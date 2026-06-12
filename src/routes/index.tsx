@@ -1,6 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 
+import falconNavbarLogo from "../assets/falcon-navbar-logo.png";
+import falconLogoMini from "../assets/falcon-logo-mini.png";
+import { learnWorldsAiFundamentalsUrl, learnWorldsCoursesUrl } from "../lib/learnworlds";
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -13,31 +17,6 @@ export const Route = createFileRoute("/")({
   component: Landing,
 });
 
-function FalconLogo({ className = "h-8 w-8" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 64 64" className={className} aria-hidden="true">
-      <defs>
-        <clipPath id="falcon-clip">
-          <path d="M8 34c4-12 16-20 30-20 6 0 12 2 18 6-6 0-12 2-16 6l8 2-10 4 6 4-12 2 4 6-14-2 2 8-12-4-4-12z" />
-        </clipPath>
-      </defs>
-      <g clipPath="url(#falcon-clip)">
-        <rect x="0" y="0" width="64" height="16" fill="#00843D" />
-        <rect x="0" y="16" width="64" height="16" fill="#FFFFFF" />
-        <rect x="0" y="32" width="64" height="16" fill="#1F2937" />
-        <rect x="0" y="48" width="14" height="16" fill="#C8102E" />
-        <rect x="14" y="48" width="50" height="16" fill="#1F2937" />
-      </g>
-      <path
-        d="M8 34c4-12 16-20 30-20 6 0 12 2 18 6-6 0-12 2-16 6l8 2-10 4 6 4-12 2 4 6-14-2 2 8-12-4-4-12z"
-        fill="none"
-        stroke="#1F2937"
-        strokeWidth="1.2"
-      />
-    </svg>
-  );
-}
-
 function Nav() {
   const [open, setOpen] = useState(false);
   const links = [
@@ -49,11 +28,12 @@ function Nav() {
   return (
     <header className="sticky top-0 z-50 border-b border-border/60 bg-background/85 backdrop-blur-md">
       <nav className="container-x flex items-center justify-between py-3.5">
-        <a href="#top" className="flex items-center gap-2.5">
-          <FalconLogo className="h-9 w-9" />
-          <span className="font-display text-lg font-extrabold tracking-tight">
-            Falcon <span className="text-falcon-green">Academy</span>
-          </span>
+        <a href="#top" className="flex items-center">
+          <img
+            src={falconNavbarLogo}
+            alt="Falcon Academy"
+            className="h-9 w-auto"
+          />
         </a>
         <div className="hidden items-center gap-8 md:flex">
           {links.map((l) => (
@@ -65,7 +45,7 @@ function Nav() {
               {l.label}
             </a>
           ))}
-          <a href="#enroll" className="btn-accent !py-2.5 !px-4 text-sm">
+          <a href={learnWorldsAiFundamentalsUrl} className="btn-accent !py-2.5 !px-4 text-sm">
             Enroll in AI Fundamentals
           </a>
         </div>
@@ -94,7 +74,7 @@ function Nav() {
                 {l.label}
               </a>
             ))}
-            <a href="#enroll" onClick={() => setOpen(false)} className="btn-accent">
+            <a href={learnWorldsAiFundamentalsUrl} onClick={() => setOpen(false)} className="btn-accent">
               Enroll in AI Fundamentals
             </a>
           </div>
@@ -215,8 +195,8 @@ function Hero() {
             (or should not) be used.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <a href="#course-1" className="btn-primary">Start with AI Fundamentals</a>
-            <a href="#program" className="btn-gold">Explore full program</a>
+            <a href={learnWorldsAiFundamentalsUrl} className="btn-primary">Start with AI Fundamentals</a>
+            <a href={learnWorldsCoursesUrl} className="btn-gold">Explore full program</a>
           </div>
           <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-muted-foreground">
             <div className="flex items-center gap-2"><CheckDot /> 4 sequential courses</div>
@@ -233,7 +213,7 @@ function Hero() {
 function ProblemSolution() {
   const problems = [
     "We test AI tools randomly",
-    "Unclear what data we can upload to ChatGPT",
+    "Unclear what data we can upload to AI models",
     "AI outputs need hours of re-verification",
     "No governance — everyone does their own thing",
   ];
@@ -506,7 +486,7 @@ function Results() {
         </div>
 
         <p className="mx-auto mt-10 max-w-2xl text-center italic text-muted-foreground">
-          These are not homework. You finish the program with working documents you can apply on Monday.
+          These are not homework. You finish the program with working documents you can apply immediately.
         </p>
       </div>
     </section>
@@ -614,13 +594,13 @@ function Course1Deep() {
             verification and privacy — explained for decision-makers.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <a href="#" className="btn-accent">Enroll in Course 1</a>
-            <a href="#program" className="btn-gold" style={{ color: "white", borderColor: "var(--falcon-gold)" }}>
+            <a href={learnWorldsAiFundamentalsUrl} className="btn-accent">Enroll in Course 1</a>
+            <a href={learnWorldsCoursesUrl} className="btn-gold" style={{ color: "white", borderColor: "var(--falcon-gold)" }}>
               See full program
             </a>
           </div>
           <p className="mt-4 text-sm text-white/60">
-            Access to materials for 6 months. Based in UAE, serving the world.
+            Access to materials for 6 months.
           </p>
         </div>
 
@@ -714,11 +694,18 @@ function FAQ() {
                 <div className="flex items-center justify-between gap-4 px-6 py-5">
                   <span className="font-semibold">{f.q}</span>
                   <span
-                    className={`grid h-7 w-7 shrink-0 place-items-center rounded-full border border-border text-lg transition-transform ${
+                    className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-border transition-[transform,background-color,border-color,color] ${
                       isOpen ? "rotate-45 border-falcon-green bg-falcon-green text-white" : ""
                     }`}
                   >
-                    +
+                    <svg viewBox="0 0 12 12" className="h-3 w-3" aria-hidden="true">
+                      <path
+                        d="M6 1.5v9M1.5 6h9"
+                        stroke="currentColor"
+                        strokeWidth="1.75"
+                        strokeLinecap="round"
+                      />
+                    </svg>
                   </span>
                 </div>
                 {isOpen && <div className="px-6 pb-5 text-muted-foreground">{f.a}</div>}
@@ -751,8 +738,8 @@ function FinalCTA() {
             Join Falcon Academy and build your competitive advantage with AI.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <a href="#course-1" className="btn-primary">Start with AI Fundamentals</a>
-            <a href="#" className="btn-gold">Request team pricing</a>
+            <a href={learnWorldsAiFundamentalsUrl} className="btn-primary">Start with AI Fundamentals</a>
+            <a href={learnWorldsCoursesUrl} className="btn-gold">View all courses</a>
           </div>
           <p className="mt-6 text-sm text-muted-foreground">
             Access to materials for 6 months. Based in UAE, serving the world.
@@ -768,11 +755,18 @@ function Footer() {
     <footer className="border-t border-border bg-white">
       <div className="container-x grid gap-8 py-12 md:grid-cols-[1.4fr_1fr_1fr]">
         <div>
-          <div className="flex items-center gap-2.5">
-            <FalconLogo className="h-8 w-8" />
-            <span className="font-display text-lg font-extrabold">
-              Falcon <span className="text-falcon-green">Academy</span>
-            </span>
+          <div className="flex flex-col items-start gap-3">
+            <img
+              src={falconLogoMini}
+              alt=""
+              aria-hidden="true"
+              className="h-15 w-auto"
+            />
+            <img
+              src={falconNavbarLogo}
+              alt="Falcon Academy"
+              className="h-8 w-auto max-w-[220px]"
+            />
           </div>
           <p className="mt-3 max-w-sm text-sm text-muted-foreground">
             Practical AI for Business. Built in the UAE, designed for ambitious teams worldwide.
@@ -782,10 +776,10 @@ function Footer() {
         <div>
           <div className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Program</div>
           <ul className="mt-3 space-y-2 text-sm">
-            <li><a href="#course-1" className="hover:text-falcon-green">AI Fundamentals</a></li>
-            <li><a href="#course-2" className="hover:text-falcon-green">Tools & Cases</a></li>
-            <li><a href="#course-3" className="hover:text-falcon-green">Agents & Automation</a></li>
-            <li><a href="#course-4" className="hover:text-falcon-green">Strategy & Roadmap</a></li>
+            <li><a href={learnWorldsAiFundamentalsUrl} className="hover:text-falcon-green">AI Fundamentals</a></li>
+            <li><a href={learnWorldsCoursesUrl} className="hover:text-falcon-green">Tools & Cases</a></li>
+            <li><a href={learnWorldsCoursesUrl} className="hover:text-falcon-green">Agents & Automation</a></li>
+            <li><a href={learnWorldsCoursesUrl} className="hover:text-falcon-green">Strategy & Roadmap</a></li>
           </ul>
         </div>
         <div>
@@ -799,14 +793,7 @@ function Footer() {
       </div>
       <div className="border-t border-border">
         <div className="container-x flex flex-col items-start justify-between gap-3 py-5 text-xs text-muted-foreground sm:flex-row sm:items-center">
-          <div>© 2025 Falcon Academy. All rights reserved.</div>
-          <div className="flex items-center gap-2">
-            <span className="h-2 w-2 rounded-full bg-falcon-green" />
-            <span className="h-2 w-2 rounded-full border border-border bg-white" />
-            <span className="h-2 w-2 rounded-full bg-falcon-ink" />
-            <span className="h-2 w-2 rounded-full bg-falcon-red" />
-            <span className="ml-2">UAE heritage · global outlook</span>
-          </div>
+          <div>© {new Date().getFullYear()} Falcon Expert Institute FZ-LLC. All rights reserved.</div>
         </div>
       </div>
     </footer>
