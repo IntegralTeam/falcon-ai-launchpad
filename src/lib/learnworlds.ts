@@ -1,5 +1,7 @@
-/** LearnWorlds LMS base URL (no trailing slash). Set via VITE_LEARNWORLDS_BASE_URL in .env */
-const learnWorldsBaseUrl = (import.meta.env.VITE_LEARNWORLDS_BASE_URL ?? "").replace(/\/$/, "");
+/** LearnWorlds LMS base URL (no trailing slash). Override via VITE_LEARNWORLDS_BASE_URL in .env */
+const learnWorldsBaseUrl = (
+  import.meta.env.VITE_LEARNWORLDS_BASE_URL || "https://falcon.academy"
+).replace(/\/$/, "");
 
 /** All courses catalog */
 export const learnWorldsCoursesUrl = `${learnWorldsBaseUrl}/courses`;
