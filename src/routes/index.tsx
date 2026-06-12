@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 
 import falconNavbarLogo from "../assets/falcon-navbar-logo.png";
+import falconLogoCircle from "../assets/falcon-logo-circle.png";
 import falconLogoMini from "../assets/falcon-logo-mini.png";
 import { learnWorldsAiFundamentalsUrl, learnWorldsCoursesUrl } from "../lib/learnworlds";
 
@@ -28,11 +29,17 @@ function Nav() {
   return (
     <header className="sticky top-0 z-50 border-b border-border/60 bg-background/85 backdrop-blur-md">
       <nav className="container-x flex items-center justify-between py-3.5">
-        <a href="#top" className="flex items-center">
+        <a href="#top" className="flex items-center gap-2.5">
+          <img
+            src={falconLogoCircle}
+            alt=""
+            aria-hidden="true"
+            className="h-9 w-9 shrink-0"
+          />
           <img
             src={falconNavbarLogo}
             alt="Falcon Academy"
-            className="h-9 w-auto"
+            className="h-8 w-auto"
           />
         </a>
         <div className="hidden items-center gap-8 md:flex">
