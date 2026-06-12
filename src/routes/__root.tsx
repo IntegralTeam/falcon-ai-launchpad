@@ -72,6 +72,8 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   );
 }
 
+const assetUrl = (path: string) => `${import.meta.env.BASE_URL}${path.replace(/^\//, "")}`;
+
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
     meta: [
@@ -82,15 +84,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:title", content: "Falcon Academy — AI for Business Courses" },
       { property: "og:description", content: "Practical AI for Business program for owners, managers and consultants. From fundamentals to agents and implementation. UAE-based, serving the world." },
       { property: "og:type", content: "website" },
-      { property: "og:image", content: "/og-image.jpeg" },
+      { property: "og:image", content: assetUrl("og-image.jpeg") },
       { property: "og:image:alt", content: "Falcon Expert Institute — Knowledge. Intelligence. Impact." },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:image", content: "/og-image.jpeg" },
+      { name: "twitter:image", content: assetUrl("og-image.jpeg") },
     ],
     links: [
-      { rel: "icon", href: "/favicon.ico", sizes: "any" },
-      { rel: "icon", type: "image/png", sizes: "32x32", href: "/favicon-32x32.png" },
-      { rel: "apple-touch-icon", sizes: "180x180", href: "/apple-touch-icon.png" },
+      { rel: "icon", href: assetUrl("favicon.ico"), sizes: "any" },
+      { rel: "icon", type: "image/png", sizes: "32x32", href: assetUrl("favicon-32x32.png") },
+      { rel: "apple-touch-icon", sizes: "180x180", href: assetUrl("apple-touch-icon.png") },
       { rel: "stylesheet", href: appCss },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
