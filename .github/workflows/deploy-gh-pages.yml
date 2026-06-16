@@ -30,7 +30,7 @@ jobs:
       - name: Build static site
         env:
           BASE_PATH: /
-          VITE_LEARNWORLDS_BASE_URL: ${{ vars.VITE_LEARNWORLDS_BASE_URL || 'https://falcon.academy' }}
+          VITE_LEARNWORLDS_BASE_URL: ${{ vars.VITE_LEARNWORLDS_BASE_URL || 'https://learn.falcon.academy' }}
         run: npm run build
 
       - name: Add SPA fallback for client-side routes
