@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
-    "build:gh-pages": "BASE_PATH=/falcon-ai-launchpad/ vite build && cp dist/client/index.html dist/client/404.html",
+    "build:gh-pages": "BASE_PATH=/ vite build && cp dist/client/index.html dist/client/404.html",
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
     "lint": "eslint .",
