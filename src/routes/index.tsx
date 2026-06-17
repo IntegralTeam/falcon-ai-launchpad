@@ -1,9 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import falconNavbarLogo from "../assets/falcon-navbar-logo.png";
 import falconLogoCircle from "../assets/falcon-logo-circle.png";
-import falconLogoMini from "../assets/falcon-logo-mini.png";
+import falconLogoFull from "../assets/falcon-logo.jpeg";
 import { learnWorldsAiFundamentalsUrl, learnWorldsCoursesUrl } from "../lib/learnworlds";
 
 export const Route = createFileRoute("/")({
@@ -18,6 +25,136 @@ export const Route = createFileRoute("/")({
   component: Landing,
 });
 
+function BrandLogo({ className = "" }: { className?: string }) {
+  return (
+    <div className={`flex items-center gap-2.5 ${className}`}>
+      <img
+        src={falconLogoCircle}
+        alt=""
+        aria-hidden="true"
+        className="h-9 w-9 shrink-0"
+      />
+      <img
+        src={falconNavbarLogo}
+        alt="Falcon Academy"
+        className="h-8 w-auto"
+      />
+    </div>
+  );
+}
+
+const PRIVACY_POLICY_SECTIONS = [
+  {
+    title: "Who we are",
+    body: "Falcon Expert Institute FZ-LLC (“Falcon Academy”, “we”, “us”) operates online business education programs from Ras Al Khaimah Economic Zone (RAKEZ), United Arab Emirates. Educational Licence No. 52001001.",
+  },
+  {
+    title: "Information we collect",
+    body: "When you enroll, contact us, or use our website, we may collect your name, email address, company details, billing information, course progress, and communications you send to us. We also collect limited technical data such as IP address, browser type, and usage analytics to keep the platform secure and improve our services.",
+  },
+  {
+    title: "How we use your information",
+    body: "We use personal data to provide access to courses, process enrollments, respond to inquiries, issue certificates or records of completion, improve program content, and comply with applicable law. We do not sell your personal information to third parties.",
+  },
+  {
+    title: "Sharing and processors",
+    body: "We may share data with trusted service providers that help us deliver our programs—such as learning platforms, payment processors, email tools, and hosting providers—only as needed to operate Falcon Academy. These providers are required to protect your data and use it solely for the services they provide to us.",
+  },
+  {
+    title: "Data retention",
+    body: "We retain personal information for as long as needed to deliver courses, maintain business records, resolve disputes, and meet legal obligations. When data is no longer required, we delete or anonymize it where reasonably possible.",
+  },
+  {
+    title: "Your rights",
+    body: "Depending on applicable law, you may request access to, correction of, or deletion of your personal data, or object to certain processing. To exercise these rights, contact us at info@falcon.academy. We will respond within a reasonable timeframe.",
+  },
+  {
+    title: "Security",
+    body: "We apply administrative, technical, and organizational measures designed to protect personal data against unauthorized access, loss, or misuse. No online system is completely secure, so please use strong passwords and protect your account credentials.",
+  },
+  {
+    title: "Updates",
+    body: "We may update this Privacy Policy from time to time. The latest version will always be available on falcon.academy. Material changes will be reflected by updating the effective date below.",
+  },
+];
+
+const TERMS_OF_USE_SECTIONS = [
+  {
+    title: "Agreement",
+    body: "By accessing falcon.academy or enrolling in our programs, you agree to these Terms of Use. If you do not agree, please do not use the site or purchase courses.",
+  },
+  {
+    title: "Educational services",
+    body: "Falcon Academy provides online business education in artificial intelligence and related topics. Course materials are for learning and professional development. They do not constitute legal, financial, tax, or regulated professional advice.",
+  },
+  {
+    title: "Accounts and enrollment",
+    body: "You are responsible for the accuracy of information you provide and for maintaining the confidentiality of your account credentials. Access to paid content is granted for the period stated at purchase unless otherwise specified.",
+  },
+  {
+    title: "Acceptable use",
+    body: "You may not misuse the platform, attempt unauthorized access, copy or redistribute course materials except as permitted, use content to build competing products, or upload unlawful, harmful, or infringing material.",
+  },
+  {
+    title: "Intellectual property",
+    body: "All course content, branding, graphics, and materials on this site are owned by Falcon Expert Institute FZ-LLC or its licensors and are protected by intellectual property laws. You receive a limited, non-transferable license to use materials for personal or internal business learning only.",
+  },
+  {
+    title: "Payments and refunds",
+    body: "Fees, billing terms, and any refund eligibility are disclosed at the point of purchase on our learning platform. Unless required by applicable consumer law, fees for digital educational content may be non-refundable once access is granted.",
+  },
+  {
+    title: "Disclaimer",
+    body: "Programs are provided on an “as is” basis. We do not guarantee specific business outcomes, job placement, revenue increases, or error-free operation of third-party AI tools discussed in our courses.",
+  },
+  {
+    title: "Limitation of liability",
+    body: "To the fullest extent permitted by law, Falcon Expert Institute FZ-LLC is not liable for indirect, incidental, or consequential damages arising from your use of the site or courses. Our total liability for any claim shall not exceed the amount you paid for the relevant course in the twelve months preceding the claim.",
+  },
+  {
+    title: "Governing law",
+    body: "These Terms are governed by the laws of the United Arab Emirates. Disputes shall be subject to the exclusive jurisdiction of the courts of the UAE, unless mandatory consumer protections in your country provide otherwise.",
+  },
+  {
+    title: "Contact",
+    body: "Questions about these Terms may be sent to info@falcon.academy.",
+  },
+];
+
+function LegalModal({
+  type,
+  open,
+  onOpenChange,
+}: {
+  type: "privacy" | "terms" | null;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}) {
+  const isPrivacy = type === "privacy";
+  const sections = isPrivacy ? PRIVACY_POLICY_SECTIONS : TERMS_OF_USE_SECTIONS;
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-h-[85vh] max-w-2xl overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>{isPrivacy ? "Privacy Policy" : "Terms of Use"}</DialogTitle>
+          <DialogDescription>
+            Falcon Expert Institute FZ-LLC · Effective {new Date().getFullYear()}
+          </DialogDescription>
+        </DialogHeader>
+        <div className="space-y-5 pr-1 text-sm text-foreground">
+          {sections.map((section) => (
+            <section key={section.title}>
+              <h3 className="font-semibold">{section.title}</h3>
+              <p className="mt-1.5 leading-relaxed text-muted-foreground">{section.body}</p>
+            </section>
+          ))}
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 function Nav() {
   const [open, setOpen] = useState(false);
   const links = [
@@ -29,18 +166,8 @@ function Nav() {
   return (
     <header className="sticky top-0 z-50 border-b border-border/60 bg-background/85 backdrop-blur-md">
       <nav className="container-x flex items-center justify-between py-3.5">
-        <a href="#top" className="flex items-center gap-2.5">
-          <img
-            src={falconLogoCircle}
-            alt=""
-            aria-hidden="true"
-            className="h-9 w-9 shrink-0"
-          />
-          <img
-            src={falconNavbarLogo}
-            alt="Falcon Academy"
-            className="h-8 w-auto"
-          />
+        <a href="#top" className="flex items-center">
+          <BrandLogo />
         </a>
         <div className="hidden items-center gap-8 md:flex">
           {links.map((l) => (
@@ -631,6 +758,131 @@ function Course1Deep() {
   );
 }
 
+function UaeFlagStrip({ className = "" }: { className?: string }) {
+  return (
+    <div className={`flex h-3 w-10 overflow-hidden rounded-sm border border-border/60 ${className}`} aria-hidden="true">
+      <span className="flex-1 bg-[#00843D]" />
+      <span className="flex-1 bg-white" />
+      <span className="flex-1 bg-[#1F2937]" />
+      <span className="w-1 bg-[#C8102E]" />
+    </div>
+  );
+}
+
+function ShieldBadge() {
+  return (
+    <svg viewBox="0 0 48 48" className="h-12 w-12" aria-hidden="true">
+      <path
+        d="M24 4 8 10v12c0 10.5 6.8 18.2 16 22 9.2-3.8 16-11.5 16-22V10L24 4Z"
+        fill="color-mix(in oklab, var(--falcon-green) 12%, white)"
+        stroke="var(--falcon-green)"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M17 24.5 21.5 29 31 19.5"
+        fill="none"
+        stroke="var(--falcon-green)"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function Certification() {
+  const credentials = [
+    {
+      label: "Educational licence",
+      value: "No. 52001001",
+      detail: "Issued for regulated training & professional education",
+      accent: "var(--falcon-gold)",
+    },
+    {
+      label: "Registered entity",
+      value: "Falcon Expert Institute FZ-LLC",
+      detail: "Ras Al Khaimah Economic Zone (RAKEZ)",
+      accent: "var(--falcon-green)",
+    },
+    {
+      label: "Jurisdiction",
+      value: "United Arab Emirates",
+      detail: "UAE-based institute serving learners worldwide",
+      accent: "var(--falcon-red)",
+    },
+  ];
+
+  return (
+    <section id="certification" className="section-pad relative overflow-hidden bg-white">
+      <div
+        className="pointer-events-none absolute inset-0 -z-10"
+        style={{
+          background:
+            "radial-gradient(50% 60% at 100% 0%, rgba(0,132,61,0.08), transparent 65%), radial-gradient(45% 50% at 0% 100%, rgba(199,161,90,0.12), transparent 70%)",
+        }}
+      />
+      <div className="container-x">
+        <div className="grid items-center gap-12 lg:grid-cols-[1fr_1.05fr]">
+          <div>
+            <span className="eyebrow">
+              Licensed in the UAE
+            </span>
+            <h2 className="mt-4 text-3xl font-extrabold sm:text-4xl">
+              A <span className="text-falcon-green">certified academy</span> — we want to build trust with you.
+            </h2>
+            <p className="mt-5 max-w-xl text-muted-foreground">
+              Falcon Expert Institute FZ-LLC is a registered educational provider in the United Arab Emirates,
+              operating under Educational Licence No. 52001001 from Ras Al Khaimah Economic Zone (RAKEZ).
+            </p>
+            <ul className="mt-8 space-y-4">
+              {[
+                "Officially licensed for business and professional education",
+                "Structured programs with defined learning outcomes",
+                "Transparent legal entity — enrol with confidence",
+                "UAE standards of governance and accountability",
+              ].map((point) => (
+                <li key={point} className="flex items-start gap-3 text-sm sm:text-base">
+                  <CheckDot />
+                  <span>{point}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="relative">
+            <div className="absolute -inset-4 -z-10 rounded-[2rem] bg-gradient-to-br from-falcon-sand to-white" />
+            <div className="overflow-hidden rounded-2xl border border-falcon-gold/30 bg-white shadow-[var(--shadow-card)]">
+              <div className="relative bg-falcon-sand/30 px-6 py-8">
+                <img
+                  src={falconLogoFull}
+                  alt="Falcon Expert Institute"
+                  className="mx-auto w-full max-w-md object-contain"
+                />
+              </div>
+
+              <div className="grid gap-px bg-border sm:grid-cols-3">
+                {credentials.map((item) => (
+                  <div key={item.label} className="bg-white p-4">
+                    <div
+                      className="mb-2 h-1 w-8 rounded-full"
+                      style={{ backgroundColor: item.accent }}
+                    />
+                    <div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                      {item.label}
+                    </div>
+                    <div className="mt-1 text-sm font-bold leading-snug">{item.value}</div>
+                    <div className="mt-1 text-xs text-muted-foreground">{item.detail}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function Benefits() {
   const groups = [
     { title: "For individuals", icon: "🎯", points: ["Confidence with AI", "Better decisions", "Verification skills", "Career value"] },
@@ -758,27 +1010,25 @@ function FinalCTA() {
 }
 
 function Footer() {
+  const [legalModal, setLegalModal] = useState<"privacy" | "terms" | null>(null);
+
   return (
     <footer className="border-t border-border bg-white">
+      <LegalModal
+        type={legalModal}
+        open={legalModal !== null}
+        onOpenChange={(open) => {
+          if (!open) setLegalModal(null);
+        }}
+      />
       <div className="container-x grid gap-8 py-12 md:grid-cols-[1.4fr_1fr_1fr]">
         <div>
-          <div className="flex flex-col items-start gap-3">
-            <img
-              src={falconLogoMini}
-              alt=""
-              aria-hidden="true"
-              className="h-15 w-auto"
-            />
-            <img
-              src={falconNavbarLogo}
-              alt="Falcon Academy"
-              className="h-8 w-auto max-w-[220px]"
-            />
+          <BrandLogo />
+          <div className="mt-3 max-w-sm space-y-1 text-sm text-muted-foreground">
+            <p>Falcon Expert Institute FZ-LLC</p>
+            <p>Ras Al Khaimah Economic Zone (RAKEZ), UAE</p>
+            <p>Educational Licence No 52001001</p>
           </div>
-          <p className="mt-3 max-w-sm text-sm text-muted-foreground">
-            Practical AI for Business. Built in the UAE, designed for ambitious teams worldwide.
-          </p>
-          <div className="mt-4 text-sm text-muted-foreground">Dubai, United Arab Emirates</div>
         </div>
         <div>
           <div className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Program</div>
@@ -792,9 +1042,29 @@ function Footer() {
         <div>
           <div className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Company</div>
           <ul className="mt-3 space-y-2 text-sm">
-            <li><a href="#" className="hover:text-falcon-green">Privacy Policy</a></li>
-            <li><a href="#" className="hover:text-falcon-green">Terms of Use</a></li>
-            <li><a href="#" className="hover:text-falcon-green">Contact</a></li>
+            <li>
+              <button
+                type="button"
+                onClick={() => setLegalModal("privacy")}
+                className="hover:text-falcon-green"
+              >
+                Privacy Policy
+              </button>
+            </li>
+            <li>
+              <button
+                type="button"
+                onClick={() => setLegalModal("terms")}
+                className="hover:text-falcon-green"
+              >
+                Terms of Use
+              </button>
+            </li>
+            <li>
+              <a href="mailto:info@falcon.academy" className="hover:text-falcon-green">
+                Contact
+              </a>
+            </li>
           </ul>
         </div>
       </div>
@@ -821,6 +1091,7 @@ function Landing() {
         <Outcomes />
         <Course1Deep />
         <Benefits />
+        <Certification />
         <FAQ />
         <FinalCTA />
       </main>
