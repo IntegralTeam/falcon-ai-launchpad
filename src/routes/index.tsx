@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
   Dialog,
@@ -11,7 +11,14 @@ import {
 import falconNavbarLogo from "../assets/falcon-navbar-logo.png";
 import falconLogoCircle from "../assets/falcon-logo-circle.png";
 import falconLogoFull from "../assets/falcon-logo.jpeg";
-import { learnWorldsAiFundamentalsUrl, learnWorldsCoursesUrl } from "../lib/learnworlds";
+import audienceSectionImage from "../assets/audience-section.png";
+import chaosPathImage from "../assets/chaos-path.png";
+import goodPathImage from "../assets/good-path.png";
+import {
+  learnWorldsAiFundamentalsUrl,
+  learnWorldsCourseUrls,
+  learnWorldsCoursesUrl,
+} from "../lib/learnworlds";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -158,63 +165,105 @@ function LegalModal({
 function Nav() {
   const [open, setOpen] = useState(false);
   const links = [
-    { href: "#program", label: "Program" },
+    { href: "#solution", label: "Solution" },
     { href: "#courses", label: "Courses" },
     { href: "#results", label: "Results" },
     { href: "#faq", label: "FAQ" },
   ];
+
+  const closeMenu = () => setOpen(false);
+
+  useEffect(() => {
+    if (!open) return;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
   return (
-    <header className="sticky top-0 z-50 border-b border-border/60 bg-background/85 backdrop-blur-md">
-      <nav className="container-x flex items-center justify-between py-3.5">
-        <a href="#top" className="flex items-center">
-          <BrandLogo />
-        </a>
-        <div className="hidden items-center gap-8 md:flex">
-          {links.map((l) => (
-            <a
-              key={l.href}
-              href={l.href}
-              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-            >
-              {l.label}
-            </a>
-          ))}
-          <a href={learnWorldsAiFundamentalsUrl} className="btn-accent !py-2.5 !px-4 text-sm">
-            Enroll in AI Fundamentals
+    <>
+      <header className="sticky top-0 z-[110] border-b border-border/60 bg-background/85 backdrop-blur-md">
+        <nav className="container-x flex items-center justify-between py-3.5">
+          <a href="#top" className="flex items-center" onClick={closeMenu}>
+            <BrandLogo />
           </a>
-        </div>
-        <button
-          onClick={() => setOpen(!open)}
-          className="md:hidden rounded-md border border-border p-2"
-          aria-label="Toggle menu"
-        >
-          <div className="space-y-1.5">
-            <span className="block h-0.5 w-5 bg-foreground" />
-            <span className="block h-0.5 w-5 bg-foreground" />
-            <span className="block h-0.5 w-5 bg-foreground" />
-          </div>
-        </button>
-      </nav>
-      {open && (
-        <div className="md:hidden border-t border-border bg-background">
-          <div className="container-x flex flex-col gap-3 py-4">
+          <div className="hidden items-center gap-8 md:flex">
             {links.map((l) => (
               <a
                 key={l.href}
                 href={l.href}
-                onClick={() => setOpen(false)}
-                className="text-sm font-medium text-muted-foreground"
+                className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
               >
                 {l.label}
               </a>
             ))}
-            <a href={learnWorldsAiFundamentalsUrl} onClick={() => setOpen(false)} className="btn-accent">
-              Enroll in AI Fundamentals
+            <a href={learnWorldsCoursesUrl} className="btn-accent !py-2.5 !px-4 text-sm">
+              Explore Courses
             </a>
           </div>
+          <button
+            onClick={() => setOpen((prev) => !prev)}
+            className="md:hidden rounded-md border border-border p-2.5"
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
+          >
+            {open ? (
+              <svg viewBox="0 0 20 20" className="h-5 w-5" aria-hidden="true">
+                <path d="M5 5l10 10M15 5 5 15" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" />
+              </svg>
+            ) : (
+              <div className="space-y-1.5">
+                <span className="block h-0.5 w-5 bg-foreground" />
+                <span className="block h-0.5 w-5 bg-foreground" />
+                <span className="block h-0.5 w-5 bg-foreground" />
+              </div>
+            )}
+          </button>
+        </nav>
+      </header>
+
+      {open && (
+        <div className="fixed inset-0 z-[100] md:hidden" role="dialog" aria-modal="true" aria-label="Mobile navigation">
+          <div
+            className="mobile-menu-backdrop absolute inset-0"
+            onClick={closeMenu}
+            aria-hidden="true"
+          />
+          <nav className="container-x relative flex h-full flex-col justify-between py-8 pt-24">
+            <ul className="divide-y divide-border/70">
+              {links.map((l) => (
+                <li key={l.href}>
+                  <a
+                    href={l.href}
+                    onClick={closeMenu}
+                    className="block py-5 text-xl font-semibold tracking-tight text-foreground transition-colors active:text-falcon-green"
+                  >
+                    {l.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+            <div className="space-y-3 pt-8">
+              <a
+                href={learnWorldsCoursesUrl}
+                onClick={closeMenu}
+                className="btn-accent w-full justify-center !py-4 text-base"
+              >
+                Explore Courses
+              </a>
+              <a
+                href={learnWorldsAiFundamentalsUrl}
+                onClick={closeMenu}
+                className="btn-gold w-full justify-center !py-4 text-base"
+              >
+                Enroll in AI Fundamentals
+              </a>
+            </div>
+          </nav>
         </div>
       )}
-    </header>
+    </>
   );
 }
 
@@ -358,37 +407,51 @@ function ProblemSolution() {
     "Human-in-the-loop design across every workflow",
   ];
   return (
-    <section className="section-pad bg-falcon-sand">
+    <section id="solution" className="section-pad bg-falcon-sand">
       <div className="container-x grid gap-8 lg:grid-cols-2">
-        <div className="rounded-2xl border border-border bg-white p-8">
-          <span className="eyebrow" style={{ background: "rgba(200,16,46,0.10)", color: "var(--falcon-red)" }}>
-            The chaos today
-          </span>
-          <h3 className="mt-4 text-2xl font-bold">What teams sound like without a system</h3>
-          <ul className="mt-6 space-y-4">
-            {problems.map((p) => (
-              <li key={p} className="flex items-start gap-3">
-                <span className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-falcon-red/10 text-falcon-red font-bold">
-                  ✕
-                </span>
-                <span className="text-foreground">{p}</span>
-              </li>
-            ))}
-          </ul>
+        <div className="overflow-hidden rounded-2xl border border-border bg-white">
+          <img
+            src={chaosPathImage}
+            alt="Scattered AI tools without a clear system"
+            className="aspect-[4/3] w-full object-cover object-center"
+          />
+          <div className="p-8">
+            <span className="eyebrow" style={{ background: "rgba(200,16,46,0.10)", color: "var(--falcon-red)" }}>
+              The chaos today
+            </span>
+            <h3 className="mt-4 text-2xl font-bold">What teams sound like without a system</h3>
+            <ul className="mt-6 space-y-4">
+              {problems.map((p) => (
+                <li key={p} className="flex items-start gap-3">
+                  <span className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-falcon-red/10 text-falcon-red font-bold">
+                    ✕
+                  </span>
+                  <span className="text-foreground">{p}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
-        <div className="rounded-2xl border border-falcon-green/25 bg-white p-8 shadow-[var(--shadow-elevate)]">
-          <span className="eyebrow" style={{ background: "rgba(0,132,61,0.10)", color: "var(--falcon-green)" }}>
-            The Falcon Academy way
-          </span>
-          <h3 className="mt-4 text-2xl font-bold">A clear path to capable, safe adoption</h3>
-          <ul className="mt-6 space-y-4">
-            {solutions.map((s) => (
-              <li key={s} className="flex items-start gap-3">
-                <CheckDot />
-                <span className="text-foreground">{s}</span>
-              </li>
-            ))}
-          </ul>
+        <div className="overflow-hidden rounded-2xl border border-falcon-green/25 bg-white shadow-[var(--shadow-elevate)]">
+          <img
+            src={goodPathImage}
+            alt="Structured path from fundamentals to business impact"
+            className="aspect-[4/3] w-full object-cover object-center"
+          />
+          <div className="p-8">
+            <span className="eyebrow" style={{ background: "rgba(0,132,61,0.10)", color: "var(--falcon-green)" }}>
+              The Falcon Academy way
+            </span>
+            <h3 className="mt-4 text-2xl font-bold">A clear path to capable, safe adoption</h3>
+            <ul className="mt-6 space-y-4">
+              {solutions.map((s) => (
+                <li key={s} className="flex items-start gap-3">
+                  <CheckDot />
+                  <span className="text-foreground">{s}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
     </section>
@@ -413,18 +476,18 @@ function Comparison() {
             <span className="text-falcon-green">We teach you how to decide.</span>
           </h2>
         </div>
-        <div className="mt-12 overflow-hidden rounded-2xl border border-border">
-          <div className="grid grid-cols-1 bg-falcon-sand text-sm font-semibold uppercase tracking-wide sm:grid-cols-2">
-            <div className="p-4 text-muted-foreground">Typical AI course</div>
-            <div className="border-t border-border p-4 text-falcon-green sm:border-l sm:border-t-0">
+        <div className="mx-auto mt-10 max-w-[785px] overflow-hidden rounded-2xl border border-border">
+          <div className="grid grid-cols-1 bg-falcon-sand text-xs font-semibold uppercase tracking-wide sm:grid-cols-2">
+            <div className="px-4 py-2.5 text-muted-foreground">Typical AI course</div>
+            <div className="border-t border-border px-4 py-2.5 text-falcon-green sm:border-l sm:border-t-0">
               Falcon Academy
             </div>
           </div>
           {rows.map(([a, b], i) => (
-            <div key={i} className="grid grid-cols-1 border-t border-border bg-white sm:grid-cols-2">
-              <div className="p-5 text-muted-foreground line-through decoration-falcon-red/40">{a}</div>
-              <div className="border-t border-border p-5 font-medium sm:border-l sm:border-t-0">
-                <span className="mr-2 text-falcon-green">✓</span>
+            <div key={i} className="grid grid-cols-1 border-t border-border bg-white text-sm sm:grid-cols-2">
+              <div className="px-4 py-2.5 text-muted-foreground line-through decoration-falcon-red/40">{a}</div>
+              <div className="border-t border-border px-4 py-2.5 font-medium sm:border-l sm:border-t-0">
+                <span className="mr-1.5 text-falcon-green">✓</span>
                 {b}
               </div>
             </div>
@@ -470,15 +533,15 @@ function IconMapFlags() {
 }
 
 const COURSES = [
-  { id: "course-1", n: "01", title: "AI Fundamentals for Business Decision-Makers", tagline: "Understand AI before you choose tools.", artifact: "AI Use-Case Readiness Brief", Icon: IconBlueprint },
-  { id: "course-2", n: "02", title: "AI Tools & Practical Cases", tagline: "Move from AI understanding to practical tool use.", artifact: "AI Tool Testing Portfolio", Icon: IconABTest },
-  { id: "course-3", n: "03", title: "AI Agents & Automation", tagline: "Design AI workflows that do more than answer questions.", artifact: "Agentic Workflow Blueprint", Icon: IconGearEye },
-  { id: "course-4", n: "04", title: "AI Strategy, Implementation & Operating Model", tagline: "Turn AI experiments into responsible business capability.", artifact: "Business AI Implementation Roadmap", Icon: IconMapFlags },
+  { id: "course-1", n: "01", title: "AI Fundamentals for Business Decision-Makers", tagline: "Understand AI before you choose tools.", artifact: "AI Use-Case Readiness Brief", Icon: IconBlueprint, href: learnWorldsCourseUrls.aiFundamentals },
+  { id: "course-2", n: "02", title: "AI Tools & Practical Cases", tagline: "Move from AI understanding to practical tool use.", artifact: "AI Tool Testing Portfolio", Icon: IconABTest, href: learnWorldsCourseUrls.aiTools },
+  { id: "course-3", n: "03", title: "AI Agents & Automation", tagline: "Design AI workflows that do more than answer questions.", artifact: "Agentic Workflow Blueprint", Icon: IconGearEye, href: learnWorldsCourseUrls.aiAgents },
+  { id: "course-4", n: "04", title: "AI Strategy, Implementation & Operating Model", tagline: "Turn AI experiments into responsible business capability.", artifact: "Business AI Implementation Roadmap", Icon: IconMapFlags, href: learnWorldsCourseUrls.aiStrategy },
 ];
 
 function Program() {
   return (
-    <section id="program" className="section-pad bg-falcon-sand">
+    <section id="courses" className="section-pad bg-falcon-sand">
       <div className="container-x">
         <div className="mx-auto max-w-3xl text-center">
           <span className="eyebrow">Program roadmap</span>
@@ -489,12 +552,13 @@ function Program() {
             Take them in sequence or jump in at the level that fits your team.
           </p>
         </div>
-        <div id="courses" className="mt-14 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+        <div className="mt-14 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
           {COURSES.map((c) => (
-            <article
+            <a
               key={c.id}
               id={c.id}
-              className="group relative flex flex-col rounded-2xl border border-border bg-white p-6 transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-elevate)]"
+              href={c.href}
+              className="group relative flex flex-col rounded-2xl border border-border bg-white p-6 transition-all hover:-translate-y-1 hover:border-falcon-green/30 hover:shadow-[var(--shadow-elevate)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-falcon-green focus-visible:ring-offset-2"
             >
               <div className="flex items-center justify-between">
                 <span className="font-display text-3xl font-extrabold text-falcon-gold/80">{c.n}</span>
@@ -506,7 +570,7 @@ function Program() {
                 <div className="text-[10px] font-bold uppercase tracking-wider text-falcon-gold">Final artifact</div>
                 <div className="mt-1 text-sm font-semibold">{c.artifact}</div>
               </div>
-            </article>
+            </a>
           ))}
         </div>
       </div>
@@ -619,7 +683,7 @@ function Results() {
           </div>
         </div>
 
-        <p className="mx-auto mt-10 max-w-2xl text-center italic text-muted-foreground">
+        <p className="mx-auto mt-10 text-center italic text-muted-foreground">
           These are not homework. You finish the program with working documents you can apply immediately.
         </p>
       </div>
@@ -629,13 +693,38 @@ function Results() {
 
 function Audience() {
   const personas = [
-    { icon: "👑", title: "Business owners & founders" },
-    { icon: "🧭", title: "Managers & team leads" },
-    { icon: "📊", title: "Consultants & analysts" },
-    { icon: "📣", title: "Marketing & sales professionals" },
-    { icon: "⚙️", title: "Operations & project managers" },
-    { icon: "🤝", title: "HR & people ops" },
+    {
+      icon: "👑",
+      title: "Business owners & founders",
+      description: "Make smarter decisions and unlock new growth with AI.",
+    },
+    {
+      icon: "🧭",
+      title: "Managers & team leads",
+      description: "Empower your team and improve productivity with AI tools.",
+    },
+    {
+      icon: "📊",
+      title: "Consultants & analysts",
+      description: "Deliver deeper insights and automate complex analysis.",
+    },
+    {
+      icon: "📣",
+      title: "Marketing & sales professionals",
+      description: "Create better content, generate leads, and close more deals.",
+    },
+    {
+      icon: "⚙️",
+      title: "Operations & project managers",
+      description: "Streamline workflows and manage projects more efficiently.",
+    },
+    {
+      icon: "🤝",
+      title: "HR & people ops",
+      description: "Enhance recruitment, engagement, and people development.",
+    },
   ];
+
   return (
     <section className="section-pad bg-falcon-sand">
       <div className="container-x">
@@ -646,20 +735,37 @@ function Audience() {
             <span className="text-falcon-green">level up</span> or start a new venture.
           </h2>
         </div>
-        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {personas.map((p) => (
-            <div
-              key={p.title}
-              className="flex items-center gap-4 rounded-xl border border-border bg-white p-5 transition-all hover:border-falcon-green/40 hover:shadow-[var(--shadow-card)]"
-            >
-              <div className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-falcon-green/10 text-2xl">
-                {p.icon}
-              </div>
-              <div className="min-w-0 font-semibold">{p.title}</div>
+
+        <div className="relative mx-auto mt-12 max-w-6xl">
+          <div className="aspect-[700/261] overflow-hidden rounded-3xl border border-border/50 shadow-[var(--shadow-card)]">
+            <img
+              src={audienceSectionImage}
+              alt="Professionals collaborating on AI strategy in a modern office"
+              className="size-full object-cover object-top"
+            />
+          </div>
+
+          <div className="relative z-10 -mt-8 px-1 sm:-mt-10 md:-mt-12 lg:px-2">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+              {personas.map((p) => (
+                <div
+                  key={p.title}
+                  className="flex items-start gap-3 rounded-2xl border border-border bg-white p-4 text-left shadow-[var(--shadow-card)] transition-all hover:-translate-y-0.5 hover:border-falcon-green/30"
+                >
+                  <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-falcon-green/10 text-2xl">
+                    {p.icon}
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="text-sm font-bold leading-snug">{p.title}</h3>
+                    <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">{p.description}</p>
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
         </div>
-        <p className="mt-8 text-center text-muted-foreground">
+
+        <p className="mt-10 text-center text-muted-foreground">
           You do not need to be technical. You do need to make better decisions about AI.
         </p>
       </div>
@@ -803,13 +909,7 @@ function Certification() {
       value: "Falcon Expert Institute FZ-LLC",
       detail: "Ras Al Khaimah Economic Zone (RAKEZ)",
       accent: "var(--falcon-green)",
-    },
-    {
-      label: "Jurisdiction",
-      value: "United Arab Emirates",
-      detail: "UAE-based institute serving learners worldwide",
-      accent: "var(--falcon-red)",
-    },
+    }
   ];
 
   return (
@@ -860,7 +960,7 @@ function Certification() {
                 />
               </div>
 
-              <div className="grid gap-px bg-border sm:grid-cols-3">
+              <div className="grid gap-px bg-border sm:grid-cols-2">
                 {credentials.map((item) => (
                   <div key={item.label} className="bg-white p-4">
                     <div
@@ -1033,10 +1133,10 @@ function Footer() {
         <div>
           <div className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Program</div>
           <ul className="mt-3 space-y-2 text-sm">
-            <li><a href={learnWorldsAiFundamentalsUrl} className="hover:text-falcon-green">AI Fundamentals</a></li>
-            <li><a href={learnWorldsCoursesUrl} className="hover:text-falcon-green">Tools & Cases</a></li>
-            <li><a href={learnWorldsCoursesUrl} className="hover:text-falcon-green">Agents & Automation</a></li>
-            <li><a href={learnWorldsCoursesUrl} className="hover:text-falcon-green">Strategy & Roadmap</a></li>
+            <li><a href={learnWorldsCourseUrls.aiFundamentals} className="hover:text-falcon-green">AI Fundamentals</a></li>
+            <li><a href={learnWorldsCourseUrls.aiTools} className="hover:text-falcon-green">Tools & Cases</a></li>
+            <li><a href={learnWorldsCourseUrls.aiAgents} className="hover:text-falcon-green">Agents & Automation</a></li>
+            <li><a href={learnWorldsCourseUrls.aiStrategy} className="hover:text-falcon-green">Strategy & Roadmap</a></li>
           </ul>
         </div>
         <div>
