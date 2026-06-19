@@ -23,9 +23,9 @@ import {
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Falcon Academy — Learn AI as a Business Advantage" },
+      { title: "Falcon Innovation Academy — Learn AI as a Business Advantage" },
       { name: "description", content: "A practical four-course AI for Business program: fundamentals, tools, agents and implementation. Build real artifacts, not just prompts." },
-      { property: "og:title", content: "Falcon Academy — AI for Business" },
+      { property: "og:title", content: "Falcon Innovation Academy — AI for Business" },
       { property: "og:description", content: "Master AI tools and decision-making to make your business competitive and future-proof." },
     ],
   }),
@@ -34,16 +34,10 @@ export const Route = createFileRoute("/")({
 
 function BrandLogo({ className = "" }: { className?: string }) {
   return (
-    <div className={`flex items-center gap-2.5 ${className}`}>
-      <img
-        src={falconLogoCircle}
-        alt=""
-        aria-hidden="true"
-        className="h-9 w-9 shrink-0"
-      />
+    <div className={`${className}`}>
       <img
         src={falconNavbarLogo}
-        alt="Falcon Academy"
+        alt="Falcon Innovation Academy"
         className="h-8 w-auto"
       />
     </div>
@@ -53,7 +47,7 @@ function BrandLogo({ className = "" }: { className?: string }) {
 const PRIVACY_POLICY_SECTIONS = [
   {
     title: "Who we are",
-    body: "Falcon Expert Institute FZ-LLC (“Falcon Academy”, “we”, “us”) operates online business education programs from Ras Al Khaimah Economic Zone (RAKEZ), United Arab Emirates. Educational Licence No. 52001001.",
+    body: "Falcon Expert Institute FZ-LLC (“Falcon Innovation Academy”, “we”, “us”) operates online business education programs from Ras Al Khaimah Economic Zone (RAKEZ), United Arab Emirates. Educational Licence No. 52001001.",
   },
   {
     title: "Information we collect",
@@ -65,7 +59,7 @@ const PRIVACY_POLICY_SECTIONS = [
   },
   {
     title: "Sharing and processors",
-    body: "We may share data with trusted service providers that help us deliver our programs—such as learning platforms, payment processors, email tools, and hosting providers—only as needed to operate Falcon Academy. These providers are required to protect your data and use it solely for the services they provide to us.",
+    body: "We may share data with trusted service providers that help us deliver our programs—such as learning platforms, payment processors, email tools, and hosting providers—only as needed to operate Falcon Innovation Academy. These providers are required to protect your data and use it solely for the services they provide to us.",
   },
   {
     title: "Data retention",
@@ -92,7 +86,7 @@ const TERMS_OF_USE_SECTIONS = [
   },
   {
     title: "Educational services",
-    body: "Falcon Academy provides online business education in artificial intelligence and related topics. Course materials are for learning and professional development. They do not constitute legal, financial, tax, or regulated professional advice.",
+    body: "Falcon Innovation Academy provides online business education in artificial intelligence and related topics. Course materials are for learning and professional development. They do not constitute legal, financial, tax, or regulated professional advice.",
   },
   {
     title: "Accounts and enrollment",
@@ -440,7 +434,7 @@ function ProblemSolution() {
           />
           <div className="p-8">
             <span className="eyebrow" style={{ background: "rgba(0,132,61,0.10)", color: "var(--falcon-green)" }}>
-              The Falcon Academy way
+              The Falcon Innovation Academy way
             </span>
             <h3 className="mt-4 text-2xl font-bold">A clear path to capable, safe adoption</h3>
             <ul className="mt-6 space-y-4">
@@ -480,7 +474,7 @@ function Comparison() {
           <div className="grid grid-cols-1 bg-falcon-sand text-xs font-semibold uppercase tracking-wide sm:grid-cols-2">
             <div className="px-4 py-2.5 text-muted-foreground">Typical AI course</div>
             <div className="border-t border-border px-4 py-2.5 text-falcon-green sm:border-l sm:border-t-0">
-              Falcon Academy
+              Falcon Innovation Academy
             </div>
           </div>
           {rows.map(([a, b], i) => (
@@ -1094,7 +1088,7 @@ function FinalCTA() {
             Start <span className="text-falcon-green">systematic AI adoption</span>.
           </h2>
           <p className="mx-auto mt-5 max-w-2xl text-muted-foreground">
-            Join Falcon Academy and build your competitive advantage with AI.
+            Join Falcon Innovation Academy and build your competitive advantage with AI.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <a href={learnWorldsAiFundamentalsUrl} className="btn-primary">Start with AI Fundamentals</a>
@@ -1125,9 +1119,8 @@ function Footer() {
         <div>
           <BrandLogo />
           <div className="mt-3 max-w-sm space-y-1 text-sm text-muted-foreground">
-            <p>Falcon Expert Institute FZ-LLC</p>
-            <p>Ras Al Khaimah Economic Zone (RAKEZ), UAE</p>
-            <p>Educational Licence No 52001001</p>
+            <p>Falcon Innovation Academy is a trading brand operated by Falcon Expert Institute FZ-LLC, registered in Ras Al Khaimah Economic Zone, UAE,</p>
+            <p>Educational Licence No 52001001.</p>
           </div>
         </div>
         <div>
