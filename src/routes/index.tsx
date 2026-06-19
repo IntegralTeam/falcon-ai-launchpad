@@ -14,6 +14,10 @@ import falconLogoFull from "../assets/falcon-logo.jpeg";
 import audienceSectionImage from "../assets/audience-section.png";
 import chaosPathImage from "../assets/chaos-path.png";
 import goodPathImage from "../assets/good-path.png";
+import courseAgentsImage from "../assets/agents.png";
+import courseFundamentalsImage from "../assets/fundamentals.png";
+import courseStrategyImage from "../assets/strategy.png";
+import courseToolsImage from "../assets/tools.png";
 import {
   learnWorldsAiFundamentalsUrl,
   learnWorldsCourseUrls,
@@ -122,23 +126,86 @@ const TERMS_OF_USE_SECTIONS = [
   },
 ];
 
+const REFUND_POLICY_SECTIONS = [
+  {
+    title: "Scope",
+    body: "This Refund & Cancellation Policy applies to purchases of online courses, bundles, subscriptions, and related digital educational products sold by Falcon Expert Institute FZ-LLC (“Falcon Innovation Academy”, “we”, “us”) through our LearnWorlds learning platform at learn.falcon.academy. By completing a purchase, you acknowledge that you have read and agree to this Policy.",
+  },
+  {
+    title: "Payment processing",
+    body: "Payments are processed through LearnWorlds using supported payment gateways, including Stripe (card payments, Apple Pay, Google Pay, and selected local methods) and, where offered, PayPal. We do not store full card details on our servers. All transactions are subject to the applicable terms of LearnWorlds and the relevant payment processor.",
+  },
+  {
+    title: "Digital products and immediate access",
+    body: "Our products are digital educational services. Upon successful payment, access to course materials is typically granted immediately or shortly thereafter. Because content is delivered electronically, refund eligibility may be limited once you have accessed, downloaded, or substantially used course materials.",
+  },
+  {
+    title: "Refunds we may grant",
+    body: "We may approve a full or partial refund, at our reasonable discretion, where: (a) you request a refund within fourteen (14) days of purchase and have not completed more than twenty percent (20%) of the purchased course or program; (b) you were charged in error or charged twice for the same product; (c) technical issues on our platform prevented reasonable access and we cannot resolve them within a reasonable time; or (d) applicable consumer protection law in your jurisdiction requires a refund.",
+  },
+  {
+    title: "When refunds are not available",
+    body: "Except where required by law, we do not grant refunds if: (a) the refund request is made after the eligibility period above; (b) you have substantially accessed, completed, or downloaded course content; (c) you purchased during a clearly marked non-refundable promotion; (d) the request relates to change of mind after meaningful use of the product; or (e) the payment method or processor no longer supports automated refunds (for example, certain bank-transfer methods).",
+  },
+  {
+    title: "How refunds are processed (LearnWorlds & Stripe)",
+    body: "Approved refunds are issued through LearnWorlds to the original payment method used at checkout. For Stripe card payments, refunds are normally processed to the same card; Stripe does not return its original processing fees to merchants, and that limitation may affect the net amount recoverable in partial-refund scenarios. Refunds via supported processors are generally available within one hundred eighty (180) days of the original payment. Processing may take up to seven (7) business days to appear, depending on your bank or card issuer.",
+  },
+  {
+    title: "Credit notes and access after refund",
+    body: "When a refund is issued through LearnWorlds, a refund record and, where invoicing is enabled, a credit note may be generated for accounting purposes. We may revoke or restrict course access upon a full refund. Refund and unenrollment are separate actions; where appropriate, we may unenroll you from the refunded product.",
+  },
+  {
+    title: "Subscriptions and instalment plans",
+    body: "If you purchase a subscription or instalment plan, you may cancel future renewals through your LearnWorlds account or by contacting us before the next billing date. Cancellation stops future charges but does not automatically refund fees already paid for the current billing period unless required by law or expressly stated at purchase. Trial periods, if offered, must be cancelled before renewal to avoid charge.",
+  },
+  {
+    title: "How to request a refund or cancellation",
+    body: "To request a refund or cancel a subscription, email info@falcon.academy from the email address used at purchase. Include your full name, order date, product name, and reason for the request. We may ask for additional information to verify the purchase and review usage records maintained by LearnWorlds.",
+  },
+  {
+    title: "Response times",
+    body: "We aim to acknowledge refund requests within three (3) business days and to complete approved refunds within fourteen (14) calendar days of confirming eligibility, in line with common e-commerce practice and our payment platform capabilities. If additional review is required, we will notify you of the delay.",
+  },
+  {
+    title: "Chargebacks and disputes",
+    body: "If you initiate a chargeback or payment dispute with your bank or card issuer before contacting us, we may suspend account access while the dispute is investigated. We encourage you to contact us first so we can resolve legitimate concerns promptly. For digital products, payment processors such as Stripe may require evidence of account access and policy acceptance when reviewing disputes.",
+  },
+  {
+    title: "Changes and contact",
+    body: "We may update this Policy from time to time. The version published on falcon.academy at the time of your request applies unless mandatory law provides otherwise. Questions: info@falcon.academy.",
+  },
+];
+
 function LegalModal({
   type,
   open,
   onOpenChange,
 }: {
-  type: "privacy" | "terms" | null;
+  type: "privacy" | "terms" | "refund" | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
-  const isPrivacy = type === "privacy";
-  const sections = isPrivacy ? PRIVACY_POLICY_SECTIONS : TERMS_OF_USE_SECTIONS;
+  const titles = {
+    privacy: "Privacy Policy",
+    terms: "Terms of Use",
+    refund: "Refund & Cancellation Policy",
+  } as const;
+
+  const sections =
+    type === "privacy"
+      ? PRIVACY_POLICY_SECTIONS
+      : type === "terms"
+        ? TERMS_OF_USE_SECTIONS
+        : type === "refund"
+          ? REFUND_POLICY_SECTIONS
+          : [];
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-h-[85vh] max-w-2xl overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>{isPrivacy ? "Privacy Policy" : "Terms of Use"}</DialogTitle>
+          <DialogTitle>{type ? titles[type] : ""}</DialogTitle>
           <DialogDescription>
             Falcon Expert Institute FZ-LLC · Effective {new Date().getFullYear()}
           </DialogDescription>
@@ -275,25 +342,25 @@ function HeroVisual() {
   return (
     <div className="relative">
       <div className="absolute -inset-6 -z-10 rounded-[2rem] bg-gradient-to-br from-falcon-sand to-white" />
-      <div className="rounded-2xl border border-border bg-white p-5 shadow-[var(--shadow-card)]">
-        <div className="flex items-center justify-between border-b border-border pb-3">
+      <div className="rounded-2xl border border-border bg-white p-6 shadow-[var(--shadow-card)]">
+        <div className="flex items-center justify-between border-b border-border pb-4">
           <div className="flex items-center gap-2">
-            <span className="h-2.5 w-2.5 rounded-full bg-falcon-red" />
-            <span className="h-2.5 w-2.5 rounded-full bg-falcon-gold" />
-            <span className="h-2.5 w-2.5 rounded-full bg-falcon-green" />
+            <span className="h-3 w-3 rounded-full bg-falcon-red" />
+            <span className="h-3 w-3 rounded-full bg-falcon-gold" />
+            <span className="h-3 w-3 rounded-full bg-falcon-green" />
           </div>
-          <span className="text-xs font-medium text-muted-foreground">AI Workflow · Live</span>
+          <span className="text-sm font-medium text-muted-foreground">AI Workflow · Live</span>
         </div>
-        <div className="mt-5 grid grid-cols-3 gap-3">
+        <div className="mt-6 grid grid-cols-3 gap-4">
           {[
             { label: "Use cases", value: "12", tone: "green" },
             { label: "Tools tested", value: "8", tone: "gold" },
             { label: "Pilots", value: "3", tone: "ink" },
           ].map((s) => (
-            <div key={s.label} className="rounded-lg border border-border p-3">
-              <div className="text-xs text-muted-foreground">{s.label}</div>
+            <div key={s.label} className="rounded-lg border border-border p-4">
+              <div className="text-sm text-muted-foreground">{s.label}</div>
               <div
-                className="mt-1 text-2xl font-extrabold"
+                className="mt-1.5 text-3xl font-extrabold"
                 style={{
                   color:
                     s.tone === "green"
@@ -308,18 +375,18 @@ function HeroVisual() {
             </div>
           ))}
         </div>
-        <div className="mt-5 space-y-3">
+        <div className="mt-6 space-y-4">
           {[
             { name: "Contract review · Claude", pct: 82, color: "var(--falcon-green)" },
             { name: "Sales draft · ChatGPT", pct: 64, color: "var(--falcon-gold)" },
             { name: "Internal RAG · Self-hosted", pct: 41, color: "var(--falcon-ink)" },
           ].map((b) => (
             <div key={b.name}>
-              <div className="flex items-center justify-between text-xs font-medium">
+              <div className="flex items-center justify-between text-sm font-medium">
                 <span>{b.name}</span>
                 <span className="text-muted-foreground">{b.pct}%</span>
               </div>
-              <div className="mt-1.5 h-2 rounded-full bg-muted">
+              <div className="mt-2 h-2.5 rounded-full bg-muted">
                 <div
                   className="h-full rounded-full"
                   style={{ width: `${b.pct}%`, backgroundColor: b.color }}
@@ -328,14 +395,14 @@ function HeroVisual() {
             </div>
           ))}
         </div>
-        <div className="mt-5 grid grid-cols-2 gap-3">
-          <div className="rounded-lg bg-falcon-sand p-3">
-            <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Approval gate</div>
-            <div className="mt-1 text-sm font-semibold">Human-in-the-loop ✓</div>
+        <div className="mt-6 grid grid-cols-2 gap-4">
+          <div className="rounded-lg bg-falcon-sand p-4">
+            <div className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">Approval gate</div>
+            <div className="mt-1.5 text-base font-semibold">Human-in-the-loop</div>
           </div>
-          <div className="rounded-lg bg-falcon-sand p-3">
-            <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Data class</div>
-            <div className="mt-1 text-sm font-semibold">Confidential · API</div>
+          <div className="rounded-lg bg-falcon-sand p-4">
+            <div className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">Data class</div>
+            <div className="mt-1.5 text-base font-semibold">Confidential · API</div>
           </div>
         </div>
       </div>
@@ -492,45 +559,11 @@ function Comparison() {
   );
 }
 
-function IconBlueprint() {
-  return (
-    <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="1.8">
-      <rect x="3" y="3" width="18" height="18" rx="2" />
-      <path d="M3 8h18M8 21V8M14 12h4M14 16h4" />
-    </svg>
-  );
-}
-function IconABTest() {
-  return (
-    <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="1.8">
-      <rect x="3" y="4" width="8" height="16" rx="1.5" />
-      <rect x="13" y="4" width="8" height="16" rx="1.5" />
-      <path d="M5 9h4M15 9h4M5 13h4M15 13h4" />
-    </svg>
-  );
-}
-function IconGearEye() {
-  return (
-    <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="1.8">
-      <circle cx="12" cy="12" r="3" />
-      <path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1" />
-    </svg>
-  );
-}
-function IconMapFlags() {
-  return (
-    <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="1.8">
-      <path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2z" />
-      <path d="M9 4v14M15 6v14" />
-    </svg>
-  );
-}
-
 const COURSES = [
-  { id: "course-1", n: "01", title: "AI Fundamentals for Business Decision-Makers", tagline: "Understand AI before you choose tools.", artifact: "AI Use-Case Readiness Brief", Icon: IconBlueprint, href: learnWorldsCourseUrls.aiFundamentals },
-  { id: "course-2", n: "02", title: "AI Tools & Practical Cases", tagline: "Move from AI understanding to practical tool use.", artifact: "AI Tool Testing Portfolio", Icon: IconABTest, href: learnWorldsCourseUrls.aiTools },
-  { id: "course-3", n: "03", title: "AI Agents & Automation", tagline: "Design AI workflows that do more than answer questions.", artifact: "Agentic Workflow Blueprint", Icon: IconGearEye, href: learnWorldsCourseUrls.aiAgents },
-  { id: "course-4", n: "04", title: "AI Strategy, Implementation & Operating Model", tagline: "Turn AI experiments into responsible business capability.", artifact: "Business AI Implementation Roadmap", Icon: IconMapFlags, href: learnWorldsCourseUrls.aiStrategy },
+  { id: "course-1", n: "01", title: "AI Fundamentals for Business Decision-Makers", tagline: "Understand AI before you choose tools.", artifact: "AI Use-Case Readiness Brief", image: courseFundamentalsImage, href: learnWorldsCourseUrls.aiFundamentals },
+  { id: "course-2", n: "02", title: "AI Tools & Practical Cases", tagline: "Move from AI understanding to practical tool use.", artifact: "AI Tool Testing Portfolio", image: courseToolsImage, href: learnWorldsCourseUrls.aiTools },
+  { id: "course-3", n: "03", title: "AI Agents & Automation", tagline: "Design AI workflows that do more than answer questions.", artifact: "Agentic Workflow Blueprint", image: courseAgentsImage, href: learnWorldsCourseUrls.aiAgents },
+  { id: "course-4", n: "04", title: "AI Strategy, Implementation & Operating Model", tagline: "Turn AI experiments into responsible business capability.", artifact: "Business AI Implementation Roadmap", image: courseStrategyImage, href: learnWorldsCourseUrls.aiStrategy },
 ];
 
 function Program() {
@@ -552,17 +585,22 @@ function Program() {
               key={c.id}
               id={c.id}
               href={c.href}
-              className="group relative flex flex-col rounded-2xl border border-border bg-white p-6 transition-all hover:-translate-y-1 hover:border-falcon-green/30 hover:shadow-[var(--shadow-elevate)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-falcon-green focus-visible:ring-offset-2"
+              className="group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-white transition-all hover:-translate-y-1 hover:border-falcon-green/30 hover:shadow-[var(--shadow-elevate)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-falcon-green focus-visible:ring-offset-2"
             >
-              <div className="flex items-center justify-between">
+              <img
+                src={c.image}
+                alt=""
+                aria-hidden="true"
+                className="aspect-[400/269] w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+              />
+              <div className="flex flex-1 flex-col p-6">
                 <span className="font-display text-3xl font-extrabold text-falcon-gold/80">{c.n}</span>
-                <div className="rounded-xl bg-falcon-sand p-2.5 text-falcon-green"><c.Icon /></div>
-              </div>
-              <h3 className="mt-5 text-lg font-bold leading-tight">{c.title}</h3>
-              <p className="mt-2 text-sm italic text-muted-foreground">{c.tagline}</p>
-              <div className="mt-5 rounded-lg border border-dashed border-falcon-gold/50 bg-falcon-gold/5 p-3">
-                <div className="text-[10px] font-bold uppercase tracking-wider text-falcon-gold">Final artifact</div>
-                <div className="mt-1 text-sm font-semibold">{c.artifact}</div>
+                <h3 className="mt-4 text-lg font-bold leading-tight">{c.title}</h3>
+                <p className="mt-2 text-sm italic text-muted-foreground">{c.tagline}</p>
+                <div className="mt-5 rounded-lg border border-dashed border-falcon-gold/50 bg-falcon-gold/5 p-3">
+                  <div className="text-[10px] font-bold uppercase tracking-wider text-falcon-gold">Final artifact</div>
+                  <div className="mt-1 text-sm font-semibold">{c.artifact}</div>
+                </div>
               </div>
             </a>
           ))}
@@ -1104,7 +1142,7 @@ function FinalCTA() {
 }
 
 function Footer() {
-  const [legalModal, setLegalModal] = useState<"privacy" | "terms" | null>(null);
+  const [legalModal, setLegalModal] = useState<"privacy" | "terms" | "refund" | null>(null);
 
   return (
     <footer className="border-t border-border bg-white">
@@ -1119,7 +1157,8 @@ function Footer() {
         <div>
           <BrandLogo />
           <div className="mt-3 max-w-sm space-y-1 text-sm text-muted-foreground">
-            <p>Falcon Innovation Academy is a trading brand operated by Falcon Expert Institute FZ-LLC, registered in Ras Al Khaimah Economic Zone, UAE,</p>
+            <p>Falcon Innovation Academy is a trading brand operated by Falcon Expert Institute FZ-LLC.</p>
+            <p>VUNE3122, Compass building, AL Hulaila Industrial Zone-FZ, RAK, UAE.</p>
             <p>Educational Licence No 52001001.</p>
           </div>
         </div>
@@ -1151,6 +1190,15 @@ function Footer() {
                 className="hover:text-falcon-green"
               >
                 Terms of Use
+              </button>
+            </li>
+            <li>
+              <button
+                type="button"
+                onClick={() => setLegalModal("refund")}
+                className="hover:text-falcon-green"
+              >
+                Refund & Cancellation Policy
               </button>
             </li>
             <li>
