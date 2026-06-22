@@ -340,27 +340,27 @@ function CheckDot() {
 
 function HeroVisual() {
   return (
-    <div className="relative">
-      <div className="absolute -inset-6 -z-10 rounded-[2rem] bg-gradient-to-br from-falcon-sand to-white" />
-      <div className="rounded-2xl border border-border bg-white p-6 shadow-[var(--shadow-card)]">
-        <div className="flex items-center justify-between border-b border-border pb-4">
-          <div className="flex items-center gap-2">
-            <span className="h-3 w-3 rounded-full bg-falcon-red" />
-            <span className="h-3 w-3 rounded-full bg-falcon-gold" />
-            <span className="h-3 w-3 rounded-full bg-falcon-green" />
+    <div className="relative shrink-0">
+      <div className="absolute -inset-3 -z-10 rounded-[1.5rem] bg-gradient-to-br from-falcon-sand to-white lg:-inset-6 lg:rounded-[2rem]" />
+      <div className="rounded-xl border border-border bg-white p-4 shadow-[var(--shadow-card)] lg:rounded-2xl lg:p-6">
+        <div className="flex items-center justify-between border-b border-border pb-3 lg:pb-4">
+          <div className="flex items-center gap-1.5 lg:gap-2">
+            <span className="h-2.5 w-2.5 rounded-full bg-falcon-red lg:h-3 lg:w-3" />
+            <span className="h-2.5 w-2.5 rounded-full bg-falcon-gold lg:h-3 lg:w-3" />
+            <span className="h-2.5 w-2.5 rounded-full bg-falcon-green lg:h-3 lg:w-3" />
           </div>
-          <span className="text-sm font-medium text-muted-foreground">AI Workflow · Live</span>
+          <span className="text-xs font-medium text-muted-foreground lg:text-sm">AI Workflow · Live</span>
         </div>
-        <div className="mt-6 grid grid-cols-3 gap-4">
+        <div className="mt-4 grid grid-cols-3 gap-2 lg:mt-6 lg:gap-4">
           {[
             { label: "Use cases", value: "12", tone: "green" },
             { label: "Tools tested", value: "8", tone: "gold" },
             { label: "Pilots", value: "3", tone: "ink" },
           ].map((s) => (
-            <div key={s.label} className="rounded-lg border border-border p-4">
-              <div className="text-sm text-muted-foreground">{s.label}</div>
+            <div key={s.label} className="rounded-lg border border-border p-2.5 lg:p-4">
+              <div className="text-[0.7rem] leading-tight text-muted-foreground lg:text-sm">{s.label}</div>
               <div
-                className="mt-1.5 text-3xl font-extrabold"
+                className="mt-1 text-2xl font-extrabold lg:mt-1.5 lg:text-3xl"
                 style={{
                   color:
                     s.tone === "green"
@@ -375,18 +375,18 @@ function HeroVisual() {
             </div>
           ))}
         </div>
-        <div className="mt-6 space-y-4">
+        <div className="mt-4 space-y-2.5 lg:mt-6 lg:space-y-4">
           {[
             { name: "Contract review · Claude", pct: 82, color: "var(--falcon-green)" },
             { name: "Sales draft · ChatGPT", pct: 64, color: "var(--falcon-gold)" },
             { name: "Internal RAG · Self-hosted", pct: 41, color: "var(--falcon-ink)" },
           ].map((b) => (
             <div key={b.name}>
-              <div className="flex items-center justify-between text-sm font-medium">
-                <span>{b.name}</span>
-                <span className="text-muted-foreground">{b.pct}%</span>
+              <div className="flex items-center justify-between text-xs font-medium lg:text-sm">
+                <span className="truncate pr-2">{b.name}</span>
+                <span className="shrink-0 text-muted-foreground">{b.pct}%</span>
               </div>
-              <div className="mt-2 h-2.5 rounded-full bg-muted">
+              <div className="mt-1.5 h-2 rounded-full bg-muted lg:mt-2 lg:h-2.5">
                 <div
                   className="h-full rounded-full"
                   style={{ width: `${b.pct}%`, backgroundColor: b.color }}
@@ -395,14 +395,18 @@ function HeroVisual() {
             </div>
           ))}
         </div>
-        <div className="mt-6 grid grid-cols-2 gap-4">
-          <div className="rounded-lg bg-falcon-sand p-4">
-            <div className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">Approval gate</div>
-            <div className="mt-1.5 text-base font-semibold">Human-in-the-loop</div>
+        <div className="mt-4 hidden grid-cols-2 gap-3 sm:grid lg:mt-6 lg:gap-4">
+          <div className="rounded-lg bg-falcon-sand p-3 lg:p-4">
+            <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground lg:text-sm">
+              Approval gate
+            </div>
+            <div className="mt-1 text-sm font-semibold lg:mt-1.5 lg:text-base">Human-in-the-loop</div>
           </div>
-          <div className="rounded-lg bg-falcon-sand p-4">
-            <div className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">Data class</div>
-            <div className="mt-1.5 text-base font-semibold">Confidential · API</div>
+          <div className="rounded-lg bg-falcon-sand p-3 lg:p-4">
+            <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground lg:text-sm">
+              Data class
+            </div>
+            <div className="mt-1 text-sm font-semibold lg:mt-1.5 lg:text-base">Confidential · API</div>
           </div>
         </div>
       </div>
@@ -412,7 +416,10 @@ function HeroVisual() {
 
 function Hero() {
   return (
-    <section id="top" className="relative overflow-hidden">
+    <section
+      id="top"
+      className="relative flex min-h-[calc(100dvh-4rem)] flex-col overflow-hidden lg:min-h-0"
+    >
       <div
         className="absolute inset-0 -z-10"
         style={{
@@ -420,29 +427,33 @@ function Hero() {
             "radial-gradient(60% 50% at 80% 10%, rgba(199,161,90,0.18), transparent 70%), radial-gradient(50% 50% at 10% 90%, rgba(0,132,61,0.12), transparent 70%)",
         }}
       />
-      <div className="container-x grid items-center gap-12 py-16 md:py-24 lg:grid-cols-[1.05fr_0.95fr]">
-        <div>
+      <div className="container-x flex flex-1 flex-col justify-between gap-6 py-8 md:gap-8 lg:grid lg:flex-none lg:items-center lg:gap-12 lg:py-16 lg:grid-cols-[1.05fr_0.95fr] xl:py-24">
+        <div className="flex flex-col">
           <span className="eyebrow">
             <span className="h-1.5 w-1.5 rounded-full bg-falcon-gold" />
             UAE-based · Globally trusted
           </span>
-          <h1 className="mt-5 text-4xl font-extrabold leading-[1.05] sm:text-5xl lg:text-6xl">
+          <h1 className="mt-4 text-3xl font-extrabold leading-[1.08] sm:mt-5 sm:text-4xl md:text-5xl lg:text-6xl">
             Learn to use AI as a <span className="text-falcon-green">business advantage</span> — not a buzzword.
           </h1>
-          <p className="mt-6 max-w-xl text-lg text-muted-foreground">
+          <p className="mt-4 max-w-xl text-base text-muted-foreground md:mt-6 md:text-lg">
             A practical four-course program for business owners, managers, consultants and analysts who want to
             understand AI, choose the right tools, build real workflows and safely adopt AI agents.
           </p>
-          <p className="mt-4 max-w-xl text-base text-muted-foreground">
+          <p className="mt-4 hidden max-w-xl text-base text-muted-foreground md:block">
             From AI fundamentals to hands-on tool use, agentic workflows and implementation planning — learn how
             models work, how to compare tools, prompt effectively, verify outputs, and decide when AI should
             (or should not) be used.
           </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <a href={learnWorldsAiFundamentalsUrl} className="btn-primary">Start with AI Fundamentals</a>
-            <a href={learnWorldsCoursesUrl} className="btn-gold">Explore full program</a>
+          <div className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:flex-wrap">
+            <a href={learnWorldsAiFundamentalsUrl} className="btn-primary justify-center sm:justify-start">
+              Start with AI Fundamentals
+            </a>
+            <a href={learnWorldsCoursesUrl} className="btn-gold justify-center sm:justify-start">
+              Explore full program
+            </a>
           </div>
-          <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-muted-foreground">
+          <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-muted-foreground sm:mt-8 sm:gap-x-6 sm:gap-y-3 sm:text-sm">
             <div className="flex items-center gap-2"><CheckDot /> 4 sequential courses</div>
             <div className="flex items-center gap-2"><CheckDot /> Real business artifacts</div>
             <div className="flex items-center gap-2"><CheckDot /> No coding required</div>
