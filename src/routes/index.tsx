@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 
 import {
   Dialog,
@@ -338,75 +338,209 @@ function CheckDot() {
   );
 }
 
+const PIPELINE_STAGES = ["Intake", "AI draft", "Verify", "Approve"] as const;
+
+const WORKFLOW_SCENES = [
+  {
+    name: "Contract review",
+    stage: 2,
+    confidence: 86,
+    gate: "Human review",
+    dataClass: "Confidential",
+    queued: 2,
+    active: 1,
+    doneToday: 14,
+    activity: "Vendor NDA — 2 clauses flagged for legal review",
+  },
+  {
+    name: "Sales proposal",
+    stage: 1,
+    confidence: 68,
+    gate: "AI drafting",
+    dataClass: "Internal",
+    queued: 3,
+    active: 2,
+    doneToday: 14,
+    activity: "Q2 revenue forecast — first draft generating",
+  },
+  {
+    name: "Support triage",
+    stage: 3,
+    confidence: 94,
+    gate: "Approved",
+    dataClass: "Public FAQ",
+    queued: 1,
+    active: 0,
+    doneToday: 16,
+    activity: "Refund policy answer — verified and sent",
+  },
+] as const;
+
+const ACTIVITY_FEED = [
+  "NDA clause check — approved · 2m ago",
+  "Vendor terms — awaiting review · now",
+  "Q2 forecast — AI drafting · now",
+  "Refund policy — verified · 4m ago",
+  "Budget memo — queued · 6m ago",
+  "Client brief — approved · 11m ago",
+] as const;
+
+const SCENE_CYCLE_MS = 4200;
+const SCENE_FADE_MS = 320;
+
 function HeroVisual() {
+  const [sceneIndex, setSceneIndex] = useState(0);
+  const [sceneVisible, setSceneVisible] = useState(true);
+
+  useEffect(() => {
+    let fadeTimeout: number | undefined;
+
+    const interval = window.setInterval(() => {
+      setSceneVisible(false);
+      fadeTimeout = window.setTimeout(() => {
+        setSceneIndex((current) => (current + 1) % WORKFLOW_SCENES.length);
+        setSceneVisible(true);
+      }, SCENE_FADE_MS);
+    }, SCENE_CYCLE_MS);
+
+    return () => {
+      window.clearInterval(interval);
+      if (fadeTimeout !== undefined) window.clearTimeout(fadeTimeout);
+    };
+  }, []);
+
+  const scene = WORKFLOW_SCENES[sceneIndex];
+  const tickerItems = [...ACTIVITY_FEED, ...ACTIVITY_FEED];
+
   return (
     <div className="relative shrink-0">
       <div className="absolute -inset-3 -z-10 rounded-[1.5rem] bg-gradient-to-br from-falcon-sand to-white lg:-inset-6 lg:rounded-[2rem]" />
       <div className="rounded-xl border border-border bg-white p-4 shadow-[var(--shadow-card)] lg:rounded-2xl lg:p-6">
-        <div className="flex items-center justify-between border-b border-border pb-3 lg:pb-4">
+        <div className="flex items-center justify-between gap-3 border-b border-border pb-3 lg:pb-4">
           <div className="flex items-center gap-1.5 lg:gap-2">
             <span className="h-2.5 w-2.5 rounded-full bg-falcon-red lg:h-3 lg:w-3" />
             <span className="h-2.5 w-2.5 rounded-full bg-falcon-gold lg:h-3 lg:w-3" />
             <span className="h-2.5 w-2.5 rounded-full bg-falcon-green lg:h-3 lg:w-3" />
           </div>
-          <span className="text-xs font-medium text-muted-foreground lg:text-sm">AI Workflow · Live</span>
+          <span className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground lg:text-sm">
+            <span className="relative flex h-2 w-2">
+              <span className="hero-live-ping absolute inline-flex h-full w-full rounded-full bg-falcon-green opacity-50" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-falcon-green" />
+            </span>
+            AI Workflow · Live
+          </span>
         </div>
-        <div className="mt-4 grid grid-cols-3 gap-2 lg:mt-6 lg:gap-4">
-          {[
-            { label: "Use cases", value: "12", tone: "green" },
-            { label: "Tools tested", value: "8", tone: "gold" },
-            { label: "Pilots", value: "3", tone: "ink" },
-          ].map((s) => (
-            <div key={s.label} className="rounded-lg border border-border p-2.5 lg:p-4">
-              <div className="text-[0.7rem] leading-tight text-muted-foreground lg:text-sm">{s.label}</div>
-              <div
-                className="mt-1 text-2xl font-extrabold lg:mt-1.5 lg:text-3xl"
-                style={{
-                  color:
-                    s.tone === "green"
-                      ? "var(--falcon-green)"
-                      : s.tone === "gold"
-                      ? "var(--falcon-gold)"
-                      : "var(--falcon-ink)",
-                }}
-              >
-                {s.value}
-              </div>
+
+        <div
+          className={`mt-4 transition-opacity duration-300 lg:mt-6 ${sceneVisible ? "opacity-100" : "opacity-0"}`}
+        >
+          <div className="flex items-start justify-between gap-3">
+            <div className="min-w-0">
+              {/* <div className="text-[0.65rem] font-semibold uppercase tracking-wide text-muted-foreground lg:text-xs">
+                Active pipeline
+              </div> */}
+              <div className="truncate text-sm font-bold lg:text-base">{scene.name}</div>
             </div>
-          ))}
-        </div>
-        <div className="mt-4 space-y-2.5 lg:mt-6 lg:space-y-4">
-          {[
-            { name: "Contract review · Claude", pct: 82, color: "var(--falcon-green)" },
-            { name: "Sales draft · ChatGPT", pct: 64, color: "var(--falcon-gold)" },
-            { name: "Internal RAG · Self-hosted", pct: 41, color: "var(--falcon-ink)" },
-          ].map((b) => (
-            <div key={b.name}>
-              <div className="flex items-center justify-between text-xs font-medium lg:text-sm">
-                <span className="truncate pr-2">{b.name}</span>
-                <span className="shrink-0 text-muted-foreground">{b.pct}%</span>
-              </div>
-              <div className="mt-1.5 h-2 rounded-full bg-muted lg:mt-2 lg:h-2.5">
-                <div
-                  className="h-full rounded-full"
-                  style={{ width: `${b.pct}%`, backgroundColor: b.color }}
-                />
-              </div>
-            </div>
-          ))}
-        </div>
-        <div className="mt-4 hidden grid-cols-2 gap-3 sm:grid lg:mt-6 lg:gap-4">
-          <div className="rounded-lg bg-falcon-sand p-3 lg:p-4">
-            <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground lg:text-sm">
-              Approval gate
-            </div>
-            <div className="mt-1 text-sm font-semibold lg:mt-1.5 lg:text-base">Human-in-the-loop</div>
+            <span className="shrink-0 rounded-full bg-falcon-green/10 px-2 py-0.5 text-[0.65rem] font-semibold text-falcon-green lg:px-2.5 lg:py-1 lg:text-xs">
+              {scene.gate}
+            </span>
           </div>
-          <div className="rounded-lg bg-falcon-sand p-3 lg:p-4">
-            <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground lg:text-sm">
-              Data class
+
+          <div className="mt-3 flex items-center gap-0.5 lg:mt-4 lg:gap-1">
+            {PIPELINE_STAGES.map((stage, index) => {
+              const isComplete = index < scene.stage;
+              const isActive = index === scene.stage;
+              return (
+                <Fragment key={stage}>
+                  <div
+                    className={`min-w-0 flex-1 rounded-md border px-0.5 py-1.5 text-center text-[0.55rem] font-semibold leading-tight sm:text-[0.6rem] lg:px-1 lg:py-2 lg:text-[0.7rem] ${
+                      isActive
+                        ? "hero-stage-active border-falcon-green/40 bg-falcon-green/10 text-falcon-green"
+                        : isComplete
+                          ? "border-falcon-green/20 bg-falcon-green/5 text-falcon-green"
+                          : "border-border bg-muted/40 text-muted-foreground"
+                    }`}
+                  >
+                    {isComplete ? "✓ " : ""}
+                    {stage}
+                  </div>
+                  {index < PIPELINE_STAGES.length - 1 && (
+                    <div
+                      className={`h-0.5 w-2 shrink-0 rounded-full sm:w-3 ${
+                        index < scene.stage ? "bg-falcon-green/50" : "bg-border"
+                      }`}
+                    />
+                  )}
+                </Fragment>
+              );
+            })}
+          </div>
+
+          <div className="mt-4 lg:mt-5">
+            <div className="flex items-center justify-between text-xs font-medium lg:text-sm">
+              <span>Verification confidence</span>
+              <span className="tabular-nums text-muted-foreground">{scene.confidence}%</span>
             </div>
-            <div className="mt-1 text-sm font-semibold lg:mt-1.5 lg:text-base">Confidential · API</div>
+            <div className="relative mt-1.5 h-2 overflow-hidden rounded-full bg-muted lg:mt-2 lg:h-2.5">
+              <div
+                className="relative h-full rounded-full bg-falcon-green transition-[width] duration-700 ease-out"
+                style={{ width: `${scene.confidence}%` }}
+              >
+                <span className="hero-confidence-shimmer absolute inset-y-0 w-1/3 bg-gradient-to-r from-transparent via-white/45 to-transparent" />
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-4 grid grid-cols-3 gap-2 lg:mt-5 lg:gap-3">
+            {[
+              { label: "Queued", value: scene.queued, tone: "gold" },
+              { label: "In progress", value: scene.active, tone: "green" },
+              { label: "Done today", value: scene.doneToday, tone: "ink" },
+            ].map((stat) => (
+              <div key={stat.label} className="rounded-lg border border-border p-2 text-center lg:p-2.5">
+                <div className="text-[0.65rem] leading-tight text-muted-foreground lg:text-xs">{stat.label}</div>
+                <div
+                  className="mt-0.5 text-xl font-extrabold tabular-nums transition-all duration-500 lg:text-2xl"
+                  style={{
+                    color:
+                      stat.tone === "green"
+                        ? "var(--falcon-green)"
+                        : stat.tone === "gold"
+                          ? "var(--falcon-gold)"
+                          : "var(--falcon-ink)",
+                  }}
+                >
+                  {stat.value}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-3 rounded-lg bg-falcon-sand/80 px-2.5 py-2 text-[0.7rem] leading-snug text-foreground lg:mt-4 lg:px-3 lg:py-2.5 lg:text-xs">
+            <span className="font-semibold text-falcon-green">Now · </span>
+            {scene.activity}
+          </div>
+        </div>
+
+        <div className="mt-4 border-t border-border pt-3 lg:mt-5 lg:pt-4">
+          <div className="flex items-center justify-between gap-2 text-[0.65rem] font-semibold uppercase tracking-wide text-muted-foreground lg:text-xs">
+            <span>Recent activity</span>
+            <span className="rounded bg-muted px-1.5 py-0.5 normal-case tracking-normal text-[0.6rem] lg:text-[0.65rem]">
+              {scene.dataClass}
+            </span>
+          </div>
+          <div className="relative mt-2 h-9 overflow-hidden lg:h-10">
+            <div className="hero-activity-ticker">
+              {tickerItems.map((item, index) => (
+                <div
+                  key={`${item}-${index}`}
+                  className="flex h-9 items-center text-[0.7rem] text-muted-foreground lg:h-10 lg:text-xs"
+                >
+                  <span className="mr-2 h-1.5 w-1.5 shrink-0 rounded-full bg-falcon-green/70" />
+                  <span className="truncate">{item}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -480,7 +614,15 @@ function ProblemSolution() {
   ];
   return (
     <section id="solution" className="section-pad bg-falcon-sand">
-      <div className="container-x grid gap-8 lg:grid-cols-2">
+      <div className="container-x">
+        <div className="mx-auto mb-10 max-w-3xl text-center lg:mb-14">
+          <span className="eyebrow">From chaos to capability</span>
+          <h2 className="mt-4 text-3xl font-extrabold sm:text-4xl">
+            Shift from the chaotic use of AI tools to the {" "}
+            <span className="text-falcon-green">deliberate construction of processes.</span>
+          </h2>
+        </div>
+        <div className="grid gap-8 lg:grid-cols-2">
         <div className="overflow-hidden rounded-2xl border border-border bg-white">
           <img
             src={chaosPathImage}
@@ -524,6 +666,7 @@ function ProblemSolution() {
               ))}
             </ul>
           </div>
+        </div>
         </div>
       </div>
     </section>

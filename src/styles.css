@@ -1,4 +1,4 @@
-@import "tailwindcss" source(none);
+@import "tailwindcss";
 @source "../src";
 @import "tw-animate-css";
 
@@ -245,12 +245,65 @@
   backdrop-filter: blur(20px) saturate(160%);
 }
 
+@keyframes hero-live-ping {
+  75%,
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+@keyframes hero-stage-active {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--falcon-green) 40%, transparent);
+  }
+  50% {
+    box-shadow: 0 0 0 5px transparent;
+  }
+}
+
+@keyframes hero-confidence-shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(250%);
+  }
+}
+
+@keyframes hero-ticker {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-50%);
+  }
+}
+
+@utility hero-live-ping {
+  animation: hero-live-ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@utility hero-stage-active {
+  animation: hero-stage-active 2.2s ease-in-out infinite;
+}
+
+@utility hero-confidence-shimmer {
+  animation: hero-confidence-shimmer 2.8s ease-in-out infinite;
+}
+
+@utility hero-activity-ticker {
+  animation: hero-ticker 14s linear infinite;
+}
+
 @utility section-pad {
   padding-block: 5rem;
 }
 
 @utility eyebrow {
   display: inline-flex;
+  width: fit-content;
   align-items: center;
   gap: 0.5rem;
   padding: 0.375rem 0.875rem;
