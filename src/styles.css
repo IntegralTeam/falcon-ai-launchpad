@@ -239,6 +239,55 @@
   }
 }
 
+@property --hero-glow-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes hero-aurora-spin {
+  to {
+    --hero-glow-angle: 360deg;
+  }
+}
+
+@utility hero-viewport {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+@utility hero-aurora {
+  position: absolute;
+  inset: -40%;
+  z-index: 0;
+  pointer-events: none;
+  background: conic-gradient(
+    from var(--hero-glow-angle),
+    transparent 0%,
+    color-mix(in oklab, var(--falcon-gold-soft) 28%, transparent) 7%,
+    color-mix(in oklab, var(--falcon-gold) 22%, transparent) 13%,
+    color-mix(in oklab, var(--falcon-gold-soft) 18%, transparent) 19%,
+    transparent 27%,
+    transparent 47%,
+    color-mix(in oklab, var(--falcon-gold) 20%, transparent) 55%,
+    color-mix(in oklab, var(--falcon-gold-soft) 26%, transparent) 61%,
+    transparent 69%,
+    transparent 100%
+  );
+  filter: blur(80px);
+  opacity: 0.42;
+  animation: hero-aurora-spin 32s linear infinite;
+  mask-image: radial-gradient(ellipse 72% 64% at 50% 44%, transparent 54%, black 90%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-aurora {
+    animation: none;
+    opacity: 0.24;
+  }
+}
+
 @utility mobile-menu-backdrop {
   background-color: color-mix(in oklab, var(--background) 72%, transparent);
   -webkit-backdrop-filter: blur(20px) saturate(160%);
@@ -314,4 +363,243 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
+}
+
+@utility comparison-table {
+  opacity: 0;
+  transform: translateY(1.25rem);
+  transition:
+    opacity 0.55s ease-out,
+    transform 0.55s ease-out;
+
+  &.comparison-table-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@utility comparison-row {
+  .comparison-negate {
+    display: inline-flex;
+    width: 1rem;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: scale(0.4);
+    transition:
+      opacity 0.3s ease-out,
+      transform 0.35s cubic-bezier(0.34, 1.4, 0.64, 1);
+  }
+
+  .comparison-strike-wrap {
+    position: relative;
+    display: inline-block;
+    transition: color 0.35s ease-out;
+  }
+
+  .comparison-strike-line {
+    position: absolute;
+    top: 54%;
+    left: 0;
+    height: 2px;
+    width: 0;
+    border-radius: 999px;
+    background: color-mix(in oklab, var(--falcon-red) 55%, transparent);
+    transition: width 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .comparison-win {
+    opacity: 0;
+    transform: translateX(0.75rem);
+    transition:
+      opacity 0.45s ease-out,
+      transform 0.45s ease-out;
+  }
+
+  .comparison-check {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: scale(0.35);
+    transition:
+      opacity 0.3s ease-out,
+      transform 0.4s cubic-bezier(0.34, 1.4, 0.64, 1);
+  }
+
+  &.comparison-row-visible {
+    .comparison-negate {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .comparison-strike-wrap {
+      color: color-mix(in oklab, var(--muted-foreground) 72%, transparent);
+    }
+
+    .comparison-strike-line {
+      width: 100%;
+    }
+
+    .comparison-win {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .comparison-check {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+}
+
+@utility results-reveal {
+  opacity: 0;
+  transform: translateY(1.25rem) scale(0.985);
+  transition:
+    opacity 0.55s ease-out,
+    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+
+  &.results-reveal-visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@utility results-reveal-row {
+  opacity: 0;
+  transform: translateX(-0.65rem);
+  transition:
+    opacity 0.4s ease-out,
+    transform 0.4s ease-out;
+
+  &.results-reveal-row-visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@utility results-reveal-cell {
+  opacity: 0;
+  transform: translateY(0.4rem);
+  transition:
+    opacity 0.35s ease-out,
+    transform 0.35s ease-out;
+
+  &.results-reveal-cell-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@utility results-flow-step {
+  flex: 1;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border);
+  background-color: var(--falcon-sand);
+  padding: 0.75rem;
+  text-align: center;
+  opacity: 0.45;
+  transform: scale(0.94);
+  transition:
+    opacity 0.35s ease-out,
+    transform 0.4s cubic-bezier(0.34, 1.4, 0.64, 1),
+    border-color 0.35s ease-out,
+    background-color 0.35s ease-out,
+    color 0.35s ease-out;
+
+  &.results-flow-step-visible {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  &.results-flow-step-highlight.results-flow-step-visible {
+    border-color: color-mix(in oklab, var(--falcon-gold) 55%, transparent);
+    background-color: color-mix(in oklab, var(--falcon-gold) 12%, transparent);
+    color: var(--falcon-ink);
+    animation: hero-stage-active 2.2s ease-in-out infinite;
+  }
+}
+
+@utility results-flow-arrow {
+  padding-inline: 0.25rem;
+  color: var(--muted-foreground);
+  opacity: 0;
+  transform: translateX(-0.25rem);
+  transition:
+    opacity 0.3s ease-out,
+    transform 0.3s ease-out;
+
+  &.results-flow-arrow-visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@utility results-bar-track {
+  margin-top: 0.25rem;
+  height: 0.5rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background-color: var(--muted);
+}
+
+@utility results-bar-fill {
+  height: 100%;
+  width: 0;
+  border-radius: 999px;
+  transition: width 0.75s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &.results-bar-fill-visible {
+    width: var(--results-bar-target);
+  }
+}
+
+@utility results-footer-note {
+  opacity: 0;
+  transform: translateY(0.75rem);
+  transition:
+    opacity 0.55s ease-out,
+    transform 0.55s ease-out;
+
+  &.results-footer-note-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .comparison-table {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .comparison-row .comparison-negate,
+  .comparison-row .comparison-strike-line,
+  .comparison-row .comparison-win,
+  .comparison-row .comparison-check {
+    opacity: 1;
+    transform: none;
+    width: 100%;
+    transition: none;
+  }
+
+  .comparison-row .comparison-strike-wrap {
+    color: color-mix(in oklab, var(--muted-foreground) 72%, transparent);
+  }
+
+  .results-reveal,
+  .results-reveal-row,
+  .results-reveal-cell,
+  .results-flow-step,
+  .results-flow-arrow,
+  .results-bar-track,
+  .results-footer-note {
+    transition: none;
+    opacity: 1;
+    transform: none;
+    width: var(--results-bar-target, 100%);
+  }
 }

@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 
 import {
   Dialog,
@@ -244,7 +244,7 @@ function Nav() {
 
   return (
     <>
-      <header className="sticky top-0 z-[110] border-b border-border/60 bg-background/85 backdrop-blur-md">
+      <header className="sticky top-0 z-[110] shrink-0 border-b border-border/60 bg-background/85 backdrop-blur-md">
         <nav className="container-x flex items-center justify-between py-3.5">
           <a href="#top" className="flex items-center" onClick={closeMenu}>
             <BrandLogo />
@@ -550,10 +550,7 @@ function HeroVisual() {
 
 function Hero() {
   return (
-    <section
-      id="top"
-      className="relative flex min-h-[calc(100dvh-4rem)] flex-col overflow-hidden lg:min-h-0"
-    >
+    <section id="top" className="relative flex min-h-0 flex-1 flex-col overflow-hidden">
       <div
         className="absolute inset-0 -z-10"
         style={{
@@ -561,7 +558,7 @@ function Hero() {
             "radial-gradient(60% 50% at 80% 10%, rgba(199,161,90,0.18), transparent 70%), radial-gradient(50% 50% at 10% 90%, rgba(0,132,61,0.12), transparent 70%)",
         }}
       />
-      <div className="container-x flex flex-1 flex-col justify-between gap-6 py-8 md:gap-8 lg:grid lg:flex-none lg:items-center lg:gap-12 lg:py-16 lg:grid-cols-[1.05fr_0.95fr] xl:py-24">
+      <div className="container-x flex min-h-0 flex-1 flex-col justify-between gap-6 py-6 md:gap-8 md:py-8 lg:grid lg:items-center lg:gap-12 lg:py-10 lg:grid-cols-[1.05fr_0.95fr] xl:py-12">
         <div className="flex flex-col">
           <span className="eyebrow">
             <span className="h-1.5 w-1.5 rounded-full bg-falcon-gold" />
@@ -574,11 +571,6 @@ function Hero() {
             A practical four-course program for business owners, managers, consultants and analysts who want to
             understand AI, choose the right tools, build real workflows and safely adopt AI agents.
           </p>
-          <p className="mt-4 hidden max-w-xl text-base text-muted-foreground md:block">
-            From AI fundamentals to hands-on tool use, agentic workflows and implementation planning — learn how
-            models work, how to compare tools, prompt effectively, verify outputs, and decide when AI should
-            (or should not) be used.
-          </p>
           <div className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:flex-wrap">
             <a href={learnWorldsAiFundamentalsUrl} className="btn-primary justify-center sm:justify-start">
               Start with AI Fundamentals
@@ -586,11 +578,6 @@ function Hero() {
             <a href={learnWorldsCoursesUrl} className="btn-gold justify-center sm:justify-start">
               Explore full program
             </a>
-          </div>
-          <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-muted-foreground sm:mt-8 sm:gap-x-6 sm:gap-y-3 sm:text-sm">
-            <div className="flex items-center gap-2"><CheckDot /> 4 sequential courses</div>
-            <div className="flex items-center gap-2"><CheckDot /> Real business artifacts</div>
-            <div className="flex items-center gap-2"><CheckDot /> No coding required</div>
           </div>
         </div>
         <HeroVisual />
@@ -673,14 +660,92 @@ function ProblemSolution() {
   );
 }
 
+const COMPARISON_ROWS = [
+  ["Teaches one tool", "Teaches durable decision-making across tools"],
+  ["Only prompts", "Models, tools, workflows, deployment, verification"],
+  ["Hype language", "Practical business judgment"],
+  ["Ends with a quiz", "Ends with business artifacts (brief, roadmap)"],
+  ["Jumps to automation", "Builds readiness before agents and automation"],
+] as const;
+
+const COMPARISON_ROW_STAGGER_MS = 130;
+
+function useScrollReveal(threshold = 0.25) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    if (!visible && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setVisible(true);
+      return;
+    }
+
+    const element = ref.current;
+    if (!element || visible) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold },
+    );
+
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [threshold, visible]);
+
+  return { ref, visible };
+}
+
+function ComparisonRow({
+  left,
+  right,
+  index,
+  tableVisible,
+}: {
+  left: string;
+  right: string;
+  index: number;
+  tableVisible: boolean;
+}) {
+  const rowDelay = index * COMPARISON_ROW_STAGGER_MS;
+  const strikeDelay = rowDelay + 180;
+  const winDelay = rowDelay + 420;
+
+  return (
+    <div
+      className={`comparison-row grid grid-cols-1 border-t border-border bg-white text-sm sm:grid-cols-2 ${
+        tableVisible ? "comparison-row-visible" : ""
+      }`}
+    >
+      <div className="flex items-center gap-2 px-4 py-2.5 text-muted-foreground">
+        <span className="comparison-negate text-falcon-red" style={{ transitionDelay: `${rowDelay}ms` }}>
+          ✕
+        </span>
+        <span className="comparison-strike-wrap">
+          {left}
+          <span className="comparison-strike-line" style={{ transitionDelay: `${strikeDelay}ms` }} />
+        </span>
+      </div>
+      <div
+        className="comparison-win border-t border-border px-4 py-2.5 font-medium sm:border-l sm:border-t-0"
+        style={{ transitionDelay: `${winDelay}ms` }}
+      >
+        <span className="comparison-check mr-1.5 text-falcon-green" style={{ transitionDelay: `${winDelay + 60}ms` }}>
+          ✓
+        </span>
+        {right}
+      </div>
+    </div>
+  );
+}
+
 function Comparison() {
-  const rows = [
-    ["Teaches one tool", "Teaches durable decision-making across tools"],
-    ["Only prompts", "Models, tools, workflows, deployment, verification"],
-    ["Hype language", "Practical business judgment"],
-    ["Ends with a quiz", "Ends with business artifacts (brief, roadmap)"],
-    ["Jumps to automation", "Builds readiness before agents and automation"],
-  ];
+  const { ref, visible } = useScrollReveal();
+
   return (
     <section className="section-pad">
       <div className="container-x">
@@ -691,21 +756,20 @@ function Comparison() {
             <span className="text-falcon-green">We teach you how to decide.</span>
           </h2>
         </div>
-        <div className="mx-auto mt-10 max-w-[785px] overflow-hidden rounded-2xl border border-border">
+        <div
+          ref={ref}
+          className={`comparison-table mx-auto mt-10 max-w-[785px] overflow-hidden rounded-2xl border border-border ${
+            visible ? "comparison-table-visible" : ""
+          }`}
+        >
           <div className="grid grid-cols-1 bg-falcon-sand text-xs font-semibold uppercase tracking-wide sm:grid-cols-2">
             <div className="px-4 py-2.5 text-muted-foreground">Typical AI course</div>
             <div className="border-t border-border px-4 py-2.5 text-falcon-green sm:border-l sm:border-t-0">
               Falcon Innovation Academy
             </div>
           </div>
-          {rows.map(([a, b], i) => (
-            <div key={i} className="grid grid-cols-1 border-t border-border bg-white text-sm sm:grid-cols-2">
-              <div className="px-4 py-2.5 text-muted-foreground line-through decoration-falcon-red/40">{a}</div>
-              <div className="border-t border-border px-4 py-2.5 font-medium sm:border-l sm:border-t-0">
-                <span className="mr-1.5 text-falcon-green">✓</span>
-                {b}
-              </div>
-            </div>
+          {COMPARISON_ROWS.map(([left, right], index) => (
+            <ComparisonRow key={left} left={left} right={right} index={index} tableVisible={visible} />
           ))}
         </div>
       </div>
@@ -764,16 +828,60 @@ function Program() {
   );
 }
 
-function Row({ label, value }: { label: string; value: string }) {
+function Row({
+  label,
+  value,
+  index,
+  visible,
+  baseDelay,
+}: {
+  label: string;
+  value: string;
+  index: number;
+  visible: boolean;
+  baseDelay: number;
+}) {
   return (
-    <div className="flex items-start justify-between gap-4 border-b border-border/60 pb-2 last:border-0 last:pb-0">
+    <div
+      className={`results-reveal-row flex items-start justify-between gap-4 border-b border-border/60 pb-2 last:border-0 last:pb-0 ${
+        visible ? "results-reveal-row-visible" : ""
+      }`}
+      style={{ transitionDelay: `${baseDelay + 220 + index * 75}ms` }}
+    >
       <span className="text-muted-foreground">{label}</span>
       <span className="text-right font-semibold">{value}</span>
     </div>
   );
 }
 
+const RESULTS_CARD_STAGGER_MS = 150;
+const READINESS_ROWS = [
+  { label: "Workflow", value: "Vendor contract review" },
+  { label: "Data sensitivity", value: "Confidential — legal" },
+  { label: "Model category", value: "Hosted API · enterprise tier" },
+  { label: "Human review", value: "Required before sign-off" },
+  { label: "Next steps", value: "Pilot with 10 contracts · 4 weeks" },
+] as const;
+
+const TOOL_PORTFOLIO_ROWS = [
+  ["Clause extraction", "Good", "Excellent"],
+  ["Tone control", "Excellent", "Good"],
+  ["Long contracts", "Limited", "Strong"],
+  ["Risk flagging", "Good", "Excellent"],
+] as const;
+
+const WORKFLOW_STEPS = ["User", "Agent", "Approval", "Action"] as const;
+
+const ROADMAP_PHASES = [
+  { phase: "Phase 1 · Discovery", width: "20%", color: "var(--falcon-green)" },
+  { phase: "Phase 2 · Pilots", width: "45%", color: "var(--falcon-gold)" },
+  { phase: "Phase 3 · Governance", width: "70%", color: "var(--falcon-ink)" },
+  { phase: "Phase 4 · Scale", width: "95%", color: "var(--falcon-red)" },
+] as const;
+
 function Results() {
+  const { ref, visible } = useScrollReveal(0.15);
+
   return (
     <section id="results" className="section-pad">
       <div className="container-x">
@@ -784,20 +892,35 @@ function Results() {
           </h2>
         </div>
 
-        <div className="mt-14 grid gap-6 lg:grid-cols-2">
-          <div className="rounded-2xl border border-border bg-white p-6 shadow-[var(--shadow-card)]">
+        <div ref={ref} className="mt-14 grid gap-6 lg:grid-cols-2">
+          <div
+            className={`results-reveal rounded-2xl border border-border bg-white p-6 shadow-[var(--shadow-card)] ${
+              visible ? "results-reveal-visible" : ""
+            }`}
+            style={{ transitionDelay: `${RESULTS_CARD_STAGGER_MS * 0}ms` }}
+          >
             <div className="text-xs font-bold uppercase tracking-wider text-falcon-gold">Artifact · 01</div>
             <h3 className="mt-1 text-xl font-bold">AI Use-Case Readiness Brief</h3>
             <div className="mt-4 space-y-3 rounded-xl bg-falcon-sand p-4 text-sm">
-              <Row label="Workflow" value="Vendor contract review" />
-              <Row label="Data sensitivity" value="Confidential — legal" />
-              <Row label="Model category" value="Hosted API · enterprise tier" />
-              <Row label="Human review" value="Required before sign-off" />
-              <Row label="Next steps" value="Pilot with 10 contracts · 4 weeks" />
+              {READINESS_ROWS.map((row, index) => (
+                <Row
+                  key={row.label}
+                  label={row.label}
+                  value={row.value}
+                  index={index}
+                  visible={visible}
+                  baseDelay={RESULTS_CARD_STAGGER_MS * 0}
+                />
+              ))}
             </div>
           </div>
 
-          <div className="rounded-2xl border border-border bg-white p-6 shadow-[var(--shadow-card)]">
+          <div
+            className={`results-reveal rounded-2xl border border-border bg-white p-6 shadow-[var(--shadow-card)] ${
+              visible ? "results-reveal-visible" : ""
+            }`}
+            style={{ transitionDelay: `${RESULTS_CARD_STAGGER_MS * 1}ms` }}
+          >
             <div className="text-xs font-bold uppercase tracking-wider text-falcon-gold">Artifact · 02</div>
             <h3 className="mt-1 text-xl font-bold">AI Tool Testing Portfolio</h3>
             <div className="mt-4 overflow-hidden rounded-xl border border-border text-sm">
@@ -806,62 +929,96 @@ function Results() {
                 <div>ChatGPT</div>
                 <div>Claude</div>
               </div>
-              {[
-                ["Clause extraction", "Good", "Excellent"],
-                ["Tone control", "Excellent", "Good"],
-                ["Long contracts", "Limited", "Strong"],
-                ["Risk flagging", "Good", "Excellent"],
-              ].map((r) => (
-                <div key={r[0]} className="grid grid-cols-3 border-t border-border p-3">
-                  <div className="text-muted-foreground">{r[0]}</div>
-                  <div>{r[1]}</div>
-                  <div className="font-semibold text-falcon-green">{r[2]}</div>
+              {TOOL_PORTFOLIO_ROWS.map((row, rowIndex) => (
+                <div key={row[0]} className="grid grid-cols-3 border-t border-border p-3">
+                  {row.map((cell, cellIndex) => (
+                    <div
+                      key={`${row[0]}-${cellIndex}`}
+                      className={`results-reveal-cell ${
+                        visible ? "results-reveal-cell-visible" : ""
+                      } ${cellIndex === 0 ? "text-muted-foreground" : cellIndex === 2 ? "font-semibold text-falcon-green" : ""}`}
+                      style={{
+                        transitionDelay: `${RESULTS_CARD_STAGGER_MS * 1 + 220 + rowIndex * 90 + cellIndex * 45}ms`,
+                      }}
+                    >
+                      {cell}
+                    </div>
+                  ))}
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="rounded-2xl border border-border bg-white p-6 shadow-[var(--shadow-card)]">
+          <div
+            className={`results-reveal rounded-2xl border border-border bg-white p-6 shadow-[var(--shadow-card)] ${
+              visible ? "results-reveal-visible" : ""
+            }`}
+            style={{ transitionDelay: `${RESULTS_CARD_STAGGER_MS * 2}ms` }}
+          >
             <div className="text-xs font-bold uppercase tracking-wider text-falcon-gold">Artifact · 03</div>
             <h3 className="mt-1 text-xl font-bold">Agentic Workflow Blueprint</h3>
             <div className="mt-6 flex items-center justify-between gap-2 text-xs font-semibold">
-              {["User", "Agent", "Approval", "Action"].map((s, i) => (
-                <div key={s} className="flex flex-1 items-center">
+              {WORKFLOW_STEPS.map((step, index) => (
+                <Fragment key={step}>
                   <div
-                    className={`flex-1 rounded-lg border p-3 text-center ${
-                      i === 2
-                        ? "border-falcon-gold bg-falcon-gold/10 text-falcon-ink"
-                        : "border-border bg-falcon-sand"
-                    }`}
+                    className={`results-flow-step ${
+                      index === 2 ? "results-flow-step-highlight" : ""
+                    } ${visible ? "results-flow-step-visible" : ""}`}
+                    style={{ transitionDelay: `${RESULTS_CARD_STAGGER_MS * 2 + 200 + index * 160}ms` }}
                   >
-                    {s}
+                    {step}
                   </div>
-                  {i < 3 && <span className="px-1 text-muted-foreground">→</span>}
-                </div>
+                  {index < WORKFLOW_STEPS.length - 1 && (
+                    <span
+                      className={`results-flow-arrow ${visible ? "results-flow-arrow-visible" : ""}`}
+                      style={{ transitionDelay: `${RESULTS_CARD_STAGGER_MS * 2 + 280 + index * 160}ms` }}
+                    >
+                      →
+                    </span>
+                  )}
+                </Fragment>
               ))}
             </div>
-            <p className="mt-4 text-sm text-muted-foreground">
+            <p
+              className={`results-reveal-row mt-4 text-sm text-muted-foreground ${
+                visible ? "results-reveal-row-visible" : ""
+              }`}
+              style={{ transitionDelay: `${RESULTS_CARD_STAGGER_MS * 2 + 880}ms` }}
+            >
               Every agent runs through approval gates and risk controls before any external action.
             </p>
           </div>
 
-          <div className="rounded-2xl border border-border bg-white p-6 shadow-[var(--shadow-card)]">
+          <div
+            className={`results-reveal rounded-2xl border border-border bg-white p-6 shadow-[var(--shadow-card)] ${
+              visible ? "results-reveal-visible" : ""
+            }`}
+            style={{ transitionDelay: `${RESULTS_CARD_STAGGER_MS * 3}ms` }}
+          >
             <div className="text-xs font-bold uppercase tracking-wider text-falcon-gold">Artifact · 04</div>
             <h3 className="mt-1 text-xl font-bold">Business AI Implementation Roadmap</h3>
             <div className="mt-6 space-y-3">
-              {[
-                { phase: "Phase 1 · Discovery", w: "20%", color: "var(--falcon-green)" },
-                { phase: "Phase 2 · Pilots", w: "45%", color: "var(--falcon-gold)" },
-                { phase: "Phase 3 · Governance", w: "70%", color: "var(--falcon-ink)" },
-                { phase: "Phase 4 · Scale", w: "95%", color: "var(--falcon-red)" },
-              ].map((p) => (
-                <div key={p.phase}>
+              {ROADMAP_PHASES.map((phase, index) => (
+                <div
+                  key={phase.phase}
+                  className={`results-reveal-row ${visible ? "results-reveal-row-visible" : ""}`}
+                  style={{ transitionDelay: `${RESULTS_CARD_STAGGER_MS * 3 + 180 + index * 100}ms` }}
+                >
                   <div className="flex justify-between text-xs font-semibold">
-                    <span>{p.phase}</span>
-                    <span className="text-muted-foreground">{p.w}</span>
+                    <span>{phase.phase}</span>
+                    <span className="text-muted-foreground">{phase.width}</span>
                   </div>
-                  <div className="mt-1 h-2 rounded-full bg-muted">
-                    <div className="h-full rounded-full" style={{ width: p.w, backgroundColor: p.color }} />
+                  <div className="results-bar-track">
+                    <div
+                      className={`results-bar-fill ${visible ? "results-bar-fill-visible" : ""}`}
+                      style={
+                        {
+                          "--results-bar-target": phase.width,
+                          backgroundColor: phase.color,
+                          transitionDelay: `${RESULTS_CARD_STAGGER_MS * 3 + 280 + index * 120}ms`,
+                        } as React.CSSProperties
+                      }
+                    />
                   </div>
                 </div>
               ))}
@@ -869,7 +1026,12 @@ function Results() {
           </div>
         </div>
 
-        <p className="mx-auto mt-10 text-center italic text-muted-foreground">
+        <p
+          className={`results-footer-note mx-auto mt-10 text-center italic text-muted-foreground ${
+            visible ? "results-footer-note-visible" : ""
+          }`}
+          style={{ transitionDelay: `${RESULTS_CARD_STAGGER_MS * 3 + 720}ms` }}
+        >
           These are not homework. You finish the program with working documents you can apply immediately.
         </p>
       </div>
@@ -959,47 +1121,218 @@ function Audience() {
   );
 }
 
+const OUTCOME_PILLARS = [
+  {
+    n: "01",
+    title: "Speak AI fluently",
+    tagline: "Lead the room — not follow the hype",
+    items: [
+      "Explain models, tokens and trade-offs in plain business language",
+      "Compare LLMs, RAG, agents, APIs and self-hosted options with confidence",
+    ],
+    accent: "var(--falcon-gold)",
+  },
+  {
+    n: "02",
+    title: "Choose the right tool",
+    tagline: "Match capability to workflow, not trend",
+    items: [
+      "Map AI tools to real business processes — not random experiments",
+      "Write prompts that produce outputs your team can actually use",
+    ],
+    accent: "var(--falcon-green)",
+  },
+  {
+    n: "03",
+    title: "Verify before you trust",
+    tagline: "Catch risk before it reaches customers",
+    items: [
+      "Evaluate outputs for accuracy, bias and privacy exposure",
+      "Build prompt libraries and review habits that scale across teams",
+    ],
+    accent: "var(--falcon-green)",
+  },
+  {
+    n: "04",
+    title: "Ship governed workflows",
+    tagline: "From pilot to production — safely",
+    items: [
+      "Design human-in-the-loop workflows leadership will approve",
+      "Launch pilots with success criteria, governance and clear next steps",
+    ],
+    accent: "var(--falcon-gold)",
+  },
+] as const;
+
+const BENEFIT_GROUPS = [
+  {
+    title: "Individuals",
+    subtitle: "Consultants, analysts & specialists",
+    headline: "Walk into every AI conversation prepared — not intimidated.",
+    outcome: "Career edge · Decision confidence",
+    icon: "🎯",
+    featured: false,
+    points: [
+      "Defend tool choices to clients and leadership with evidence",
+      "Deliver faster without sacrificing quality or judgment",
+      "Stand out with artifacts that prove AI fluency",
+    ],
+  },
+  {
+    title: "Managers & team leads",
+    subtitle: "The most common starting point for teams",
+    headline: "Turn AI from solo experiments into a team capability.",
+    outcome: "Team outcome · Controlled adoption",
+    icon: "🧩",
+    featured: true,
+    points: [
+      "Roll out tools with evaluation criteria — not tool-of-the-week chaos",
+      "Set verification standards everyone follows",
+      "Lift productivity without losing oversight",
+    ],
+  },
+  {
+    title: "Business owners",
+    subtitle: "Founders, executives & operators",
+    headline: "Stop funding random pilots. Build durable AI advantage.",
+    outcome: "Business outcome · Governed scale",
+    icon: "🏛️",
+    featured: false,
+    points: [
+      "Cut wasted spend with a clear build-vs-buy roadmap",
+      "Equip staff to adopt AI without compliance surprises",
+      "Move from experiments to accountable business capability",
+    ],
+  },
+] as const;
+
 function Outcomes() {
-  const items = [
-    "Explain AI systems in plain business language",
-    "Compare LLMs, RAG, agents, APIs, self-hosted options",
-    "Match AI tools to business workflows",
-    "Write prompts that produce useful outputs",
-    "Evaluate AI outputs for accuracy, bias and privacy risks",
-    "Build prompt libraries and review habits",
-    "Design AI-assisted workflows with human-in-the-loop",
-    "Prepare AI pilots with success criteria and governance",
-  ];
+  const { ref, visible } = useScrollReveal(0.12);
+
   return (
-    <section className="section-pad">
-      <div className="container-x">
-        <div className="mx-auto max-w-3xl text-center">
-          <span className="eyebrow">Capabilities you gain</span>
-          <h2 className="mt-4 text-3xl font-extrabold sm:text-4xl">
-            What learners will be able to do
-          </h2>
+    <section className="section-pad relative overflow-hidden bg-white">
+      <div
+        className="pointer-events-none absolute inset-0"
+        aria-hidden="true"
+        style={{
+          background:
+            "radial-gradient(55% 45% at 85% 10%, rgba(199,161,90,0.1), transparent 70%), radial-gradient(45% 40% at 8% 90%, rgba(0,132,61,0.06), transparent 70%)",
+        }}
+      />
+      <div className="container-x relative">
+        <div className="grid items-end gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:gap-14">
+          <div>
+            <span className="eyebrow">Capabilities you gain</span>
+            <h2 className="mt-4 text-3xl font-extrabold sm:text-4xl lg:text-4xl">
+              Stop guessing.{" "}
+              <span className="text-falcon-green">Lead</span> every AI decision with confidence.
+            </h2>
+          </div>
+          <p className="text-base leading-relaxed text-muted-foreground lg:text-lg">
+            You will not leave with vague inspiration. You leave able to evaluate, verify and deploy — the skills
+            competitors are still paying consultants to figure out.
+          </p>
         </div>
-        <ul className="mx-auto mt-10 grid max-w-4xl gap-x-10 gap-y-4 md:grid-cols-2">
-          {items.map((i) => (
-            <li key={i} className="flex items-start gap-3">
-              <CheckDot />
-              <span className="text-foreground">{i}</span>
-            </li>
+
+        <div ref={ref} className="mt-12 grid gap-4 sm:grid-cols-2 lg:mt-14 lg:gap-5">
+          {OUTCOME_PILLARS.map((pillar, index) => (
+            <div
+              key={pillar.n}
+              className={`results-reveal group relative overflow-hidden rounded-2xl border border-border bg-white p-6 shadow-[var(--shadow-card)] transition-all hover:-translate-y-0.5 hover:border-falcon-green/25 hover:shadow-[var(--shadow-elevate)] lg:p-8 ${
+                visible ? "results-reveal-visible" : ""
+              }`}
+              style={{ transitionDelay: `${index * 120}ms` }}
+            >
+              <div
+                className="absolute -right-6 -top-6 h-24 w-24 rounded-full opacity-30 blur-2xl transition-opacity group-hover:opacity-50"
+                style={{ backgroundColor: pillar.accent }}
+              />
+              <div className="font-display text-4xl font-extrabold leading-none text-falcon-gold/20 lg:text-5xl">
+                {pillar.n}
+              </div>
+              <h3 className="mt-3 text-xl font-bold text-foreground">{pillar.title}</h3>
+              <p className="mt-1.5 text-sm font-semibold text-falcon-gold">{pillar.tagline}</p>
+              <ul className="mt-5 space-y-3">
+                {pillar.items.map((item) => (
+                  <li key={item} className="flex items-start gap-3 text-sm leading-relaxed text-muted-foreground">
+                    <CheckDot />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <div
+                className="absolute bottom-0 left-0 h-1 w-0 rounded-full transition-all duration-500 group-hover:w-full"
+                style={{ backgroundColor: pillar.accent }}
+              />
+            </div>
           ))}
-        </ul>
+        </div>
       </div>
     </section>
   );
 }
 
-function Field({ label, placeholder }: { label: string; placeholder: string }) {
+const COURSE1_READINESS_BRIEF = [
+  { label: "Workflow", value: "Vendor contract review" },
+  { label: "Data sensitivity", value: "Confidential — legal" },
+  { label: "Model approach", value: "Hosted API · enterprise tier" },
+  { label: "Human review gate", value: "Legal lead · required before sign-off" },
+  { label: "Expected benefit", value: "~6 hrs/week saved · fewer missed clauses" },
+  { label: "Recommended next step", value: "4-week pilot · 10 contracts" },
+] as const;
+
+function BriefRow({ label, value }: { label: string; value: string }) {
   return (
-    <label className="block">
-      <span className="text-xs font-semibold text-muted-foreground">{label}</span>
-      <div className="mt-1 rounded-lg border border-border bg-falcon-sand px-3 py-2.5 text-sm text-muted-foreground">
-        {placeholder}
+    <div className="flex items-start justify-between gap-4 border-b border-border/60 py-2.5 last:border-0 last:pb-0">
+      <span className="shrink-0 text-muted-foreground">{label}</span>
+      <span className="text-right font-semibold text-foreground">{value}</span>
+    </div>
+  );
+}
+
+function ReadinessBriefPreview() {
+  return (
+    <div className="overflow-hidden rounded-2xl border border-white/10 bg-white text-foreground shadow-2xl">
+      <div className="flex items-center justify-between gap-3 border-b border-border bg-falcon-sand/50 px-5 py-3">
+        <div className="flex items-center gap-2">
+          <span className="h-2.5 w-2.5 rounded-full bg-falcon-red/80" />
+          <span className="h-2.5 w-2.5 rounded-full bg-falcon-gold/80" />
+          <span className="h-2.5 w-2.5 rounded-full bg-falcon-green/80" />
+        </div>
       </div>
-    </label>
+
+      <div className="flex items-start justify-between gap-4 border-b border-border px-6 py-5">
+        <div>
+          <div className="text-xs font-bold uppercase tracking-wider text-falcon-gold">Course 01 · Final artifact</div>
+          <h3 className="mt-1 text-lg font-bold leading-tight">AI Use-Case Readiness Brief</h3>
+        </div>
+        <span className="shrink-0 rounded-full border border-border bg-falcon-sand px-2.5 py-1 text-[0.65rem] font-bold uppercase tracking-wide text-muted-foreground">
+          Sample
+        </span>
+      </div>
+
+      <div className="px-6 py-5">
+        <div className="rounded-xl border border-border/70 bg-falcon-sand p-4 text-sm">
+          {COURSE1_READINESS_BRIEF.map((row) => (
+            <BriefRow key={row.label} label={row.label} value={row.value} />
+          ))}
+        </div>
+
+        <div className="mt-4 flex items-start gap-3 rounded-xl border border-falcon-green/25 bg-falcon-green/5 p-4">
+          <CheckDot />
+          <div>
+            <div className="text-xs font-bold uppercase tracking-wide text-falcon-green">Readiness verdict</div>
+            <p className="mt-1 text-sm font-semibold leading-snug">
+              Proceed to pilot — governance and data rules defined
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="border-t border-border bg-falcon-sand/30 px-6 py-3 text-xs text-muted-foreground">
+        You complete this in Course 01 — ready to share with leadership, not another blank template.
+      </div>
+    </div>
   );
 }
 
@@ -1030,21 +1363,7 @@ function Course1Deep() {
           </p>
         </div>
 
-        <div className="rounded-2xl border border-white/10 bg-white p-6 text-foreground shadow-2xl">
-          <div className="flex items-center justify-between">
-            <div className="text-xs font-bold uppercase tracking-wider text-falcon-gold">
-              AI Use-Case Readiness Brief
-            </div>
-            <div className="text-xs text-muted-foreground">Preview</div>
-          </div>
-          <div className="mt-4 space-y-4 text-sm">
-            <Field label="Workflow" placeholder="e.g. Inbound lead qualification" />
-            <Field label="Data sensitivity" placeholder="Public · Internal · Confidential" />
-            <Field label="Model category" placeholder="Hosted · API · Self-hosted" />
-            <Field label="Human verification needed" placeholder="When and by whom" />
-            <Field label="Expected benefit" placeholder="Time saved · quality gained" />
-          </div>
-        </div>
+        <ReadinessBriefPreview />
       </div>
     </section>
   );
@@ -1170,33 +1489,66 @@ function Certification() {
 }
 
 function Benefits() {
-  const groups = [
-    { title: "For individuals", icon: "🎯", points: ["Confidence with AI", "Better decisions", "Verification skills", "Career value"] },
-    { title: "For managers", icon: "🧩", points: ["Team adoption without chaos", "Clear tool evaluation", "Higher productivity"] },
-    { title: "For business owners", icon: "🏛️", points: ["Time & cost savings", "A real roadmap", "Staff readiness", "Safe adoption"] },
-  ];
+  const { ref, visible } = useScrollReveal(0.15);
+
   return (
     <section className="section-pad bg-falcon-sand">
       <div className="container-x">
         <div className="mx-auto max-w-3xl text-center">
           <span className="eyebrow">Business benefits</span>
-          <h2 className="mt-4 text-3xl font-extrabold sm:text-4xl">Value at every level</h2>
+          <h2 className="mt-4 text-3xl font-extrabold sm:text-4xl">
+            Value at <span className="text-falcon-green">every level</span> of your organization
+          </h2>
+          <p className="mt-4 text-base text-muted-foreground sm:text-lg">
+            Whether you enroll solo or sponsor a team, the program pays back in clearer decisions, safer adoption
+            and less wasted tool spend.
+          </p>
         </div>
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
-          {groups.map((g) => (
-            <div key={g.title} className="rounded-2xl border border-border bg-white p-7">
-              <div className="grid h-12 w-12 place-items-center rounded-xl bg-falcon-green/10 text-2xl">
-                {g.icon}
+
+        <div ref={ref} className="mt-12 grid items-stretch gap-6 lg:grid-cols-3 lg:gap-5">
+          {BENEFIT_GROUPS.map((group, index) => (
+            <div
+              key={group.title}
+              className={`results-reveal relative flex flex-col rounded-2xl border bg-white p-7 lg:p-8 ${
+                group.featured
+                  ? "border-falcon-gold/50 shadow-[var(--shadow-gold)] lg:-mt-3 lg:mb-3 lg:scale-[1.03]"
+                  : "border-border shadow-[var(--shadow-card)]"
+              } ${visible ? "results-reveal-visible" : ""}`}
+              style={{ transitionDelay: `${index * 140}ms` }}
+            >
+              <div
+                className={`grid h-12 w-12 place-items-center rounded-xl text-2xl ${
+                  group.featured ? "bg-falcon-gold/15" : "bg-falcon-green/10"
+                }`}
+              >
+                {group.icon}
               </div>
-              <h3 className="mt-5 text-lg font-bold">{g.title}</h3>
-              <ul className="mt-4 space-y-2">
-                {g.points.map((p) => (
-                  <li key={p} className="flex items-start gap-2 text-sm">
-                    <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-falcon-gold" />
-                    {p}
+              <p className="mt-5 text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                {group.subtitle}
+              </p>
+              <h3 className="mt-1 text-xl font-bold">{group.title}</h3>
+              <p className="mt-3 text-base font-semibold leading-snug text-foreground">{group.headline}</p>
+              <ul className="mt-5 flex-1 space-y-3">
+                {group.points.map((point) => (
+                  <li key={point} className="flex items-start gap-2.5 text-sm leading-relaxed text-muted-foreground">
+                    <span
+                      className={`mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full ${
+                        group.featured ? "bg-falcon-gold" : "bg-falcon-green"
+                      }`}
+                    />
+                    {point}
                   </li>
                 ))}
               </ul>
+              <div
+                className={`mt-6 rounded-lg px-3 py-2.5 text-xs font-bold uppercase tracking-wide ${
+                  group.featured
+                    ? "bg-falcon-gold/10 text-falcon-gold"
+                    : "bg-falcon-green/10 text-falcon-green"
+                }`}
+              >
+                {group.outcome}
+              </div>
             </div>
           ))}
         </div>
@@ -1375,9 +1727,14 @@ function Footer() {
 function Landing() {
   return (
     <div className="bg-background text-foreground">
-      <Nav />
+      <div className="hero-viewport flex h-dvh flex-col">
+        <div className="hero-aurora" aria-hidden="true" />
+        <div className="relative z-10 flex min-h-0 flex-1 flex-col">
+          <Nav />
+          <Hero />
+        </div>
+      </div>
       <main>
-        <Hero />
         <ProblemSolution />
         <Comparison />
         <Program />
