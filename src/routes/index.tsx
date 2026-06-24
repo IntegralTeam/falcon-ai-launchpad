@@ -14,10 +14,10 @@ import falconLogoFull from "../assets/falcon-logo.jpeg";
 import audienceSectionImage from "../assets/audience-section.png";
 import chaosPathImage from "../assets/chaos-path.png";
 import goodPathImage from "../assets/good-path.png";
-import courseAgentsImage from "../assets/agents.png";
-import courseFundamentalsImage from "../assets/fundamentals.png";
-import courseStrategyImage from "../assets/strategy.png";
-import courseToolsImage from "../assets/tools.png";
+import courseAgentsImage from "../assets/agents.jpeg";
+import courseFundamentalsImage from "../assets/fundamentals.jpeg";
+import courseStrategyImage from "../assets/strategy.jpeg";
+import courseToolsImage from "../assets/tools.jpeg";
 import {
   learnWorldsAiFundamentalsUrl,
   learnWorldsCourseUrls,
@@ -226,7 +226,7 @@ function LegalModal({
 function Nav() {
   const [open, setOpen] = useState(false);
   const links = [
-    { href: "#solution", label: "Solution" },
+    { href: "#solution", label: "Problem & Solution" },
     { href: "#courses", label: "Courses" },
     { href: "#results", label: "Results" },
     { href: "#faq", label: "FAQ" },
@@ -781,7 +781,7 @@ const COURSES = [
   { id: "course-1", n: "01", title: "AI Fundamentals for Business Decision-Makers", tagline: "Understand AI before you choose tools.", artifact: "AI Use-Case Readiness Brief", image: courseFundamentalsImage, href: learnWorldsCourseUrls.aiFundamentals },
   { id: "course-2", n: "02", title: "AI Tools & Practical Cases", tagline: "Move from AI understanding to practical tool use.", artifact: "AI Tool Testing Portfolio", image: courseToolsImage, href: learnWorldsCourseUrls.aiTools },
   { id: "course-3", n: "03", title: "AI Agents & Automation", tagline: "Design AI workflows that do more than answer questions.", artifact: "Agentic Workflow Blueprint", image: courseAgentsImage, href: learnWorldsCourseUrls.aiAgents },
-  { id: "course-4", n: "04", title: "AI Strategy, Implementation & Operating Model", tagline: "Turn AI experiments into responsible business capability.", artifact: "Business AI Implementation Roadmap", image: courseStrategyImage, href: learnWorldsCourseUrls.aiStrategy },
+  { id: "course-4", n: "04", title: "AI Strategy, Implementation & Operating Model", tagline: "Turn AI experiments into responsible business capability.", artifact: "AI Implementation Roadmap", image: courseStrategyImage, href: learnWorldsCourseUrls.aiStrategy },
 ];
 
 function Program() {
@@ -797,7 +797,7 @@ function Program() {
             Take them in sequence or jump in at the level that fits your team.
           </p>
         </div>
-        <div className="mt-14 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+        <div className="mt-14 grid gap-6 md:grid-cols-2 xl:grid-cols-2">
           {COURSES.map((c) => (
             <a
               key={c.id}
@@ -814,7 +814,7 @@ function Program() {
               <div className="flex flex-1 flex-col p-6">
                 <span className="font-display text-3xl font-extrabold text-falcon-gold/80">{c.n}</span>
                 <h3 className="mt-4 text-lg font-bold leading-tight">{c.title}</h3>
-                <p className="mt-2 text-sm italic text-muted-foreground">{c.tagline}</p>
+                <p className="mt-2 text-sm italic text-muted-foreground flex-1">{c.tagline}</p>
                 <div className="mt-5 rounded-lg border border-dashed border-falcon-gold/50 bg-falcon-gold/5 p-3">
                   <div className="text-[10px] font-bold uppercase tracking-wider text-falcon-gold">Final artifact</div>
                   <div className="mt-1 text-sm font-semibold">{c.artifact}</div>
@@ -1243,10 +1243,10 @@ function Outcomes() {
               }`}
               style={{ transitionDelay: `${index * 120}ms` }}
             >
-              <div
+              {/* <div
                 className="absolute -right-6 -top-6 h-24 w-24 rounded-full opacity-30 blur-2xl transition-opacity group-hover:opacity-50"
                 style={{ backgroundColor: pillar.accent }}
-              />
+              /> */}
               <div className="font-display text-4xl font-extrabold leading-none text-falcon-gold/20 lg:text-5xl">
                 {pillar.n}
               </div>
@@ -1260,10 +1260,6 @@ function Outcomes() {
                   </li>
                 ))}
               </ul>
-              <div
-                className="absolute bottom-0 left-0 h-1 w-0 rounded-full transition-all duration-500 group-hover:w-full"
-                style={{ backgroundColor: pillar.accent }}
-              />
             </div>
           ))}
         </div>
@@ -1509,10 +1505,10 @@ function Benefits() {
           {BENEFIT_GROUPS.map((group, index) => (
             <div
               key={group.title}
-              className={`results-reveal relative flex flex-col rounded-2xl border bg-white p-7 lg:p-8 ${
+              className={`results-reveal relative flex flex-col rounded-2xl border bg-white p-7 shadow-[var(--shadow-card)] transition-all duration-200 hover:-translate-y-1 hover:scale-[1.02] hover:shadow-[var(--shadow-elevate)] lg:p-8 ${
                 group.featured
-                  ? "border-falcon-gold/50 shadow-[var(--shadow-gold)] lg:-mt-3 lg:mb-3 lg:scale-[1.03]"
-                  : "border-border shadow-[var(--shadow-card)]"
+                  ? "border-falcon-gold/35 hover:border-falcon-gold/50"
+                  : "border-border hover:border-falcon-green/30"
               } ${visible ? "results-reveal-visible" : ""}`}
               style={{ transitionDelay: `${index * 140}ms` }}
             >
@@ -1563,6 +1559,18 @@ const FAQS = [
   { q: "Is AI automation safe for confidential business data?", a: "Yes — the program teaches you to choose between hosted, API and on-premise options, and how to implement human review gates and data handling rules." },
   { q: "Will I learn to build AI agents?", a: "Yes, but only after building the judgment to use them safely. Course 3 focuses on agentic workflows with controls." },
   { q: "What do I leave with?", a: "Four practical artifacts: Readiness Brief, Tool Portfolio, Agentic Blueprint and Implementation Roadmap — plus the skills to keep using them." },
+  {
+    q: "Can I enroll in one course or do I need the full program?",
+    a: "You can enroll in any course on its own. The four courses are designed to build on each other, but you can start at the level that fits your experience — most learners begin with AI Fundamentals.",
+  },
+  {
+    q: "How long do I have access after I enroll?",
+    a: "You get access to course materials for 6 months from enrollment — enough time to complete lessons, build your artifacts, and revisit modules as your projects evolve.",
+  },
+  {
+    q: "Do I receive a certificate of completion?",
+    a: "Yes. When you finish a course, you receive a record of completion from Falcon Innovation Academy — a licensed educational provider in the UAE (Educational Licence No. 52001001).",
+  },
 ];
 
 function FAQ() {
