@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Fragment, useEffect, useRef, useState } from "react";
 
+import { ChaosPathOverlay, GoodPathOverlay } from "@/components/solution-path-overlays";
 import {
   Dialog,
   DialogContent,
@@ -12,8 +13,8 @@ import falconNavbarLogo from "../assets/falcon-navbar-logo.png";
 import falconLogoCircle from "../assets/falcon-logo-circle.png";
 import falconLogoFull from "../assets/falcon-logo.jpeg";
 import audienceSectionImage from "../assets/audience-section.png";
-import chaosPathImage from "../assets/chaos-path.png";
-import goodPathImage from "../assets/good-path.png";
+import chaosPathVideo from "../assets/chaos-path.mp4";
+import goodPathVideo from "../assets/good-path.mp4";
 import courseAgentsImage from "../assets/agents.jpeg";
 import courseFundamentalsImage from "../assets/fundamentals.jpeg";
 import courseStrategyImage from "../assets/strategy.jpeg";
@@ -611,11 +612,18 @@ function ProblemSolution() {
         </div>
         <div className="grid gap-8 lg:grid-cols-2">
         <div className="overflow-hidden rounded-2xl border border-border bg-white">
-          <img
-            src={chaosPathImage}
-            alt="Scattered AI tools without a clear system"
-            className="aspect-[4/3] w-full object-cover object-center"
-          />
+          <div className="relative aspect-[4/3] w-full">
+            <video
+              src={chaosPathVideo}
+              autoPlay
+              loop
+              muted
+              playsInline
+              aria-label="Scattered AI tools without a clear system"
+              className="absolute inset-0 h-full w-full object-cover object-center"
+            />
+            <ChaosPathOverlay />
+          </div>
           <div className="p-8">
             <span className="eyebrow" style={{ background: "rgba(200,16,46,0.10)", color: "var(--falcon-red)" }}>
               The chaos today
@@ -634,11 +642,18 @@ function ProblemSolution() {
           </div>
         </div>
         <div className="overflow-hidden rounded-2xl border border-falcon-green/25 bg-white shadow-[var(--shadow-elevate)]">
-          <img
-            src={goodPathImage}
-            alt="Structured path from fundamentals to business impact"
-            className="aspect-[4/3] w-full object-cover object-center"
-          />
+          <div className="relative aspect-[4/3] w-full">
+            <video
+              src={goodPathVideo}
+              autoPlay
+              loop
+              muted
+              playsInline
+              aria-label="Structured path from fundamentals to business impact"
+              className="absolute inset-0 h-full w-full object-cover object-center"
+            />
+            <GoodPathOverlay />
+          </div>
           <div className="p-8">
             <span className="eyebrow" style={{ background: "rgba(0,132,61,0.10)", color: "var(--falcon-green)" }}>
               The Falcon Innovation Academy way
