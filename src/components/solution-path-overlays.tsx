@@ -130,10 +130,10 @@ function ChaosToolPill({ label, x, y, driftClass }: { label: string; x: number; 
       style={{ left: `${x}%`, top: `${y}%`, transform: "translate(-50%, -50%)" }}
     >
       <div
-        className={`chaos-node ${driftClass} relative whitespace-nowrap rounded-full bg-white/95 px-2.5 py-1 text-[0.6rem] font-semibold text-foreground shadow-sm sm:px-3 sm:py-1.5 sm:text-[0.65rem]`}
+        className={`chaos-node ${driftClass} relative whitespace-nowrap border border-border bg-white/95 px-2.5 py-1 text-[0.6rem] font-semibold text-foreground sm:px-3 sm:py-1.5 sm:text-[0.65rem]`}
       >
         {label}
-        <span className="absolute -right-1 -top-1 flex h-2.5 w-2.5 items-center justify-center rounded-sm bg-falcon-red text-[0.45rem] font-bold leading-none text-white sm:h-3 sm:w-3 sm:text-[0.5rem]">
+        <span className="absolute -right-1 -top-1 flex h-2.5 w-2.5 items-center justify-center bg-falcon-red text-[0.45rem] font-bold leading-none text-white sm:h-3 sm:w-3 sm:text-[0.5rem]">
           !
         </span>
       </div>
@@ -174,7 +174,7 @@ function GoodStep({
         />
       </g>
       <g transform={`translate(${labelX} ${labelY})`}>
-        <rect width={GOOD_LABEL_W} height={GOOD_LABEL_H} rx={2.4} fill="white" fillOpacity={0.7} />
+        <rect width={GOOD_LABEL_W} height={GOOD_LABEL_H} fill="white" fillOpacity={0.7} />
         <text
           x={2.5}
           y={6}
