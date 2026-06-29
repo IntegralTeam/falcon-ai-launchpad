@@ -1114,7 +1114,7 @@ function Certification() {
               Licensed in the UAE
             </span>
             <h2 className="mt-4 text-3xl font-extrabold sm:text-4xl">
-              A <span className="text-falcon-green">certified academy</span> — we want to build trust with you.
+              A <span className="text-falcon-green">certified expert institute</span> — we want to build trust with you.
             </h2>
             <p className="mt-5 max-w-xl text-muted-foreground">
               Falcon Expert Institute FZ-LLC is a registered educational provider in the United Arab Emirates,
