@@ -34,6 +34,7 @@ const courses = [
     title: "AI Fundamentals for Business Decision-Makers",
     body: "Understand AI before you choose tools. Learn the mechanics, limits, privacy basics and decision-making models that matter for business use.",
     tag: "READINESS BRIEF",
+    href: "https://learn.falcon.academy/course/ai-fundamentals-for-business-decision-makers",
   },
   {
     n: "02",
@@ -41,6 +42,7 @@ const courses = [
     title: "AI Tools & Practical Cases",
     body: "Move from generic prompting to evaluated tools. Compare vendors, use multimodal workflows, and build a practical tool portfolio for real tasks.",
     tag: "TOOL PORTFOLIO",
+    href: "https://learn.falcon.academy/course/ai-tools-practical-cases",
   },
   {
     n: "03",
@@ -48,6 +50,7 @@ const courses = [
     title: "AI Agents & Automation",
     body: "Design AI workflows that do more than answer questions. Build agentic processes with controls, supervision and safe handoffs.",
     tag: "AGENTIC BLUEPRINT",
+    href: "https://learn.falcon.academy/course/ai-agents-automation-design-a-safe-humansupervised-pilot",
   },
   {
     n: "04",
@@ -55,6 +58,7 @@ const courses = [
     title: "AI Strategy, Implementation & Operating Model",
     body: "Turn experiments into a governed operating model. Define rollout phases, ownership, policies and an implementation roadmap.",
     tag: "ROADMAP",
+    href: "https://learn.falcon.academy/course/ai-strategy-governance-implementation",
   },
 ];
 
@@ -558,8 +562,9 @@ function Home() {
 
         <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-px bg-black/5 border border-black/5">
           {courses.map((c) => (
-            <div
+            <a
               key={c.n}
+              href={c.href}
               className="bg-offwhite p-10 group cursor-pointer hover:bg-white transition-colors flex flex-col"
             >
               <div
@@ -576,7 +581,7 @@ function Home() {
                 <span className="text-[10px] font-bold uppercase tracking-widest">→</span>
               </div>
               <div className="h-px w-0 group-hover:w-full bg-ink transition-all duration-500 mt-6" />
-            </div>
+            </a>
           ))}
         </div>
       </section>
@@ -657,7 +662,7 @@ function Home() {
               <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-black/50 block mb-6">
                 Course 01 · Entry point
               </span>
-              <h2 className="text-[clamp(2.5rem,6vw,5.5rem)] font-extrabold tracking-tighter uppercase leading-[0.9]">
+              <h2 className="text-[clamp(2rem,4.6vw,4rem)] font-extrabold tracking-tighter uppercase leading-[0.92]">
                 Start with AI Fundamentals. <br />
                 Leave with a decision framework.
               </h2>
