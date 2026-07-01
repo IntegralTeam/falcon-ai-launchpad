@@ -121,12 +121,7 @@
 }
 
 @utility bg-diagonal-line {
-  background: linear-gradient(
-    45deg,
-    transparent 49.5%,
-    rgba(0, 0, 0, 0.08) 50%,
-    transparent 50.5%
-  );
+  background: linear-gradient(45deg, transparent 49.5%, rgba(0, 0, 0, 0.08) 50%, transparent 50.5%);
   background-size: 100% 100%;
 }
 
@@ -184,6 +179,18 @@
   }
 }
 
+@keyframes section-reveal {
+  from {
+    opacity: 0;
+    transform: translate3d(var(--reveal-x, 0), var(--reveal-y, 28px), 0)
+      scale(var(--reveal-scale, 1));
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
 @keyframes spin-y {
   from {
     transform: rotateX(-18deg) rotateY(0deg);
@@ -231,6 +238,32 @@
   animation: entrance 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
+.reveal {
+  opacity: 0;
+  transform: translate3d(var(--reveal-x, 0), var(--reveal-y, 28px), 0) scale(var(--reveal-scale, 1));
+  will-change: opacity, transform;
+}
+
+.reveal-left {
+  --reveal-x: -28px;
+  --reveal-y: 0;
+}
+
+.reveal-right {
+  --reveal-x: 28px;
+  --reveal-y: 0;
+}
+
+.reveal-scale {
+  --reveal-y: 18px;
+  --reveal-scale: 0.96;
+}
+
+[data-in-view="true"] .reveal {
+  animation: section-reveal 0.85s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: var(--reveal-delay, 0ms);
+}
+
 .animate-spin-y {
   animation: spin-y 24s linear infinite;
   transform-style: preserve-3d;
@@ -260,4 +293,16 @@
 .perspective-scene {
   perspective: 1400px;
   perspective-origin: 50% 40%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    will-change: auto;
+  }
+
+  [data-in-view="true"] .reveal {
+    animation: none;
+  }
 }

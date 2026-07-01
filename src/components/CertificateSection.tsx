@@ -1,12 +1,20 @@
 import certificateImg from "@/assets/certificate.png";
+import { useRepeatInView } from "@/hooks/use-repeat-in-view";
 
 /** Certificate showcase — text panel left, sample certificate preview right */
 export function CertificateSection() {
+  const [sectionRef, sectionInView] = useRepeatInView<HTMLElement>();
+
   return (
-    <section id="certificate" className="pt-12 pb-24 md:pt-16 md:pb-32 px-8 max-w-[1440px] mx-auto">
+    <section
+      id="certificate"
+      ref={sectionRef}
+      data-in-view={sectionInView ? "true" : "false"}
+      className="pt-12 pb-24 md:pt-16 md:pb-32 px-8 max-w-[1440px] mx-auto"
+    >
       <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.25fr)] gap-10 lg:gap-12 items-stretch">
         {/* Left — dark editorial card */}
-        <div className="relative overflow-hidden rounded-2xl bg-ink px-10 py-12 md:px-12 md:py-14 flex flex-col justify-center">
+        <div className="reveal reveal-left relative overflow-hidden rounded-2xl bg-ink px-10 py-12 md:px-12 md:py-14 flex flex-col justify-center">
           <div className="absolute inset-0 bg-diagonal-lines-dense opacity-40 pointer-events-none" />
           <div className="relative">
             <span className="text-mint text-[10px] font-extrabold uppercase tracking-[0.3em] block mb-6 italic">
@@ -37,7 +45,10 @@ export function CertificateSection() {
         </div>
 
         {/* Right — certificate preview with mint glow */}
-        <div className="relative flex items-stretch justify-center">
+        <div
+          className="reveal reveal-right relative flex items-stretch justify-center"
+          style={{ ["--reveal-delay" as string]: "140ms" }}
+        >
           {/* Ambient glow */}
           <div className="absolute inset-0 rounded-3xl bg-mint/30 blur-3xl scale-95 pointer-events-none" />
           <div className="absolute inset-0 rounded-3xl bg-sky/20 blur-2xl scale-100 pointer-events-none" />
@@ -57,7 +68,10 @@ export function CertificateSection() {
             </div>
 
             {/* Verified badge */}
-            <div className="absolute -bottom-4 -left-2 md:-left-6 flex items-center gap-2 bg-ink text-white px-4 py-2 rounded-sm shadow-lg">
+            <div
+              className="reveal reveal-scale absolute -bottom-4 -left-2 md:-left-6 flex items-center gap-2 bg-ink text-white px-4 py-2 rounded-sm shadow-lg"
+              style={{ ["--reveal-delay" as string]: "360ms" }}
+            >
               <span className="size-1.5 rounded-full bg-mint animate-pulse" />
               <span className="text-[10px] font-bold uppercase tracking-[0.2em]">
                 Verifiable online

@@ -3,6 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { CertificateSection } from "@/components/CertificateSection";
 import { LegalModal, type LegalModalType } from "@/components/LegalModal";
 import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { useRepeatInView } from "@/hooks/use-repeat-in-view";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -16,7 +17,8 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: "Falcon Innovation Academy — AI for Business" },
       {
         property: "og:description",
-        content: "Master AI tools and decision-making to make your business competitive and future-proof.",
+        content:
+          "Master AI tools and decision-making to make your business competitive and future-proof.",
       },
       { property: "og:type", content: "website" },
     ],
@@ -217,7 +219,12 @@ function HeroCraft() {
               style={{ animationDelay: "0.4s" }}
             />
           </g>
-          <g fontFamily="ui-monospace, Menlo, monospace" fontSize="9" fontWeight="700" fill="#0a0a0a">
+          <g
+            fontFamily="ui-monospace, Menlo, monospace"
+            fontSize="9"
+            fontWeight="700"
+            fill="#0a0a0a"
+          >
             <text x="18" y="352" letterSpacing="2">
               INPUT · 01
             </text>
@@ -241,7 +248,6 @@ function HeroCraft() {
   );
 }
 
-
 /** Brand mark: wordmark + UAE flag accent stripes */
 function FalconLogo({ className = "" }: { className?: string }) {
   return (
@@ -260,6 +266,10 @@ function FalconLogo({ className = "" }: { className?: string }) {
 
 function Home() {
   const [legalModal, setLegalModal] = useState<LegalModalType>(null);
+  const [programRef, programInView] = useRepeatInView<HTMLElement>();
+  const [coursesRef, coursesInView] = useRepeatInView<HTMLElement>();
+  const [faqRef, faqInView] = useRepeatInView<HTMLElement>();
+  const [applyRef, applyInView] = useRepeatInView<HTMLElement>();
   const navigationLinks = [
     { href: "#program", label: "Solution" },
     { href: "#courses", label: "Courses" },
@@ -316,7 +326,10 @@ function Home() {
                   </span>
                 </button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-[88vw] max-w-sm border-l border-black/10 bg-offwhite px-6 py-16">
+              <SheetContent
+                side="right"
+                className="w-[88vw] max-w-sm border-l border-black/10 bg-offwhite px-6 py-16"
+              >
                 <SheetTitle className="text-left text-sm font-bold uppercase tracking-[0.28em] text-ink">
                   Navigation
                 </SheetTitle>
@@ -419,19 +432,23 @@ function Home() {
             Start with AI Fundamentals →
           </a>
           <p className="max-w-[600px] text-sm font-medium leading-relaxed text-black/60">
-            A practical four-course program for business owners, managers, consultants and
-            analysts who want to understand AI, choose the right tools, build real workflows
-            and safely adopt AI agents.
+            A practical four-course program for business owners, managers, consultants and analysts
+            who want to understand AI, choose the right tools, build real workflows and safely adopt
+            AI agents.
           </p>
         </div>
       </header>
 
-
       {/* Program overview — dark break */}
-      <section id="program" className="w-full bg-ink py-32 px-8 overflow-hidden relative">
+      <section
+        id="program"
+        ref={programRef}
+        data-in-view={programInView ? "true" : "false"}
+        className="w-full bg-ink py-32 px-8 overflow-hidden relative"
+      >
         <div className="absolute inset-0 bg-diagonal-lines-dense opacity-60 pointer-events-none" />
         <div className="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center relative">
-          <div>
+          <div className="reveal reveal-left">
             <span className="text-sky text-xs font-extrabold uppercase tracking-[0.3em] block mb-6 italic">
               // From chaos to capability
             </span>
@@ -439,29 +456,29 @@ function Home() {
               Shift from the chaotic use of AI tools to the deliberate construction of processes.
             </h2>
             <p className="text-white/55 mt-8 text-lg max-w-md leading-relaxed">
-              Falcon Innovation Academy is a practical AI for Business program. You leave with
-              real business artifacts, not just prompts.
+              Falcon Innovation Academy is a practical AI for Business program. You leave with real
+              business artifacts, not just prompts.
             </p>
             <div className="mt-12 grid grid-cols-2 gap-8 border-t border-white/10 pt-8">
-              <div>
+              <div className="reveal" style={{ ["--reveal-delay" as string]: "120ms" }}>
                 <div className="text-sky text-3xl font-extrabold">4</div>
                 <div className="text-white/40 text-[10px] uppercase font-bold mt-1 tracking-widest">
                   Sequential courses
                 </div>
               </div>
-              <div>
+              <div className="reveal" style={{ ["--reveal-delay" as string]: "180ms" }}>
                 <div className="text-mint text-3xl font-extrabold">Real</div>
                 <div className="text-white/40 text-[10px] uppercase font-bold mt-1 tracking-widest">
                   Business artifacts
                 </div>
               </div>
-              <div>
+              <div className="reveal" style={{ ["--reveal-delay" as string]: "240ms" }}>
                 <div className="text-white text-3xl font-extrabold">Safe</div>
                 <div className="text-white/40 text-[10px] uppercase font-bold mt-1 tracking-widest">
                   Agent adoption
                 </div>
               </div>
-              <div>
+              <div className="reveal" style={{ ["--reveal-delay" as string]: "300ms" }}>
                 <div className="text-white text-3xl font-extrabold">UAE</div>
                 <div className="text-white/40 text-[10px] uppercase font-bold mt-1 tracking-widest">
                   Based, globally trusted
@@ -470,7 +487,10 @@ function Home() {
             </div>
           </div>
 
-          <div className="relative">
+          <div
+            className="relative reveal reveal-right"
+            style={{ ["--reveal-delay" as string]: "180ms" }}
+          >
             <div className="w-full aspect-auto min-h-0 py-10 px-8 sm:py-12 sm:px-10 lg:aspect-square lg:p-10 bg-white/[0.03] outline-1 -outline-offset-1 outline-white/10 rounded-sm flex items-center relative overflow-hidden">
               <div className="absolute inset-0 bg-grid-lines opacity-[0.06]" />
               {/* Live workflow diagram */}
@@ -494,9 +514,7 @@ function Home() {
                     <span
                       key={step}
                       className={`px-3.5 py-2 rounded-sm text-xs sm:text-sm font-bold uppercase tracking-[0.14em] ${
-                        i < 3
-                          ? "bg-mint text-ink"
-                          : "border border-white/20 text-white/60"
+                        i < 3 ? "bg-mint text-ink" : "border border-white/20 text-white/60"
                       }`}
                     >
                       {i < 3 ? "✓ " : ""}
@@ -523,7 +541,9 @@ function Home() {
                       key={t.l}
                       className="border border-white/10 rounded-sm px-3 py-4 sm:p-4 text-center"
                     >
-                      <div className={`text-3xl sm:text-4xl font-extrabold leading-none ${t.c}`}>{t.v}</div>
+                      <div className={`text-3xl sm:text-4xl font-extrabold leading-none ${t.c}`}>
+                        {t.v}
+                      </div>
                       <div className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.18em] text-white/45 mt-2 leading-snug">
                         {t.l}
                       </div>
@@ -542,29 +562,38 @@ function Home() {
       </section>
 
       {/* Courses ladder */}
-      <section id="courses" className="py-32 px-8 max-w-[1440px] mx-auto">
+      <section
+        id="courses"
+        ref={coursesRef}
+        data-in-view={coursesInView ? "true" : "false"}
+        className="py-32 px-8 max-w-[1440px] mx-auto"
+      >
         <div className="flex items-end justify-between mb-20 gap-8 flex-wrap">
-          <h2 className="text-[clamp(3rem,7vw,7rem)] font-extrabold tracking-tighter uppercase leading-[0.8]">
+          <h2 className="reveal reveal-left text-[clamp(3rem,7vw,7rem)] font-extrabold tracking-tighter uppercase leading-[0.8]">
             The <br />
             Curriculum
           </h2>
-          <div className="max-w-sm">
+          <div
+            className="reveal reveal-right max-w-sm"
+            style={{ ["--reveal-delay" as string]: "120ms" }}
+          >
             <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-black/40 block mb-3">
               Sequence · 01 → 04
             </span>
             <p className="text-sm text-black/60 leading-relaxed">
-              Four sequential courses. Take them in order. Stop when you have what you need — or
-              go all the way to a deployable plan.
+              Four sequential courses. Take them in order. Stop when you have what you need — or go
+              all the way to a deployable plan.
             </p>
           </div>
         </div>
 
         <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-px bg-black/5 border border-black/5">
-          {courses.map((c) => (
+          {courses.map((c, i) => (
             <a
               key={c.n}
               href={c.href}
-              className="bg-offwhite p-10 group cursor-pointer hover:bg-white transition-colors flex flex-col"
+              className="reveal reveal-scale bg-offwhite p-10 group cursor-pointer hover:bg-white transition-colors flex flex-col"
+              style={{ ["--reveal-delay" as string]: `${160 + i * 80}ms` }}
             >
               <div
                 className={`size-12 rounded-sm flex items-center justify-center mb-12 transition-colors ${c.tint}`}
@@ -589,9 +618,14 @@ function Home() {
       <CertificateSection />
 
       {/* FAQ */}
-      <section id="faq" className="bg-white border-y border-black/10 py-32 px-8">
+      <section
+        id="faq"
+        ref={faqRef}
+        data-in-view={faqInView ? "true" : "false"}
+        className="bg-white border-y border-black/10 py-32 px-8"
+      >
         <div className="max-w-[1440px] mx-auto grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)] gap-16">
-          <div>
+          <div className="reveal reveal-left">
             <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-black/40 block mb-6 italic">
               // Common questions
             </span>
@@ -600,8 +634,8 @@ function Home() {
               you enrol.
             </h2>
             <p className="text-sm text-black/60 mt-8 max-w-sm leading-relaxed">
-              Still unsure? Reach out and we will help you choose the right entry course for
-              your role.
+              Still unsure? Reach out and we will help you choose the right entry course for your
+              role.
             </p>
             <a
               href="mailto:info@falcon.academy"
@@ -613,7 +647,12 @@ function Home() {
 
           <div className="divide-y divide-black/10 border-y border-black/10">
             {faqs.map((f, i) => (
-              <details key={f.q} className="group py-6" open={i === 0}>
+              <details
+                key={f.q}
+                className="reveal group py-6"
+                style={{ ["--reveal-delay" as string]: `${100 + i * 70}ms` }}
+                open={i === 0}
+              >
                 <summary className="flex items-center justify-between cursor-pointer list-none">
                   <span className="text-xl font-extrabold tracking-tight pr-8">{f.q}</span>
                   <span className="size-8 shrink-0 rounded-full border border-black/15 grid place-items-center text-lg group-open:bg-mint group-open:border-mint transition-colors">
@@ -628,11 +667,16 @@ function Home() {
       </section>
 
       {/* Apply CTA */}
-      <section id="apply" className="py-32 px-8 max-w-[1440px] mx-auto">
+      <section
+        id="apply"
+        ref={applyRef}
+        data-in-view={applyInView ? "true" : "false"}
+        className="py-32 px-8 max-w-[1440px] mx-auto"
+      >
         <div className="border border-black/10 px-8 py-10 sm:p-12 md:p-20 bg-mint/30 relative overflow-hidden">
           <div className="absolute -bottom-24 -right-24 w-[400px] h-[400px] bg-diagonal-line pointer-events-none opacity-70" />
           <div className="relative grid md:grid-cols-[1fr_auto] gap-10 md:gap-12 items-center md:items-end">
-            <div className="text-center md:text-left">
+            <div className="reveal reveal-left text-center md:text-left">
               <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-black/50 block mb-6">
                 Course 01 · Entry point
               </span>
@@ -641,12 +685,14 @@ function Home() {
                 Leave with a decision framework.
               </h2>
               <p className="text-sm text-black/70 mt-6 max-w-md leading-relaxed mx-auto md:mx-0">
-                Covered topics include tokens, context windows, embeddings, hosted vs
-                self-hosted models, prompting, verification and privacy — explained for
-                decision-makers.
+                Covered topics include tokens, context windows, embeddings, hosted vs self-hosted
+                models, prompting, verification and privacy — explained for decision-makers.
               </p>
             </div>
-            <div className="flex flex-col gap-3 w-full md:w-auto">
+            <div
+              className="reveal reveal-right flex flex-col gap-3 w-full md:w-auto"
+              style={{ ["--reveal-delay" as string]: "140ms" }}
+            >
               <a
                 href="https://learn.falcon.academy/course/ai-fundamentals-for-business-decision-makers"
                 className="inline-block w-full md:w-auto px-10 sm:px-12 py-5 sm:py-6 bg-ink text-offwhite font-extrabold text-sm uppercase tracking-[0.2em] rounded-sm hover:translate-x-2 transition-transform duration-300 text-center"
@@ -668,22 +714,24 @@ function Home() {
       <footer className="border-t border-black/10">
         <div className="flex overflow-hidden py-6 bg-ink text-white">
           <div className="flex shrink-0 items-center whitespace-nowrap uppercase text-[11px] font-bold tracking-[0.4em] opacity-80 animate-marquee">
-            {Array.from({ length: 2 }).flatMap(() => [
-              "AI as a business advantage",
-              "*",
-              "Not a buzzword",
-              "*",
-              "UAE-based · globally trusted",
-              "*",
-              "Real business artifacts",
-              "*",
-              "Falcon Innovation Academy",
-              "*",
-            ]).map((t, i) => (
-              <span key={i} className="px-8">
-                {t}
-              </span>
-            ))}
+            {Array.from({ length: 2 })
+              .flatMap(() => [
+                "AI as a business advantage",
+                "*",
+                "Not a buzzword",
+                "*",
+                "UAE-based · globally trusted",
+                "*",
+                "Real business artifacts",
+                "*",
+                "Falcon Innovation Academy",
+                "*",
+              ])
+              .map((t, i) => (
+                <span key={i} className="px-8">
+                  {t}
+                </span>
+              ))}
           </div>
         </div>
         <div className="max-w-[1440px] mx-auto px-8 py-20 grid grid-cols-1 md:grid-cols-4 gap-12">
@@ -701,9 +749,7 @@ function Home() {
             </p>
           </div>
           <div>
-            <h4 className="text-[10px] font-extrabold tracking-widest uppercase mb-6">
-              Program
-            </h4>
+            <h4 className="text-[10px] font-extrabold tracking-widest uppercase mb-6">Program</h4>
             <ul className="space-y-3 text-sm font-medium">
               <li>
                 <a
@@ -740,9 +786,7 @@ function Home() {
             </ul>
           </div>
           <div>
-            <h4 className="text-[10px] font-extrabold tracking-widest uppercase mb-6">
-              Company
-            </h4>
+            <h4 className="text-[10px] font-extrabold tracking-widest uppercase mb-6">Company</h4>
             <ul className="space-y-3 text-sm font-medium">
               <li>
                 <button
@@ -772,7 +816,10 @@ function Home() {
                 </button>
               </li>
               <li>
-                <a href="mailto:info@falcon.academy" className="hover:text-black/60 transition-colors">
+                <a
+                  href="mailto:info@falcon.academy"
+                  className="hover:text-black/60 transition-colors"
+                >
                   Contact
                 </a>
               </li>
