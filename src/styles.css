@@ -143,23 +143,24 @@
 /* Animations */
 @keyframes word-cycle {
   0%,
-  22% {
+  18% {
     transform: translateY(0);
   }
-  25%,
-  47% {
-    transform: translateY(-25%);
+  22%,
+  38% {
+    transform: translateY(-1em);
   }
-  50%,
-  72% {
-    transform: translateY(-50%);
+  42%,
+  58% {
+    transform: translateY(-2em);
   }
-  75%,
-  97% {
-    transform: translateY(-75%);
+  62%,
+  78% {
+    transform: translateY(-3em);
   }
+  82%,
   100% {
-    transform: translateY(-100%);
+    transform: translateY(-4em);
   }
 }
 
@@ -218,7 +219,8 @@
 }
 
 .animate-word-cycle {
-  animation: word-cycle 10s cubic-bezier(0.76, 0, 0.24, 1) infinite;
+  animation: word-cycle 10s ease-in-out infinite;
+  will-change: transform;
 }
 
 .animate-marquee {

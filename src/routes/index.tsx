@@ -1,5 +1,8 @@
+import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { CertificateSection } from "@/components/CertificateSection";
+import { LegalModal, type LegalModalType } from "@/components/LegalModal";
+import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -60,13 +63,6 @@ const courses = [
     tag: "ROADMAP",
     href: "https://learn.falcon.academy/course/ai-strategy-governance-implementation",
   },
-];
-
-const outcomes = [
-  { metric: "01", label: "AI Use-Case Readiness Brief" },
-  { metric: "02", label: "Tool Portfolio" },
-  { metric: "03", label: "Agentic Blueprint" },
-  { metric: "04", label: "Implementation Roadmap" },
 ];
 
 const faqs = [
@@ -240,14 +236,6 @@ function HeroCraft() {
             <path d="M 392 392 L 392 372 M 392 392 L 372 392" />
           </g>
         </svg>
-
-        {/* Live badge */}
-        <div className="absolute -bottom-2 left-2 flex items-center gap-2 bg-ink text-white px-3 py-1.5 rounded-sm">
-          <span className="size-1.5 rounded-full bg-mint animate-pulse" />
-          <span className="text-[10px] font-bold uppercase tracking-[0.25em]">
-            AI Workflow · Live
-          </span>
-        </div>
       </div>
     </div>
   );
@@ -271,15 +259,23 @@ function FalconLogo({ className = "" }: { className?: string }) {
 }
 
 function Home() {
+  const [legalModal, setLegalModal] = useState<LegalModalType>(null);
   const navigationLinks = [
     { href: "#program", label: "Solution" },
     { href: "#courses", label: "Courses" },
-    { href: "#outcomes", label: "Results" },
+    { href: "#certificate", label: "Certificate" },
     { href: "#faq", label: "FAQ" },
   ];
 
   return (
     <div className="min-h-screen bg-offwhite text-ink font-sora">
+      <LegalModal
+        type={legalModal}
+        open={legalModal !== null}
+        onOpenChange={(open) => {
+          if (!open) setLegalModal(null);
+        }}
+      />
       {/* Navigation */}
       <nav className="fixed top-0 w-full z-50 border-b border-black/5 bg-offwhite/80 backdrop-blur-md">
         <div className="max-w-[1440px] mx-auto flex items-center justify-between px-8 py-5">
@@ -326,21 +322,24 @@ function Home() {
                 </SheetTitle>
                 <div className="mt-10 flex flex-col gap-5">
                   {navigationLinks.map((link) => (
-                    <a
-                      key={link.href}
-                      href={link.href}
-                      className="text-lg font-semibold uppercase tracking-[0.16em] text-ink transition-colors hover:text-black/60"
-                    >
-                      {link.label}
-                    </a>
+                    <SheetClose key={link.href} asChild>
+                      <a
+                        href={link.href}
+                        className="text-lg font-semibold uppercase tracking-[0.16em] text-ink transition-colors hover:text-black/60"
+                      >
+                        {link.label}
+                      </a>
+                    </SheetClose>
                   ))}
                 </div>
-                <a
-                  href="https://learn.falcon.academy/courses"
-                  className="mt-10 inline-flex w-full items-center justify-center rounded-sm bg-ink px-5 py-3 text-[11px] font-bold uppercase tracking-widest text-offwhite transition-colors hover:bg-black/80"
-                >
-                  Explore Courses
-                </a>
+                <SheetClose asChild>
+                  <a
+                    href="https://learn.falcon.academy/courses"
+                    className="mt-10 inline-flex w-full items-center justify-center rounded-sm bg-ink px-5 py-3 text-[11px] font-bold uppercase tracking-widest text-offwhite transition-colors hover:bg-black/80"
+                  >
+                    Explore Courses
+                  </a>
+                </SheetClose>
               </SheetContent>
             </Sheet>
           </div>
@@ -366,22 +365,22 @@ function Home() {
               business{" "}
               <span
                 aria-hidden
-                className="inline-flex h-[0.9em] overflow-hidden align-baseline translate-y-[0.08em]"
+                className="inline-flex h-[1em] overflow-hidden align-baseline translate-y-[0.08em]"
               >
-                <span className="animate-word-cycle flex flex-col">
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-ink via-black/40 to-ink">
+                <span className="animate-word-cycle flex flex-col leading-none shrink-0">
+                  <span className="flex h-[1em] shrink-0 items-center text-transparent bg-clip-text bg-gradient-to-r from-ink via-black/40 to-ink">
                     advantage
                   </span>
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-ink via-black/40 to-ink">
+                  <span className="flex h-[1em] shrink-0 items-center text-transparent bg-clip-text bg-gradient-to-r from-ink via-black/40 to-ink">
                     workflow
                   </span>
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-ink via-black/40 to-ink">
+                  <span className="flex h-[1em] shrink-0 items-center text-transparent bg-clip-text bg-gradient-to-r from-ink via-black/40 to-ink">
                     edge
                   </span>
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-ink via-black/40 to-ink">
+                  <span className="flex h-[1em] shrink-0 items-center text-transparent bg-clip-text bg-gradient-to-r from-ink via-black/40 to-ink">
                     moat
                   </span>
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-ink via-black/40 to-ink">
+                  <span className="flex h-[1em] shrink-0 items-center text-transparent bg-clip-text bg-gradient-to-r from-ink via-black/40 to-ink">
                     advantage
                   </span>
                 </span>
@@ -412,14 +411,14 @@ function Home() {
           <HeroCraft />
         </div>
 
-        <div className="relative z-10 mt-16 grid md:grid-cols-[auto_1fr] gap-10 md:items-end">
+        <div className="relative z-10 mt-[24px] grid md:grid-cols-[auto_1fr] gap-10 md:items-end">
           <a
             href="https://learn.falcon.academy/course/ai-fundamentals-for-business-decision-makers"
             className="inline-block px-12 py-6 bg-mint text-ink font-extrabold text-sm uppercase tracking-[0.2em] rounded-sm hover:translate-x-2 transition-transform duration-300"
           >
             Start with AI Fundamentals →
           </a>
-          <p className="max-w-md text-sm font-medium leading-relaxed text-black/60">
+          <p className="max-w-[600px] text-sm font-medium leading-relaxed text-black/60">
             A practical four-course program for business owners, managers, consultants and
             analysts who want to understand AI, choose the right tools, build real workflows
             and safely adopt AI agents.
@@ -472,29 +471,29 @@ function Home() {
           </div>
 
           <div className="relative">
-            <div className="w-full aspect-square bg-white/[0.03] outline-1 -outline-offset-1 outline-white/10 rounded-sm grid place-items-center relative overflow-hidden">
+            <div className="w-full aspect-auto min-h-0 py-10 px-8 sm:py-12 sm:px-10 lg:aspect-square lg:p-10 bg-white/[0.03] outline-1 -outline-offset-1 outline-white/10 rounded-sm flex items-center relative overflow-hidden">
               <div className="absolute inset-0 bg-grid-lines opacity-[0.06]" />
               {/* Live workflow diagram */}
-              <div className="relative z-10 w-[85%] space-y-6">
+              <div className="relative z-10 w-full space-y-6">
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-white/40">
+                  <span className="text-xs sm:text-sm font-mono font-bold uppercase tracking-[0.24em] text-white/45">
                     AI Workflow · Live
                   </span>
                   <span className="flex items-center gap-1.5">
-                    <span className="size-1.5 rounded-full bg-mint animate-pulse" />
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-mint">
+                    <span className="size-2 rounded-full bg-mint animate-pulse" />
+                    <span className="text-xs sm:text-sm font-bold uppercase tracking-[0.22em] text-mint">
                       Verified
                     </span>
                   </span>
                 </div>
-                <div className="text-white text-2xl font-extrabold tracking-tight">
+                <div className="text-white text-[clamp(1.9rem,3vw,2.6rem)] font-extrabold tracking-tight">
                   Contract review
                 </div>
                 <div className="flex items-center gap-2 flex-wrap">
                   {["Intake", "AI draft", "Verify", "Approve"].map((step, i) => (
                     <span
                       key={step}
-                      className={`px-3 py-1.5 rounded-sm text-[11px] font-bold uppercase tracking-wider ${
+                      className={`px-3.5 py-2 rounded-sm text-xs sm:text-sm font-bold uppercase tracking-[0.14em] ${
                         i < 3
                           ? "bg-mint text-ink"
                           : "border border-white/20 text-white/60"
@@ -506,15 +505,15 @@ function Home() {
                   ))}
                 </div>
                 <div>
-                  <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest text-white/50 mb-2">
+                  <div className="flex justify-between text-xs sm:text-sm font-bold uppercase tracking-[0.18em] text-white/55 mb-2.5">
                     <span>Verification confidence</span>
                     <span>86%</span>
                   </div>
-                  <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
+                  <div className="h-2 bg-white/10 rounded-full overflow-hidden">
                     <div className="h-full w-[86%] bg-mint rounded-full" />
                   </div>
                 </div>
-                <div className="grid grid-cols-3 gap-2 pt-2">
+                <div className="grid grid-cols-3 gap-3 pt-2">
                   {[
                     { l: "Queued", v: "2", c: "text-white" },
                     { l: "In progress", v: "1", c: "text-sky" },
@@ -522,10 +521,10 @@ function Home() {
                   ].map((t) => (
                     <div
                       key={t.l}
-                      className="border border-white/10 rounded-sm p-3 text-center"
+                      className="border border-white/10 rounded-sm px-3 py-4 sm:p-4 text-center"
                     >
-                      <div className={`text-2xl font-extrabold ${t.c}`}>{t.v}</div>
-                      <div className="text-[9px] font-bold uppercase tracking-widest text-white/40 mt-1">
+                      <div className={`text-3xl sm:text-4xl font-extrabold leading-none ${t.c}`}>{t.v}</div>
+                      <div className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.18em] text-white/45 mt-2 leading-snug">
                         {t.l}
                       </div>
                     </div>
@@ -586,33 +585,8 @@ function Home() {
         </div>
       </section>
 
-      {/* Outcomes */}
-      <section id="outcomes" className="px-8 pb-32">
-        <div className="max-w-[1440px] mx-auto border-t border-black/10 pt-20">
-          <div className="grid lg:grid-cols-[1fr_auto] gap-10 items-end mb-16">
-            <h2 className="text-5xl md:text-6xl font-extrabold tracking-tighter uppercase leading-[0.9] max-w-3xl">
-              Working business artifacts. <br />
-              <span className="text-black/40">Not just prompts.</span>
-            </h2>
-            <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-black/40">
-              What you will build
-            </span>
-          </div>
-
-          <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-px bg-black/5 border border-black/5">
-            {outcomes.map((o) => (
-              <div key={o.label} className="bg-offwhite p-12">
-                <div className="text-[clamp(3rem,6vw,5rem)] font-extrabold tracking-tighter leading-none">
-                  {o.metric}
-                </div>
-                <div className="mt-6 text-sm font-semibold text-black/60 max-w-xs">
-                  {o.label}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* Certificate */}
+      <CertificateSection />
 
       {/* FAQ */}
       <section id="faq" className="bg-white border-y border-black/10 py-32 px-8">
@@ -655,10 +629,10 @@ function Home() {
 
       {/* Apply CTA */}
       <section id="apply" className="py-32 px-8 max-w-[1440px] mx-auto">
-        <div className="border border-black/10 p-12 md:p-20 bg-mint/30 relative overflow-hidden">
+        <div className="border border-black/10 px-8 py-10 sm:p-12 md:p-20 bg-mint/30 relative overflow-hidden">
           <div className="absolute -bottom-24 -right-24 w-[400px] h-[400px] bg-diagonal-line pointer-events-none opacity-70" />
-          <div className="relative grid md:grid-cols-[1fr_auto] gap-12 items-end">
-            <div>
+          <div className="relative grid md:grid-cols-[1fr_auto] gap-10 md:gap-12 items-center md:items-end">
+            <div className="text-center md:text-left">
               <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-black/50 block mb-6">
                 Course 01 · Entry point
               </span>
@@ -666,22 +640,22 @@ function Home() {
                 Start with AI Fundamentals. <br />
                 Leave with a decision framework.
               </h2>
-              <p className="text-sm text-black/70 mt-6 max-w-md leading-relaxed">
+              <p className="text-sm text-black/70 mt-6 max-w-md leading-relaxed mx-auto md:mx-0">
                 Covered topics include tokens, context windows, embeddings, hosted vs
                 self-hosted models, prompting, verification and privacy — explained for
                 decision-makers.
               </p>
             </div>
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-3 w-full md:w-auto">
               <a
                 href="https://learn.falcon.academy/course/ai-fundamentals-for-business-decision-makers"
-                className="inline-block px-12 py-6 bg-ink text-offwhite font-extrabold text-sm uppercase tracking-[0.2em] rounded-sm hover:translate-x-2 transition-transform duration-300 text-center"
+                className="inline-block w-full md:w-auto px-10 sm:px-12 py-5 sm:py-6 bg-ink text-offwhite font-extrabold text-sm uppercase tracking-[0.2em] rounded-sm hover:translate-x-2 transition-transform duration-300 text-center"
               >
                 Enroll in Course 1 →
               </a>
               <a
                 href="https://learn.falcon.academy/courses"
-                className="inline-block px-12 py-6 bg-transparent border border-ink/20 text-ink font-extrabold text-sm uppercase tracking-[0.2em] rounded-sm hover:bg-white transition-colors text-center"
+                className="inline-block w-full md:w-auto px-10 sm:px-12 py-5 sm:py-6 bg-transparent border border-ink/20 text-ink font-extrabold text-sm uppercase tracking-[0.2em] rounded-sm hover:bg-white transition-colors text-center"
               >
                 See full program
               </a>
@@ -712,7 +686,7 @@ function Home() {
             ))}
           </div>
         </div>
-        <div className="max-w-[1440px] mx-auto px-8 py-20 grid md:grid-cols-4 gap-12">
+        <div className="max-w-[1440px] mx-auto px-8 py-20 grid grid-cols-1 md:grid-cols-4 gap-12">
           <div className="col-span-2">
             <span className="text-3xl font-extrabold tracking-tighter italic">FALCON.</span>
             <p className="mt-6 text-sm text-black/50 max-w-sm leading-relaxed font-semibold">
@@ -771,18 +745,30 @@ function Home() {
             </h4>
             <ul className="space-y-3 text-sm font-medium">
               <li>
-                <button type="button" className="hover:text-black/60 transition-colors">
+                <button
+                  type="button"
+                  onClick={() => setLegalModal("privacy")}
+                  className="text-left bg-transparent border-0 p-0 font-inherit text-inherit cursor-pointer hover:text-black/60 transition-colors"
+                >
                   Privacy Policy
                 </button>
               </li>
               <li>
-                <button type="button" className="hover:text-black/60 transition-colors">
+                <button
+                  type="button"
+                  onClick={() => setLegalModal("terms")}
+                  className="text-left bg-transparent border-0 p-0 font-inherit text-inherit cursor-pointer hover:text-black/60 transition-colors"
+                >
                   Terms of Use
                 </button>
               </li>
               <li>
-                <button type="button" className="hover:text-black/60 transition-colors">
-                  Refund & Cancellation Policy
+                <button
+                  type="button"
+                  onClick={() => setLegalModal("refund")}
+                  className="text-left bg-transparent border-0 p-0 font-inherit text-inherit cursor-pointer hover:text-black/60 transition-colors"
+                >
+                  Refund &<br className="md:hidden" /> Cancellation Policy
                 </button>
               </li>
               <li>
