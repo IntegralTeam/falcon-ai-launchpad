@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -266,6 +267,13 @@ function FalconLogo({ className = "" }: { className?: string }) {
 }
 
 function Home() {
+  const navigationLinks = [
+    { href: "#program", label: "Solution" },
+    { href: "#courses", label: "Courses" },
+    { href: "#outcomes", label: "Results" },
+    { href: "#faq", label: "FAQ" },
+  ];
+
   return (
     <div className="min-h-screen bg-offwhite text-ink font-sora">
       {/* Navigation */}
@@ -276,42 +284,61 @@ function Home() {
               <FalconLogo />
             </a>
             <div className="hidden md:flex space-x-8 text-[12px] font-semibold uppercase tracking-widest">
-              <a href="#program" className="hover:text-black/60 transition-colors">
-                Solution
-              </a>
-              <a href="#courses" className="hover:text-black/60 transition-colors">
-                Courses
-              </a>
-              <a href="#outcomes" className="hover:text-black/60 transition-colors">
-                Results
-              </a>
-              <a href="#faq" className="hover:text-black/60 transition-colors">
-                FAQ
-              </a>
+              {navigationLinks.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className="hover:text-black/60 transition-colors"
+                >
+                  {link.label}
+                </a>
+              ))}
             </div>
           </div>
 
           <div className="flex items-center space-x-4">
-            <div className="hidden sm:flex border border-black/10 rounded-sm overflow-hidden text-[11px] font-bold">
-              <button className="px-3 py-2 border-r border-black/10 hover:bg-black/5">EN</button>
-              <button className="px-3 py-2 hover:bg-black/5">AR</button>
-            </div>
             <a
               href="https://learn.falcon.academy/courses"
               className="hidden md:inline-block px-5 py-2.5 bg-ink text-offwhite text-[11px] font-bold uppercase tracking-widest rounded-sm hover:bg-black/80 transition-colors"
             >
               Explore Courses
             </a>
-            <button
-              aria-label="Menu"
-              className="size-10 bg-ink text-white flex items-center justify-center rounded-sm hover:bg-black/80"
-            >
-              <span className="relative block w-5">
-                <span className="block h-0.5 bg-white mb-1"></span>
-                <span className="block h-0.5 bg-white mb-1"></span>
-                <span className="block h-0.5 bg-white"></span>
-              </span>
-            </button>
+            <Sheet>
+              <SheetTrigger asChild>
+                <button
+                  aria-label="Open menu"
+                  className="flex size-10 items-center justify-center rounded-sm bg-ink text-white transition-colors hover:bg-black/80 md:hidden"
+                >
+                  <span className="relative block w-5">
+                    <span className="mb-1 block h-0.5 bg-white" />
+                    <span className="mb-1 block h-0.5 bg-white" />
+                    <span className="block h-0.5 bg-white" />
+                  </span>
+                </button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-[88vw] max-w-sm border-l border-black/10 bg-offwhite px-6 py-16">
+                <SheetTitle className="text-left text-sm font-bold uppercase tracking-[0.28em] text-ink">
+                  Navigation
+                </SheetTitle>
+                <div className="mt-10 flex flex-col gap-5">
+                  {navigationLinks.map((link) => (
+                    <a
+                      key={link.href}
+                      href={link.href}
+                      className="text-lg font-semibold uppercase tracking-[0.16em] text-ink transition-colors hover:text-black/60"
+                    >
+                      {link.label}
+                    </a>
+                  ))}
+                </div>
+                <a
+                  href="https://learn.falcon.academy/courses"
+                  className="mt-10 inline-flex w-full items-center justify-center rounded-sm bg-ink px-5 py-3 text-[11px] font-bold uppercase tracking-widest text-offwhite transition-colors hover:bg-black/80"
+                >
+                  Explore Courses
+                </a>
+              </SheetContent>
+            </Sheet>
           </div>
         </div>
       </nav>
