@@ -12,6 +12,9 @@ RUN npm ci
 # Copy source code
 COPY . .
 
+# Copy config files explicitly
+COPY vite.config.ts ./vite.config.ts
+
 # Copy .env file (if exists)
 COPY .env .env
 
