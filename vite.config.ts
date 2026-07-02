@@ -12,6 +12,9 @@ const basePath = process.env.BASE_PATH ?? "/";
 export default defineConfig({
   vite: {
     base: basePath,
+    server: {
+      allowedHosts: ['falcon.sfxdx.com'],
+    },
   },
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
