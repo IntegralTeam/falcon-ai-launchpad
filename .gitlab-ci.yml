@@ -40,7 +40,7 @@ variables:
   stage: build
   script:
     - echo "Build frontend"
-    - time docker build -f ci_cd/docker/$CI_COMMIT_REF_NAME/Dockerfile . -t $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME --build-arg IMAGE_DOCKER --cache-from $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
+    - time docker build -f ci_cd/docker/Dockerfile . -t $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME --build-arg IMAGE_DOCKER --cache-from $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
     - echo "Pushing..."
     - time docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
     - time docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
