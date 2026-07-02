@@ -15,6 +15,11 @@ export default defineConfig({
     server: {
       allowedHosts: ['falcon.sfxdx.com'],
     },
+    preview: {
+      host: '0.0.0.0',
+      port: 4173,
+      allowedHosts: ['.sfxdx.com'],
+    },
   },
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
