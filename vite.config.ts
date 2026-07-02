@@ -18,7 +18,7 @@ export default defineConfig({
     preview: {
       host: '0.0.0.0',
       port: 4173,
-      allowedHosts: ['falcon.sfxdx.com', '.sfxdx.com'],
+      allowedHosts: true,
     },
   },
   tanstackStart: {
