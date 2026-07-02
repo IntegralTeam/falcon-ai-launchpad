@@ -1,48 +1,23 @@
-# Stage 1: Build
-FROM node:20-alpine AS builder
+FROM node:20-alpine
 
 WORKDIR /app
 
-# Copy package files
+# Копируем package.json и package-lock.json (если есть)
 COPY package*.json ./
 
-# Install dependencies
-RUN npm ci
+# Устанавливаем зависимости
+RUN npm install
 
-# Copy source code
+# Копируем весь остальной проект
 COPY . .
 
-# Copy config files explicitly
-COPY vite.config.ts ./vite.config.ts
-
-# Copy .env file (if exists)
-COPY .env .env
-
-# Build the application
-RUN npm run build
-
-# Stage 2: Production
-FROM node:20-alpine AS production
-
-WORKDIR /app
-
-# Copy package files for production dependencies
-COPY package*.json ./
-
-# Install only production dependencies
-RUN npm ci --only=production
-
-# Copy built application from builder stage
-COPY --from=builder /app/dist ./dist
-
-# Copy .env file from builder stage
-COPY --from=builder /app/.env ./.env
-
-# Expose port (default for Vite preview is 4173)
-EXPOSE 4173
-
-# Set environment to production
 ENV NODE_ENV=production
 
-# Start the application
-CMD ["npm", "run", "preview", "--", "--host", "0.0.0.0"]
+# Сборка проекта
+RUN npm run build
+
+# Открываем порт, на котором работает vite preview
+EXPOSE 4173
+
+# Запуск preview-сервера
+CMD ["npm", "run", "preview"]
