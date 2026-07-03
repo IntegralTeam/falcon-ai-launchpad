@@ -1,0 +1,14 @@
+infisical_client_id: "{{ lookup('env', 'INFISICAL_CLIENT_ID') }}"
+infisical_client_secret: "{{ lookup('env', 'INFISICAL_CLIENT_SECRET') }}"
+infisical_project_id: "{{ lookup('env', 'INFISICAL_PROJECT_ID') }}"
+infisical_domain: "{{ lookup('env', 'INFISICAL_DOMAIN') }}"
+
+CI_REGISTRY_IMAGE: "{{ lookup('env', 'CI_REGISTRY_IMAGE') }}"
+CI_JOB_TOKEN: "{{ lookup('env', 'CI_JOB_TOKEN') }}"
+CI_REGISTRY: "{{ lookup('env', 'CI_REGISTRY') }}"
+CI_PROJECT_NAME: "{{ lookup('env', 'CI_PROJECT_NAME') }}"
+CI_COMMIT_REF_NAME: "{{ lookup('env', 'CI_COMMIT_REF_NAME') }}"
+
+SERVER_VARIABLE: "{{ lookup('env', 'SERVER_VARIABLE') }}"
+
+CONTAINERS_FOR_LOGS: "{{ lookup('env', 'CONTAINERS_FOR_LOGS') }}"

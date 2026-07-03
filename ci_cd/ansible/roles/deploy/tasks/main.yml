@@ -1,0 +1,48 @@
+- name: Create project directory if it does not exist
+  ansible.builtin.file:
+    path: "/opt/{{ CI_PROJECT_NAME }}"
+    state: directory
+
+- name: Create monitoring directory if it does not exist
+  ansible.builtin.file:
+    path: "/opt/{{ CI_PROJECT_NAME }}/monitoring"
+    state: directory
+
+- name: Down old compose
+  shell:
+    cmd: "docker compose down" 
+    chdir: "/opt/{{ CI_PROJECT_NAME }}"
+  ignore_errors: true
+
+- name: Clean up Docker
+  shell: |
+    docker system prune -af --volumes
+  ignore_errors: true
+
+- name: Docker login via shell (workaround)
+  shell: docker login -u gitlab-ci-token -p "{{ CI_JOB_TOKEN }}" "{{ CI_REGISTRY }}"
+  environment:
+    DOCKER_HOST: unix:///var/run/docker.sock
+
+- name: Pull new images (shell fallback)
+  shell: docker pull {{ CI_REGISTRY_IMAGE }}:{{ CI_COMMIT_REF_NAME }}
+
+- name: Create project directory if it does not exist
+  file:
+    path: '/opt/{{ CI_PROJECT_NAME }}'
+    state: directory    
+
+- name: Copy new compose to instance
+  template:
+    src: 'docker-compose.yml.j2'
+    dest: '/opt/{{ CI_PROJECT_NAME }}/docker-compose.yml'
+
+- name: copy configs/promtail.yml to ./monitoring/promtail.yml
+  ansible.builtin.copy:
+    src: configs/promtail.yml
+    dest: "/opt/{{ CI_PROJECT_NAME }}/monitoring/promtail.yml"
+
+- name: Up new compose
+  shell:
+    cmd: "docker compose up -d" 
+    chdir: "/opt/{{ CI_PROJECT_NAME }}"

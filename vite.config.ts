@@ -8,8 +8,14 @@ import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 export default defineConfig({
   vite: {
+    base: basePath,
     server: {
-      allowedHosts: [".trycloudflare.com"],
+      allowedHosts: ['falcon.sfxdx.com'],
+    },
+    preview: {
+      host: '0.0.0.0',
+      port: 4173,
+      allowedHosts: true,
     },
   },
   tanstackStart: {
