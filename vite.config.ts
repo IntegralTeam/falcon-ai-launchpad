@@ -32,4 +32,13 @@ export default defineConfig({
       crawlLinks: false,
     },
   },
+  // Disable nitro. In the Lovable sandbox nitro is force-configured to emit the server
+  // bundle at `dist/server/server.js` (a Cloudflare deploy target), which is where
+  // TanStack Start's prerender preview server looks. Outside the sandbox nitro instead
+  // emits `.output/server/index.mjs`, so the prerender crawl of `/` 500s with
+  // "Failed to fetch /: Internal Server Error". We don't deploy to Cloudflare — the
+  // Docker runtime is `vite preview` serving the static `dist/` output — so turning
+  // nitro off lets TanStack Start produce its native `dist/server/server.js`, which the
+  // prerender step can load. See ci_cd/docker/Dockerfile.
+  nitro: false,
 });
