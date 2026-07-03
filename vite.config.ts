@@ -6,9 +6,6 @@
 // You can pass additional config via defineConfig({ vite: { ... }, etc... }) if needed.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
-// GitHub Pages project sites are served from /{repo}/ — set BASE_PATH in CI (e.g. /falcon-ai-launchpad/).
-const basePath = process.env.BASE_PATH ?? "/";
-
 export default defineConfig({
   vite: {
     base: basePath,
@@ -24,12 +21,6 @@ export default defineConfig({
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this
-    server: { entry: "server" },
-    // Static HTML for GitHub Pages and other static hosts
-    prerender: {
-      enabled: true,
-      // Only prerender `/` — LearnWorlds CTAs are external absolute URLs, not app routes.
-      crawlLinks: false,
-    },
+    server: { entry: "server", allowHost: "word-tags-heading-ali.trycloudflare.com" },
   },
 });
