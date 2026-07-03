@@ -27,7 +27,7 @@ export default defineConfig({
     server: { entry: "server" },
     // Static HTML for GitHub Pages and other static hosts
     prerender: {
-      enabled: true,
+      enabled: process.env.DISABLE_PRERENDER !== "true",
       // Only prerender `/` — LearnWorlds CTAs are external absolute URLs, not app routes.
       crawlLinks: false,
     },

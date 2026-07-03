@@ -8,10 +8,12 @@ COPY package*.json ./
 # Устанавливаем зависимости
 RUN npm install
 
-# Копируем весь остальной проект
+# Копируем весь проект, включая .env
 COPY . .
 
+# Устанавливаем переменные окружения для сборки
 ENV NODE_ENV=production
+ENV DISABLE_PRERENDER=true
 
 # Сборка проекта
 RUN npm run build
