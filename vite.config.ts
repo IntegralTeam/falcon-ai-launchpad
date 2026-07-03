@@ -25,6 +25,10 @@ export default defineConfig({
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this
     server: { entry: "server" },
+    // Nitro preset: node-server для Docker, cloudflare-module для Cloudflare Workers
+    nitro: {
+      preset: process.env.NITRO_PRESET ?? "cloudflare-module",
+    },
     // Static HTML for GitHub Pages and other static hosts
     prerender: {
       enabled: process.env.DISABLE_PRERENDER !== "true",

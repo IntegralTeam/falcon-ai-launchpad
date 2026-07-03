@@ -14,12 +14,13 @@ COPY . .
 # Устанавливаем переменные окружения для сборки
 ENV NODE_ENV=production
 ENV DISABLE_PRERENDER=true
+ENV NITRO_PRESET=node-server
 
 # Сборка проекта
 RUN npm run build
 
-# Открываем порт, на котором работает vite preview
-EXPOSE 4173
+# Открываем порт, на котором работает сервер
+EXPOSE 3000
 
-# Запуск preview-сервера
-CMD ["npm", "run", "preview"]
+# Запуск сервера через node (Nitro output)
+CMD ["node", ".output/server/index.mjs"]
