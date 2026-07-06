@@ -1,4 +1,4 @@
-import certificateImg from "@/assets/certificate.png";
+import certificateImg from "@/assets/certificate.jpg";
 import { useRepeatInView } from "@/hooks/use-repeat-in-view";
 
 /** Certificate showcase — text panel left, sample certificate preview right */
@@ -27,17 +27,14 @@ export function CertificateSection() {
               After completing each course, you receive an official Certificate of Completion
               confirming the skills acquired — verifiable online with a unique certificate ID.
             </p>
-            <a
-              href="#"
-              className="mt-6 inline-block text-mint text-sm md:text-base font-semibold underline underline-offset-4 decoration-mint/50 hover:decoration-mint transition-colors"
-            >
+            <p className="mt-6 text-white/55 text-base md:text-lg leading-relaxed max-w-lg">
               Licensed by Falcon Expert Institute FZ-LLC · No. 52001001
-            </a>
+            </p>
             <a
               href={certificateImg}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-8 inline-flex items-center justify-center rounded-sm border border-white/30 px-10 py-4 text-[11px] font-bold uppercase tracking-[0.2em] text-white transition-colors hover:bg-white/10"
+              className="mt-8 inline-flex items-center justify-center border border-white/30 px-10 py-4 text-[11px] font-bold uppercase tracking-[0.2em] text-white transition-colors hover:bg-white/10"
             >
               View sample certificate
             </a>

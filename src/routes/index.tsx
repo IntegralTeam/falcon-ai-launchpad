@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { CertificateSection } from "@/components/CertificateSection";
+import { UniquenessSection } from "@/components/UniquenessSection";
 import { LegalModal, type LegalModalType } from "@/components/LegalModal";
 import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useRepeatInView } from "@/hooks/use-repeat-in-view";
+import logoSvg from "@/assets/logo.svg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -248,19 +250,14 @@ function HeroCraft() {
   );
 }
 
-/** Brand mark: wordmark + UAE flag accent stripes */
-function FalconLogo({ className = "" }: { className?: string }) {
+/** Brand mark: FALCON.ACADEMY wordmark */
+function FalconLogo({ className = "h-[30px]" }: { className?: string }) {
   return (
-    <div className={`inline-flex flex-col leading-none ${className}`}>
-      <span className="text-[1.35rem] font-extrabold tracking-tighter italic text-ink">
-        FALCON<span className="text-muted-foreground">.</span>ACADEMY
-      </span>
-      <div className="mt-1.5 flex items-center gap-1">
-        <span className="h-[3px] w-8 bg-uae-red" />
-        <span className="h-[3px] w-8 bg-uae-green" />
-        <span className="h-[3px] w-8 bg-uae-black" />
-      </div>
-    </div>
+    <img
+      src={logoSvg}
+      alt="Falcon Academy"
+      className={`w-auto ${className}`}
+    />
   );
 }
 
@@ -290,7 +287,7 @@ function Home() {
       <nav className="fixed top-0 w-full z-50 border-b border-black/5 bg-offwhite/80 backdrop-blur-md">
         <div className="max-w-[1440px] mx-auto flex items-center justify-between px-8 py-5">
           <div className="flex items-center space-x-12">
-            <a href="#">
+            <a href="#" style={{ marginTop: "4px" }}>
               <FalconLogo />
             </a>
             <div className="hidden md:flex space-x-8 text-[12px] font-semibold uppercase tracking-widest">
@@ -309,7 +306,7 @@ function Home() {
           <div className="flex items-center space-x-4">
             <a
               href="https://learn.falcon.academy/courses"
-              className="hidden md:inline-block px-5 py-2.5 bg-ink text-offwhite text-[11px] font-bold uppercase tracking-widest rounded-sm hover:bg-black/80 transition-colors"
+              className="hidden md:inline-block px-5 py-2.5 bg-ink text-offwhite text-[11px] font-bold uppercase tracking-widest hover:bg-black/80 transition-colors"
             >
               Explore Courses
             </a>
@@ -348,7 +345,7 @@ function Home() {
                 <SheetClose asChild>
                   <a
                     href="https://learn.falcon.academy/courses"
-                    className="mt-10 inline-flex w-full items-center justify-center rounded-sm bg-ink px-5 py-3 text-[11px] font-bold uppercase tracking-widest text-offwhite transition-colors hover:bg-black/80"
+                    className="mt-10 inline-flex w-full items-center justify-center bg-ink px-5 py-3 text-[11px] font-bold uppercase tracking-widest text-offwhite transition-colors hover:bg-black/80"
                   >
                     Explore Courses
                   </a>
@@ -427,7 +424,7 @@ function Home() {
         <div className="relative z-10 mt-[24px] grid md:grid-cols-[auto_1fr] gap-10 md:items-end">
           <a
             href="https://learn.falcon.academy/course/ai-fundamentals-for-business-decision-makers"
-            className="inline-block px-12 py-6 bg-mint text-ink font-extrabold text-sm uppercase tracking-[0.2em] rounded-sm hover:translate-x-2 transition-transform duration-300"
+            className="inline-block px-12 py-6 bg-mint text-ink font-extrabold text-sm uppercase tracking-[0.2em] hover:translate-x-2 transition-transform duration-300"
           >
             Start with AI Fundamentals →
           </a>
@@ -614,6 +611,8 @@ function Home() {
         </div>
       </section>
 
+      <UniquenessSection />
+
       {/* Certificate */}
       <CertificateSection />
 
@@ -695,13 +694,13 @@ function Home() {
             >
               <a
                 href="https://learn.falcon.academy/course/ai-fundamentals-for-business-decision-makers"
-                className="inline-block w-full md:w-auto px-10 sm:px-12 py-5 sm:py-6 bg-ink text-offwhite font-extrabold text-sm uppercase tracking-[0.2em] rounded-sm hover:translate-x-2 transition-transform duration-300 text-center"
+                className="inline-block w-full md:w-auto px-10 sm:px-12 py-5 sm:py-6 bg-ink text-offwhite font-extrabold text-sm uppercase tracking-[0.2em] hover:translate-x-2 transition-transform duration-300 text-center"
               >
                 Enroll in Course 1 →
               </a>
               <a
                 href="https://learn.falcon.academy/courses"
-                className="inline-block w-full md:w-auto px-10 sm:px-12 py-5 sm:py-6 bg-transparent border border-ink/20 text-ink font-extrabold text-sm uppercase tracking-[0.2em] rounded-sm hover:bg-white transition-colors text-center"
+                className="inline-block w-full md:w-auto px-10 sm:px-12 py-5 sm:py-6 bg-transparent border border-ink/20 text-ink font-extrabold text-sm uppercase tracking-[0.2em] hover:bg-white transition-colors text-center"
               >
                 See full program
               </a>
@@ -736,7 +735,7 @@ function Home() {
         </div>
         <div className="max-w-[1440px] mx-auto px-8 py-20 grid grid-cols-1 md:grid-cols-4 gap-12">
           <div className="col-span-2">
-            <span className="text-3xl font-extrabold tracking-tighter italic">FALCON.</span>
+            <FalconLogo className="h-[1.875rem]" />
             <p className="mt-6 text-sm text-black/50 max-w-sm leading-relaxed font-semibold">
               Falcon Innovation Academy is a trading brand operated by Falcon Expert Institute
               FZ-LLC.
