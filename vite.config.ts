@@ -12,14 +12,26 @@ const basePath = process.env.BASE_PATH ?? "/";
 export default defineConfig({
   vite: {
     base: basePath,
+    server: {
+      allowedHosts: ['falcon.sfxdx.com'],
+    },
+    preview: {
+      host: '0.0.0.0',
+      port: 4173,
+      allowedHosts: true,
+    },
   },
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this
     server: { entry: "server" },
+    // Nitro preset: node-server для Docker, cloudflare-module для Cloudflare Workers
+    nitro: {
+      preset: process.env.NITRO_PRESET ?? "cloudflare-module",
+    },
     // Static HTML for GitHub Pages and other static hosts
     prerender: {
-      enabled: true,
+      enabled: process.env.DISABLE_PRERENDER !== "true",
       // Only prerender `/` — LearnWorlds CTAs are external absolute URLs, not app routes.
       crawlLinks: false,
     },

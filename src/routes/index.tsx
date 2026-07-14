@@ -1,1305 +1,281 @@
+import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Fragment, useEffect, useState } from "react";
-
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import falconNavbarLogo from "../assets/falcon-navbar-logo.png";
-import falconLogoCircle from "../assets/falcon-logo-circle.png";
-import falconLogoFull from "../assets/falcon-logo.jpeg";
-import audienceSectionImage from "../assets/audience-section.png";
-import chaosPathImage from "../assets/chaos-path.png";
-import goodPathImage from "../assets/good-path.png";
-import courseAgentsImage from "../assets/agents.png";
-import courseFundamentalsImage from "../assets/fundamentals.png";
-import courseStrategyImage from "../assets/strategy.png";
-import courseToolsImage from "../assets/tools.png";
-import {
-  learnWorldsAiFundamentalsUrl,
-  learnWorldsCourseUrls,
-  learnWorldsCoursesUrl,
-} from "../lib/learnworlds";
+import { CertificateSection } from "@/components/CertificateSection";
+import { UniquenessSection } from "@/components/UniquenessSection";
+import { LegalModal, type LegalModalType } from "@/components/LegalModal";
+import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { useRepeatInView } from "@/hooks/use-repeat-in-view";
+import logoSvg from "@/assets/logo.svg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Falcon Innovation Academy — Learn AI as a Business Advantage" },
-      { name: "description", content: "A practical four-course AI for Business program: fundamentals, tools, agents and implementation. Build real artifacts, not just prompts." },
+      {
+        name: "description",
+        content:
+          "A practical four-course AI for Business program: fundamentals, tools, agents and implementation. Build real artifacts, not just prompts.",
+      },
       { property: "og:title", content: "Falcon Innovation Academy — AI for Business" },
-      { property: "og:description", content: "Master AI tools and decision-making to make your business competitive and future-proof." },
+      {
+        property: "og:description",
+        content:
+          "Master AI tools and decision-making to make your business competitive and future-proof.",
+      },
+      { property: "og:type", content: "website" },
     ],
   }),
-  component: Landing,
+  component: Home,
 });
 
-function BrandLogo({ className = "" }: { className?: string }) {
+const stats = [
+  { dot: "bg-mint", label: "4 SEQUENTIAL COURSES" },
+  { dot: "bg-sky", label: "REAL BUSINESS ARTIFACTS" },
+  { dot: "bg-amber-400", label: "NO CODING REQUIRED" },
+];
+
+const courses = [
+  {
+    n: "01",
+    tint: "bg-sky/25 group-hover:bg-sky/50",
+    title: "AI Fundamentals for Business Decision-Makers",
+    body: "Understand AI before you choose tools. Learn the mechanics, limits, privacy basics and decision-making models that matter for business use.",
+    tag: "READINESS BRIEF",
+    href: "https://learn.falcon.academy/course/ai-fundamentals-for-business-decision-makers",
+  },
+  {
+    n: "02",
+    tint: "bg-mint/40 group-hover:bg-mint/70",
+    title: "AI Tools & Practical Cases",
+    body: "Move from generic prompting to evaluated tools. Compare vendors, use multimodal workflows, and build a practical tool portfolio for real tasks.",
+    tag: "TOOL PORTFOLIO",
+    href: "https://learn.falcon.academy/course/ai-tools-practical-cases",
+  },
+  {
+    n: "03",
+    tint: "bg-amber-200/60 group-hover:bg-amber-300/80",
+    title: "AI Agents & Automation",
+    body: "Design AI workflows that do more than answer questions. Build agentic processes with controls, supervision and safe handoffs.",
+    tag: "AGENTIC BLUEPRINT",
+    href: "https://learn.falcon.academy/course/ai-agents-automation-design-a-safe-humansupervised-pilot",
+  },
+  {
+    n: "04",
+    tint: "bg-ink/10 group-hover:bg-ink/20",
+    title: "AI Strategy, Implementation & Operating Model",
+    body: "Turn experiments into a governed operating model. Define rollout phases, ownership, policies and an implementation roadmap.",
+    tag: "ROADMAP",
+    href: "https://learn.falcon.academy/course/ai-strategy-governance-implementation",
+  },
+];
+
+const faqs = [
+  {
+    q: "Do I need technical experience?",
+    a: "No. The program is built for business learners. You learn concepts only at the level needed to make decisions.",
+  },
+  {
+    q: "Is this only about ChatGPT?",
+    a: "No. We cover multimodal tools, RAG systems, APIs, open-source models, self-hosted AI, agents and automation.",
+  },
+  {
+    q: "Is AI automation safe for confidential business data?",
+    a: "Yes — the program teaches you to choose between hosted, API and on-premise options, and how to implement human review gates and data handling rules.",
+  },
+  {
+    q: "Will I learn to build AI agents?",
+    a: "Yes, but only after building the judgment to use them safely. Course 3 focuses on agentic workflows with controls.",
+  },
+  {
+    q: "What do I leave with?",
+    a: "Four practical artifacts: Readiness Brief, Tool Portfolio, Agentic Blueprint and Implementation Roadmap — plus the skills to keep using them.",
+  },
+];
+function HeroCraft() {
   return (
-    <div className={`${className}`}>
-      <img
-        src={falconNavbarLogo}
-        alt="Falcon Innovation Academy"
-        className="h-8 w-auto"
-      />
+    <div className="relative hidden lg:block">
+      {/* Halo blur */}
+      <div className="absolute inset-8 rounded-full bg-mint/40 blur-3xl opacity-70 pointer-events-none" />
+      <div className="absolute -top-6 -right-8 size-24 rounded-full bg-sky/50 blur-2xl pointer-events-none" />
+
+      {/* 3D rotating isometric wireframe */}
+      <div className="relative perspective-scene aspect-square w-full max-w-[520px] mx-auto">
+        {/* Ambient thin ring */}
+        <svg
+          viewBox="0 0 400 400"
+          className="absolute inset-0 w-full h-full text-ink/70 animate-float"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1"
+        >
+          <circle cx="200" cy="200" r="180" className="opacity-20" />
+          <circle cx="200" cy="200" r="150" className="opacity-15" strokeDasharray="2 4" />
+          <circle cx="200" cy="200" r="120" className="opacity-10" />
+          {/* Corner ticks */}
+          {[0, 90, 180, 270].map((r) => (
+            <g key={r} transform={`rotate(${r} 200 200)`}>
+              <line x1="200" y1="12" x2="200" y2="26" strokeWidth="1.5" />
+            </g>
+          ))}
+        </svg>
+
+        {/* Rotating cube stack */}
+        <div className="absolute inset-0 grid place-items-center">
+          <div className="relative animate-spin-y" style={{ width: 260, height: 260 }}>
+            {/* Cube 1 - large */}
+            <div
+              className="absolute left-1/2 top-1/2"
+              style={{
+                width: 200,
+                height: 200,
+                transformStyle: "preserve-3d",
+                transform: "translate3d(-50%, -50%, 0)",
+              }}
+            >
+              <div className="face-3d" style={{ transform: "translateZ(100px)" }} />
+              <div className="face-3d" style={{ transform: "rotateY(180deg) translateZ(100px)" }} />
+              <div className="face-3d" style={{ transform: "rotateY(90deg) translateZ(100px)" }} />
+              <div className="face-3d" style={{ transform: "rotateY(-90deg) translateZ(100px)" }} />
+              <div
+                className="face-3d"
+                style={{
+                  transform: "rotateX(90deg) translateZ(100px)",
+                  background:
+                    "linear-gradient(135deg, rgba(181,234,215,0.35), rgba(160,196,255,0.15))",
+                }}
+              />
+              <div className="face-3d" style={{ transform: "rotateX(-90deg) translateZ(100px)" }} />
+            </div>
+
+            {/* Cube 2 — offset small */}
+            <div
+              className="absolute"
+              style={{
+                width: 90,
+                height: 90,
+                left: "78%",
+                top: "18%",
+                transformStyle: "preserve-3d",
+                transform: "translate3d(-50%, -50%, 120px)",
+              }}
+            >
+              <div
+                className="face-3d"
+                style={{
+                  transform: "translateZ(45px)",
+                  background: "rgba(10,10,10,0.9)",
+                  borderColor: "rgba(10,10,10,1)",
+                }}
+              />
+              <div className="face-3d" style={{ transform: "rotateY(180deg) translateZ(45px)" }} />
+              <div className="face-3d" style={{ transform: "rotateY(90deg) translateZ(45px)" }} />
+              <div className="face-3d" style={{ transform: "rotateY(-90deg) translateZ(45px)" }} />
+              <div className="face-3d" style={{ transform: "rotateX(90deg) translateZ(45px)" }} />
+              <div className="face-3d" style={{ transform: "rotateX(-90deg) translateZ(45px)" }} />
+            </div>
+
+            {/* Cube 3 — bottom-left accent */}
+            <div
+              className="absolute"
+              style={{
+                width: 56,
+                height: 56,
+                left: "12%",
+                top: "82%",
+                transformStyle: "preserve-3d",
+                transform: "translate3d(-50%, -50%, -80px)",
+              }}
+            >
+              <div
+                className="face-3d"
+                style={{
+                  transform: "translateZ(28px)",
+                  background: "var(--mint)",
+                  borderColor: "rgba(10,10,10,0.85)",
+                }}
+              />
+              <div className="face-3d" style={{ transform: "rotateY(180deg) translateZ(28px)" }} />
+              <div className="face-3d" style={{ transform: "rotateY(90deg) translateZ(28px)" }} />
+              <div className="face-3d" style={{ transform: "rotateY(-90deg) translateZ(28px)" }} />
+              <div className="face-3d" style={{ transform: "rotateX(90deg) translateZ(28px)" }} />
+              <div className="face-3d" style={{ transform: "rotateX(-90deg) translateZ(28px)" }} />
+            </div>
+          </div>
+        </div>
+
+        {/* Overlay SVG connectors + labels */}
+        <svg
+          viewBox="0 0 400 400"
+          className="absolute inset-0 w-full h-full pointer-events-none"
+          fill="none"
+        >
+          <g stroke="#0a0a0a" strokeWidth="1">
+            <path
+              d="M 60 340 L 140 260"
+              className="animate-draw"
+              style={{ ["--dash" as string]: "160" }}
+            />
+            <path
+              d="M 340 90 L 270 150"
+              className="animate-dash"
+              style={{ animationDelay: "0.4s" }}
+            />
+          </g>
+          <g
+            fontFamily="ui-monospace, Menlo, monospace"
+            fontSize="9"
+            fontWeight="700"
+            fill="#0a0a0a"
+          >
+            <text x="18" y="352" letterSpacing="2">
+              INPUT · 01
+            </text>
+            <text x="278" y="82" letterSpacing="2">
+              AGENT · 02
+            </text>
+            <text x="300" y="360" letterSpacing="2" fill="#0a0a0a" opacity="0.5">
+              OUTPUT · 03
+            </text>
+          </g>
+          {/* Corner brackets */}
+          <g stroke="#0a0a0a" strokeWidth="1.5" opacity="0.6">
+            <path d="M 8 8 L 8 28 M 8 8 L 28 8" />
+            <path d="M 392 8 L 392 28 M 392 8 L 372 8" />
+            <path d="M 8 392 L 8 372 M 8 392 L 28 392" />
+            <path d="M 392 392 L 392 372 M 392 392 L 372 392" />
+          </g>
+        </svg>
+      </div>
     </div>
   );
 }
 
-const PRIVACY_POLICY_SECTIONS = [
-  {
-    title: "Who we are",
-    body: "Falcon Expert Institute FZ-LLC (“Falcon Innovation Academy”, “we”, “us”) operates online business education programs from Ras Al Khaimah Economic Zone (RAKEZ), United Arab Emirates. Educational Licence No. 52001001.",
-  },
-  {
-    title: "Information we collect",
-    body: "When you enroll, contact us, or use our website, we may collect your name, email address, company details, billing information, course progress, and communications you send to us. We also collect limited technical data such as IP address, browser type, and usage analytics to keep the platform secure and improve our services.",
-  },
-  {
-    title: "How we use your information",
-    body: "We use personal data to provide access to courses, process enrollments, respond to inquiries, issue certificates or records of completion, improve program content, and comply with applicable law. We do not sell your personal information to third parties.",
-  },
-  {
-    title: "Sharing and processors",
-    body: "We may share data with trusted service providers that help us deliver our programs—such as learning platforms, payment processors, email tools, and hosting providers—only as needed to operate Falcon Innovation Academy. These providers are required to protect your data and use it solely for the services they provide to us.",
-  },
-  {
-    title: "Data retention",
-    body: "We retain personal information for as long as needed to deliver courses, maintain business records, resolve disputes, and meet legal obligations. When data is no longer required, we delete or anonymize it where reasonably possible.",
-  },
-  {
-    title: "Your rights",
-    body: "Depending on applicable law, you may request access to, correction of, or deletion of your personal data, or object to certain processing. To exercise these rights, contact us at info@falcon.academy. We will respond within a reasonable timeframe.",
-  },
-  {
-    title: "Security",
-    body: "We apply administrative, technical, and organizational measures designed to protect personal data against unauthorized access, loss, or misuse. No online system is completely secure, so please use strong passwords and protect your account credentials.",
-  },
-  {
-    title: "Updates",
-    body: "We may update this Privacy Policy from time to time. The latest version will always be available on falcon.academy. Material changes will be reflected by updating the effective date below.",
-  },
-];
-
-const TERMS_OF_USE_SECTIONS = [
-  {
-    title: "Agreement",
-    body: "By accessing falcon.academy or enrolling in our programs, you agree to these Terms of Use. If you do not agree, please do not use the site or purchase courses.",
-  },
-  {
-    title: "Educational services",
-    body: "Falcon Innovation Academy provides online business education in artificial intelligence and related topics. Course materials are for learning and professional development. They do not constitute legal, financial, tax, or regulated professional advice.",
-  },
-  {
-    title: "Accounts and enrollment",
-    body: "You are responsible for the accuracy of information you provide and for maintaining the confidentiality of your account credentials. Access to paid content is granted for the period stated at purchase unless otherwise specified.",
-  },
-  {
-    title: "Acceptable use",
-    body: "You may not misuse the platform, attempt unauthorized access, copy or redistribute course materials except as permitted, use content to build competing products, or upload unlawful, harmful, or infringing material.",
-  },
-  {
-    title: "Intellectual property",
-    body: "All course content, branding, graphics, and materials on this site are owned by Falcon Expert Institute FZ-LLC or its licensors and are protected by intellectual property laws. You receive a limited, non-transferable license to use materials for personal or internal business learning only.",
-  },
-  {
-    title: "Payments and refunds",
-    body: "Fees, billing terms, and any refund eligibility are disclosed at the point of purchase on our learning platform. Unless required by applicable consumer law, fees for digital educational content may be non-refundable once access is granted.",
-  },
-  {
-    title: "Disclaimer",
-    body: "Programs are provided on an “as is” basis. We do not guarantee specific business outcomes, job placement, revenue increases, or error-free operation of third-party AI tools discussed in our courses.",
-  },
-  {
-    title: "Limitation of liability",
-    body: "To the fullest extent permitted by law, Falcon Expert Institute FZ-LLC is not liable for indirect, incidental, or consequential damages arising from your use of the site or courses. Our total liability for any claim shall not exceed the amount you paid for the relevant course in the twelve months preceding the claim.",
-  },
-  {
-    title: "Governing law",
-    body: "These Terms are governed by the laws of the United Arab Emirates. Disputes shall be subject to the exclusive jurisdiction of the courts of the UAE, unless mandatory consumer protections in your country provide otherwise.",
-  },
-  {
-    title: "Contact",
-    body: "Questions about these Terms may be sent to info@falcon.academy.",
-  },
-];
-
-const REFUND_POLICY_SECTIONS = [
-  {
-    title: "Scope",
-    body: "This Refund & Cancellation Policy applies to purchases of online courses, bundles, subscriptions, and related digital educational products sold by Falcon Expert Institute FZ-LLC (“Falcon Innovation Academy”, “we”, “us”) through our LearnWorlds learning platform at learn.falcon.academy. By completing a purchase, you acknowledge that you have read and agree to this Policy.",
-  },
-  {
-    title: "Payment processing",
-    body: "Payments are processed through LearnWorlds using supported payment gateways, including Stripe (card payments, Apple Pay, Google Pay, and selected local methods) and, where offered, PayPal. We do not store full card details on our servers. All transactions are subject to the applicable terms of LearnWorlds and the relevant payment processor.",
-  },
-  {
-    title: "Digital products and immediate access",
-    body: "Our products are digital educational services. Upon successful payment, access to course materials is typically granted immediately or shortly thereafter. Because content is delivered electronically, refund eligibility may be limited once you have accessed, downloaded, or substantially used course materials.",
-  },
-  {
-    title: "Refunds we may grant",
-    body: "We may approve a full or partial refund, at our reasonable discretion, where: (a) you request a refund within fourteen (14) days of purchase and have not completed more than twenty percent (20%) of the purchased course or program; (b) you were charged in error or charged twice for the same product; (c) technical issues on our platform prevented reasonable access and we cannot resolve them within a reasonable time; or (d) applicable consumer protection law in your jurisdiction requires a refund.",
-  },
-  {
-    title: "When refunds are not available",
-    body: "Except where required by law, we do not grant refunds if: (a) the refund request is made after the eligibility period above; (b) you have substantially accessed, completed, or downloaded course content; (c) you purchased during a clearly marked non-refundable promotion; (d) the request relates to change of mind after meaningful use of the product; or (e) the payment method or processor no longer supports automated refunds (for example, certain bank-transfer methods).",
-  },
-  {
-    title: "How refunds are processed (LearnWorlds & Stripe)",
-    body: "Approved refunds are issued through LearnWorlds to the original payment method used at checkout. For Stripe card payments, refunds are normally processed to the same card; Stripe does not return its original processing fees to merchants, and that limitation may affect the net amount recoverable in partial-refund scenarios. Refunds via supported processors are generally available within one hundred eighty (180) days of the original payment. Processing may take up to seven (7) business days to appear, depending on your bank or card issuer.",
-  },
-  {
-    title: "Credit notes and access after refund",
-    body: "When a refund is issued through LearnWorlds, a refund record and, where invoicing is enabled, a credit note may be generated for accounting purposes. We may revoke or restrict course access upon a full refund. Refund and unenrollment are separate actions; where appropriate, we may unenroll you from the refunded product.",
-  },
-  {
-    title: "Subscriptions and instalment plans",
-    body: "If you purchase a subscription or instalment plan, you may cancel future renewals through your LearnWorlds account or by contacting us before the next billing date. Cancellation stops future charges but does not automatically refund fees already paid for the current billing period unless required by law or expressly stated at purchase. Trial periods, if offered, must be cancelled before renewal to avoid charge.",
-  },
-  {
-    title: "How to request a refund or cancellation",
-    body: "To request a refund or cancel a subscription, email info@falcon.academy from the email address used at purchase. Include your full name, order date, product name, and reason for the request. We may ask for additional information to verify the purchase and review usage records maintained by LearnWorlds.",
-  },
-  {
-    title: "Response times",
-    body: "We aim to acknowledge refund requests within three (3) business days and to complete approved refunds within fourteen (14) calendar days of confirming eligibility, in line with common e-commerce practice and our payment platform capabilities. If additional review is required, we will notify you of the delay.",
-  },
-  {
-    title: "Chargebacks and disputes",
-    body: "If you initiate a chargeback or payment dispute with your bank or card issuer before contacting us, we may suspend account access while the dispute is investigated. We encourage you to contact us first so we can resolve legitimate concerns promptly. For digital products, payment processors such as Stripe may require evidence of account access and policy acceptance when reviewing disputes.",
-  },
-  {
-    title: "Changes and contact",
-    body: "We may update this Policy from time to time. The version published on falcon.academy at the time of your request applies unless mandatory law provides otherwise. Questions: info@falcon.academy.",
-  },
-];
-
-function LegalModal({
-  type,
-  open,
-  onOpenChange,
-}: {
-  type: "privacy" | "terms" | "refund" | null;
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-}) {
-  const titles = {
-    privacy: "Privacy Policy",
-    terms: "Terms of Use",
-    refund: "Refund & Cancellation Policy",
-  } as const;
-
-  const sections =
-    type === "privacy"
-      ? PRIVACY_POLICY_SECTIONS
-      : type === "terms"
-        ? TERMS_OF_USE_SECTIONS
-        : type === "refund"
-          ? REFUND_POLICY_SECTIONS
-          : [];
-
+/** Brand mark: FALCON.ACADEMY wordmark */
+function FalconLogo({ className = "h-[30px]" }: { className?: string }) {
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[85vh] max-w-2xl overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>{type ? titles[type] : ""}</DialogTitle>
-          <DialogDescription>
-            Falcon Expert Institute FZ-LLC · Effective {new Date().getFullYear()}
-          </DialogDescription>
-        </DialogHeader>
-        <div className="space-y-5 pr-1 text-sm text-foreground">
-          {sections.map((section) => (
-            <section key={section.title}>
-              <h3 className="font-semibold">{section.title}</h3>
-              <p className="mt-1.5 leading-relaxed text-muted-foreground">{section.body}</p>
-            </section>
-          ))}
-        </div>
-      </DialogContent>
-    </Dialog>
+    <img
+      src={logoSvg}
+      alt="Falcon Academy"
+      className={`w-auto ${className}`}
+    />
   );
 }
 
-function Nav() {
-  const [open, setOpen] = useState(false);
-  const links = [
-    { href: "#solution", label: "Solution" },
+function Home() {
+  const [legalModal, setLegalModal] = useState<LegalModalType>(null);
+  const [programRef, programInView] = useRepeatInView<HTMLElement>();
+  const [coursesRef, coursesInView] = useRepeatInView<HTMLElement>();
+  const [faqRef, faqInView] = useRepeatInView<HTMLElement>();
+  const [applyRef, applyInView] = useRepeatInView<HTMLElement>();
+  const navigationLinks = [
+    { href: "#program", label: "Solution" },
     { href: "#courses", label: "Courses" },
-    { href: "#results", label: "Results" },
+    { href: "#certificate", label: "Certificate" },
     { href: "#faq", label: "FAQ" },
   ];
 
-  const closeMenu = () => setOpen(false);
-
-  useEffect(() => {
-    if (!open) return;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [open]);
-
   return (
-    <>
-      <header className="sticky top-0 z-[110] border-b border-border/60 bg-background/85 backdrop-blur-md">
-        <nav className="container-x flex items-center justify-between py-3.5">
-          <a href="#top" className="flex items-center" onClick={closeMenu}>
-            <BrandLogo />
-          </a>
-          <div className="hidden items-center gap-8 md:flex">
-            {links.map((l) => (
-              <a
-                key={l.href}
-                href={l.href}
-                className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-              >
-                {l.label}
-              </a>
-            ))}
-            <a href={learnWorldsCoursesUrl} className="btn-accent !py-2.5 !px-4 text-sm">
-              Explore Courses
-            </a>
-          </div>
-          <button
-            onClick={() => setOpen((prev) => !prev)}
-            className="md:hidden rounded-md border border-border p-2.5"
-            aria-label={open ? "Close menu" : "Open menu"}
-            aria-expanded={open}
-          >
-            {open ? (
-              <svg viewBox="0 0 20 20" className="h-5 w-5" aria-hidden="true">
-                <path d="M5 5l10 10M15 5 5 15" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" />
-              </svg>
-            ) : (
-              <div className="space-y-1.5">
-                <span className="block h-0.5 w-5 bg-foreground" />
-                <span className="block h-0.5 w-5 bg-foreground" />
-                <span className="block h-0.5 w-5 bg-foreground" />
-              </div>
-            )}
-          </button>
-        </nav>
-      </header>
-
-      {open && (
-        <div className="fixed inset-0 z-[100] md:hidden" role="dialog" aria-modal="true" aria-label="Mobile navigation">
-          <div
-            className="mobile-menu-backdrop absolute inset-0"
-            onClick={closeMenu}
-            aria-hidden="true"
-          />
-          <nav className="container-x relative flex h-full flex-col justify-between py-8 pt-24">
-            <ul className="divide-y divide-border/70">
-              {links.map((l) => (
-                <li key={l.href}>
-                  <a
-                    href={l.href}
-                    onClick={closeMenu}
-                    className="block py-5 text-xl font-semibold tracking-tight text-foreground transition-colors active:text-falcon-green"
-                  >
-                    {l.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-            <div className="space-y-3 pt-8">
-              <a
-                href={learnWorldsCoursesUrl}
-                onClick={closeMenu}
-                className="btn-accent w-full justify-center !py-4 text-base"
-              >
-                Explore Courses
-              </a>
-              <a
-                href={learnWorldsAiFundamentalsUrl}
-                onClick={closeMenu}
-                className="btn-gold w-full justify-center !py-4 text-base"
-              >
-                Enroll in AI Fundamentals
-              </a>
-            </div>
-          </nav>
-        </div>
-      )}
-    </>
-  );
-}
-
-function CheckDot() {
-  return (
-    <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-falcon-green/15 text-falcon-green">
-      <svg viewBox="0 0 20 20" className="h-3 w-3 fill-current">
-        <path d="M7.6 13.2 4.4 10l-1.2 1.2 4.4 4.4 9.2-9.2-1.2-1.2z" />
-      </svg>
-    </span>
-  );
-}
-
-const PIPELINE_STAGES = ["Intake", "AI draft", "Verify", "Approve"] as const;
-
-const WORKFLOW_SCENES = [
-  {
-    name: "Contract review",
-    stage: 2,
-    confidence: 86,
-    gate: "Human review",
-    dataClass: "Confidential",
-    queued: 2,
-    active: 1,
-    doneToday: 14,
-    activity: "Vendor NDA — 2 clauses flagged for legal review",
-  },
-  {
-    name: "Sales proposal",
-    stage: 1,
-    confidence: 68,
-    gate: "AI drafting",
-    dataClass: "Internal",
-    queued: 3,
-    active: 2,
-    doneToday: 14,
-    activity: "Q2 revenue forecast — first draft generating",
-  },
-  {
-    name: "Support triage",
-    stage: 3,
-    confidence: 94,
-    gate: "Approved",
-    dataClass: "Public FAQ",
-    queued: 1,
-    active: 0,
-    doneToday: 16,
-    activity: "Refund policy answer — verified and sent",
-  },
-] as const;
-
-const ACTIVITY_FEED = [
-  "NDA clause check — approved · 2m ago",
-  "Vendor terms — awaiting review · now",
-  "Q2 forecast — AI drafting · now",
-  "Refund policy — verified · 4m ago",
-  "Budget memo — queued · 6m ago",
-  "Client brief — approved · 11m ago",
-] as const;
-
-const SCENE_CYCLE_MS = 4200;
-const SCENE_FADE_MS = 320;
-
-function HeroVisual() {
-  const [sceneIndex, setSceneIndex] = useState(0);
-  const [sceneVisible, setSceneVisible] = useState(true);
-
-  useEffect(() => {
-    let fadeTimeout: number | undefined;
-
-    const interval = window.setInterval(() => {
-      setSceneVisible(false);
-      fadeTimeout = window.setTimeout(() => {
-        setSceneIndex((current) => (current + 1) % WORKFLOW_SCENES.length);
-        setSceneVisible(true);
-      }, SCENE_FADE_MS);
-    }, SCENE_CYCLE_MS);
-
-    return () => {
-      window.clearInterval(interval);
-      if (fadeTimeout !== undefined) window.clearTimeout(fadeTimeout);
-    };
-  }, []);
-
-  const scene = WORKFLOW_SCENES[sceneIndex];
-  const tickerItems = [...ACTIVITY_FEED, ...ACTIVITY_FEED];
-
-  return (
-    <div className="relative shrink-0">
-      <div className="absolute -inset-3 -z-10 rounded-[1.5rem] bg-gradient-to-br from-falcon-sand to-white lg:-inset-6 lg:rounded-[2rem]" />
-      <div className="rounded-xl border border-border bg-white p-4 shadow-[var(--shadow-card)] lg:rounded-2xl lg:p-6">
-        <div className="flex items-center justify-between gap-3 border-b border-border pb-3 lg:pb-4">
-          <div className="flex items-center gap-1.5 lg:gap-2">
-            <span className="h-2.5 w-2.5 rounded-full bg-falcon-red lg:h-3 lg:w-3" />
-            <span className="h-2.5 w-2.5 rounded-full bg-falcon-gold lg:h-3 lg:w-3" />
-            <span className="h-2.5 w-2.5 rounded-full bg-falcon-green lg:h-3 lg:w-3" />
-          </div>
-          <span className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground lg:text-sm">
-            <span className="relative flex h-2 w-2">
-              <span className="hero-live-ping absolute inline-flex h-full w-full rounded-full bg-falcon-green opacity-50" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-falcon-green" />
-            </span>
-            AI Workflow · Live
-          </span>
-        </div>
-
-        <div
-          className={`mt-4 transition-opacity duration-300 lg:mt-6 ${sceneVisible ? "opacity-100" : "opacity-0"}`}
-        >
-          <div className="flex items-start justify-between gap-3">
-            <div className="min-w-0">
-              {/* <div className="text-[0.65rem] font-semibold uppercase tracking-wide text-muted-foreground lg:text-xs">
-                Active pipeline
-              </div> */}
-              <div className="truncate text-sm font-bold lg:text-base">{scene.name}</div>
-            </div>
-            <span className="shrink-0 rounded-full bg-falcon-green/10 px-2 py-0.5 text-[0.65rem] font-semibold text-falcon-green lg:px-2.5 lg:py-1 lg:text-xs">
-              {scene.gate}
-            </span>
-          </div>
-
-          <div className="mt-3 flex items-center gap-0.5 lg:mt-4 lg:gap-1">
-            {PIPELINE_STAGES.map((stage, index) => {
-              const isComplete = index < scene.stage;
-              const isActive = index === scene.stage;
-              return (
-                <Fragment key={stage}>
-                  <div
-                    className={`min-w-0 flex-1 rounded-md border px-0.5 py-1.5 text-center text-[0.55rem] font-semibold leading-tight sm:text-[0.6rem] lg:px-1 lg:py-2 lg:text-[0.7rem] ${
-                      isActive
-                        ? "hero-stage-active border-falcon-green/40 bg-falcon-green/10 text-falcon-green"
-                        : isComplete
-                          ? "border-falcon-green/20 bg-falcon-green/5 text-falcon-green"
-                          : "border-border bg-muted/40 text-muted-foreground"
-                    }`}
-                  >
-                    {isComplete ? "✓ " : ""}
-                    {stage}
-                  </div>
-                  {index < PIPELINE_STAGES.length - 1 && (
-                    <div
-                      className={`h-0.5 w-2 shrink-0 rounded-full sm:w-3 ${
-                        index < scene.stage ? "bg-falcon-green/50" : "bg-border"
-                      }`}
-                    />
-                  )}
-                </Fragment>
-              );
-            })}
-          </div>
-
-          <div className="mt-4 lg:mt-5">
-            <div className="flex items-center justify-between text-xs font-medium lg:text-sm">
-              <span>Verification confidence</span>
-              <span className="tabular-nums text-muted-foreground">{scene.confidence}%</span>
-            </div>
-            <div className="relative mt-1.5 h-2 overflow-hidden rounded-full bg-muted lg:mt-2 lg:h-2.5">
-              <div
-                className="relative h-full rounded-full bg-falcon-green transition-[width] duration-700 ease-out"
-                style={{ width: `${scene.confidence}%` }}
-              >
-                <span className="hero-confidence-shimmer absolute inset-y-0 w-1/3 bg-gradient-to-r from-transparent via-white/45 to-transparent" />
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-4 grid grid-cols-3 gap-2 lg:mt-5 lg:gap-3">
-            {[
-              { label: "Queued", value: scene.queued, tone: "gold" },
-              { label: "In progress", value: scene.active, tone: "green" },
-              { label: "Done today", value: scene.doneToday, tone: "ink" },
-            ].map((stat) => (
-              <div key={stat.label} className="rounded-lg border border-border p-2 text-center lg:p-2.5">
-                <div className="text-[0.65rem] leading-tight text-muted-foreground lg:text-xs">{stat.label}</div>
-                <div
-                  className="mt-0.5 text-xl font-extrabold tabular-nums transition-all duration-500 lg:text-2xl"
-                  style={{
-                    color:
-                      stat.tone === "green"
-                        ? "var(--falcon-green)"
-                        : stat.tone === "gold"
-                          ? "var(--falcon-gold)"
-                          : "var(--falcon-ink)",
-                  }}
-                >
-                  {stat.value}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-3 rounded-lg bg-falcon-sand/80 px-2.5 py-2 text-[0.7rem] leading-snug text-foreground lg:mt-4 lg:px-3 lg:py-2.5 lg:text-xs">
-            <span className="font-semibold text-falcon-green">Now · </span>
-            {scene.activity}
-          </div>
-        </div>
-
-        <div className="mt-4 border-t border-border pt-3 lg:mt-5 lg:pt-4">
-          <div className="flex items-center justify-between gap-2 text-[0.65rem] font-semibold uppercase tracking-wide text-muted-foreground lg:text-xs">
-            <span>Recent activity</span>
-            <span className="rounded bg-muted px-1.5 py-0.5 normal-case tracking-normal text-[0.6rem] lg:text-[0.65rem]">
-              {scene.dataClass}
-            </span>
-          </div>
-          <div className="relative mt-2 h-9 overflow-hidden lg:h-10">
-            <div className="hero-activity-ticker">
-              {tickerItems.map((item, index) => (
-                <div
-                  key={`${item}-${index}`}
-                  className="flex h-9 items-center text-[0.7rem] text-muted-foreground lg:h-10 lg:text-xs"
-                >
-                  <span className="mr-2 h-1.5 w-1.5 shrink-0 rounded-full bg-falcon-green/70" />
-                  <span className="truncate">{item}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function Hero() {
-  return (
-    <section
-      id="top"
-      className="relative flex min-h-[calc(100dvh-4rem)] flex-col overflow-hidden lg:min-h-0"
-    >
-      <div
-        className="absolute inset-0 -z-10"
-        style={{
-          background:
-            "radial-gradient(60% 50% at 80% 10%, rgba(199,161,90,0.18), transparent 70%), radial-gradient(50% 50% at 10% 90%, rgba(0,132,61,0.12), transparent 70%)",
-        }}
-      />
-      <div className="container-x flex flex-1 flex-col justify-between gap-6 py-8 md:gap-8 lg:grid lg:flex-none lg:items-center lg:gap-12 lg:py-16 lg:grid-cols-[1.05fr_0.95fr] xl:py-24">
-        <div className="flex flex-col">
-          <span className="eyebrow">
-            <span className="h-1.5 w-1.5 rounded-full bg-falcon-gold" />
-            UAE-based · Globally trusted
-          </span>
-          <h1 className="mt-4 text-3xl font-extrabold leading-[1.08] sm:mt-5 sm:text-4xl md:text-5xl lg:text-6xl">
-            Learn to use AI as a <span className="text-falcon-green">business advantage</span> — not a buzzword.
-          </h1>
-          <p className="mt-4 max-w-xl text-base text-muted-foreground md:mt-6 md:text-lg">
-            A practical four-course program for business owners, managers, consultants and analysts who want to
-            understand AI, choose the right tools, build real workflows and safely adopt AI agents.
-          </p>
-          <p className="mt-4 hidden max-w-xl text-base text-muted-foreground md:block">
-            From AI fundamentals to hands-on tool use, agentic workflows and implementation planning — learn how
-            models work, how to compare tools, prompt effectively, verify outputs, and decide when AI should
-            (or should not) be used.
-          </p>
-          <div className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:flex-wrap">
-            <a href={learnWorldsAiFundamentalsUrl} className="btn-primary justify-center sm:justify-start">
-              Start with AI Fundamentals
-            </a>
-            <a href={learnWorldsCoursesUrl} className="btn-gold justify-center sm:justify-start">
-              Explore full program
-            </a>
-          </div>
-          <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-muted-foreground sm:mt-8 sm:gap-x-6 sm:gap-y-3 sm:text-sm">
-            <div className="flex items-center gap-2"><CheckDot /> 4 sequential courses</div>
-            <div className="flex items-center gap-2"><CheckDot /> Real business artifacts</div>
-            <div className="flex items-center gap-2"><CheckDot /> No coding required</div>
-          </div>
-        </div>
-        <HeroVisual />
-      </div>
-    </section>
-  );
-}
-
-function ProblemSolution() {
-  const problems = [
-    "We test AI tools randomly",
-    "Unclear what data we can upload to AI models",
-    "AI outputs need hours of re-verification",
-    "No governance — everyone does their own thing",
-  ];
-  const solutions = [
-    "Systematic path: Fundamentals → Tools → Agents → Strategy",
-    "Verification checklists and data safety rules",
-    "Practical artifacts: Readiness Brief, Tool Portfolio, Roadmap",
-    "Human-in-the-loop design across every workflow",
-  ];
-  return (
-    <section id="solution" className="section-pad bg-falcon-sand">
-      <div className="container-x">
-        <div className="mx-auto mb-10 max-w-3xl text-center lg:mb-14">
-          <span className="eyebrow">From chaos to capability</span>
-          <h2 className="mt-4 text-3xl font-extrabold sm:text-4xl">
-            Shift from the chaotic use of AI tools to the {" "}
-            <span className="text-falcon-green">deliberate construction of processes.</span>
-          </h2>
-        </div>
-        <div className="grid gap-8 lg:grid-cols-2">
-        <div className="overflow-hidden rounded-2xl border border-border bg-white">
-          <img
-            src={chaosPathImage}
-            alt="Scattered AI tools without a clear system"
-            className="aspect-[4/3] w-full object-cover object-center"
-          />
-          <div className="p-8">
-            <span className="eyebrow" style={{ background: "rgba(200,16,46,0.10)", color: "var(--falcon-red)" }}>
-              The chaos today
-            </span>
-            <h3 className="mt-4 text-2xl font-bold">What teams sound like without a system</h3>
-            <ul className="mt-6 space-y-4">
-              {problems.map((p) => (
-                <li key={p} className="flex items-start gap-3">
-                  <span className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-falcon-red/10 text-falcon-red font-bold">
-                    ✕
-                  </span>
-                  <span className="text-foreground">{p}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-        <div className="overflow-hidden rounded-2xl border border-falcon-green/25 bg-white shadow-[var(--shadow-elevate)]">
-          <img
-            src={goodPathImage}
-            alt="Structured path from fundamentals to business impact"
-            className="aspect-[4/3] w-full object-cover object-center"
-          />
-          <div className="p-8">
-            <span className="eyebrow" style={{ background: "rgba(0,132,61,0.10)", color: "var(--falcon-green)" }}>
-              The Falcon Innovation Academy way
-            </span>
-            <h3 className="mt-4 text-2xl font-bold">A clear path to capable, safe adoption</h3>
-            <ul className="mt-6 space-y-4">
-              {solutions.map((s) => (
-                <li key={s} className="flex items-start gap-3">
-                  <CheckDot />
-                  <span className="text-foreground">{s}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Comparison() {
-  const rows = [
-    ["Teaches one tool", "Teaches durable decision-making across tools"],
-    ["Only prompts", "Models, tools, workflows, deployment, verification"],
-    ["Hype language", "Practical business judgment"],
-    ["Ends with a quiz", "Ends with business artifacts (brief, roadmap)"],
-    ["Jumps to automation", "Builds readiness before agents and automation"],
-  ];
-  return (
-    <section className="section-pad">
-      <div className="container-x">
-        <div className="mx-auto max-w-3xl text-center">
-          <span className="eyebrow">Why we are different</span>
-          <h2 className="mt-4 text-3xl font-extrabold sm:text-4xl">
-            Most courses teach you which buttons to press.{" "}
-            <span className="text-falcon-green">We teach you how to decide.</span>
-          </h2>
-        </div>
-        <div className="mx-auto mt-10 max-w-[785px] overflow-hidden rounded-2xl border border-border">
-          <div className="grid grid-cols-1 bg-falcon-sand text-xs font-semibold uppercase tracking-wide sm:grid-cols-2">
-            <div className="px-4 py-2.5 text-muted-foreground">Typical AI course</div>
-            <div className="border-t border-border px-4 py-2.5 text-falcon-green sm:border-l sm:border-t-0">
-              Falcon Innovation Academy
-            </div>
-          </div>
-          {rows.map(([a, b], i) => (
-            <div key={i} className="grid grid-cols-1 border-t border-border bg-white text-sm sm:grid-cols-2">
-              <div className="px-4 py-2.5 text-muted-foreground line-through decoration-falcon-red/40">{a}</div>
-              <div className="border-t border-border px-4 py-2.5 font-medium sm:border-l sm:border-t-0">
-                <span className="mr-1.5 text-falcon-green">✓</span>
-                {b}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-const COURSES = [
-  { id: "course-1", n: "01", title: "AI Fundamentals for Business Decision-Makers", tagline: "Understand AI before you choose tools.", artifact: "AI Use-Case Readiness Brief", image: courseFundamentalsImage, href: learnWorldsCourseUrls.aiFundamentals },
-  { id: "course-2", n: "02", title: "AI Tools & Practical Cases", tagline: "Move from AI understanding to practical tool use.", artifact: "AI Tool Testing Portfolio", image: courseToolsImage, href: learnWorldsCourseUrls.aiTools },
-  { id: "course-3", n: "03", title: "AI Agents & Automation", tagline: "Design AI workflows that do more than answer questions.", artifact: "Agentic Workflow Blueprint", image: courseAgentsImage, href: learnWorldsCourseUrls.aiAgents },
-  { id: "course-4", n: "04", title: "AI Strategy, Implementation & Operating Model", tagline: "Turn AI experiments into responsible business capability.", artifact: "Business AI Implementation Roadmap", image: courseStrategyImage, href: learnWorldsCourseUrls.aiStrategy },
-];
-
-function Program() {
-  return (
-    <section id="courses" className="section-pad bg-falcon-sand">
-      <div className="container-x">
-        <div className="mx-auto max-w-3xl text-center">
-          <span className="eyebrow">Program roadmap</span>
-          <h2 className="mt-4 text-3xl font-extrabold sm:text-4xl">
-            Four courses. One <span className="text-falcon-green">decision-making system</span>.
-          </h2>
-          <p className="mt-4 text-muted-foreground">
-            Take them in sequence or jump in at the level that fits your team.
-          </p>
-        </div>
-        <div className="mt-14 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-          {COURSES.map((c) => (
-            <a
-              key={c.id}
-              id={c.id}
-              href={c.href}
-              className="group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-white transition-all hover:-translate-y-1 hover:border-falcon-green/30 hover:shadow-[var(--shadow-elevate)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-falcon-green focus-visible:ring-offset-2"
-            >
-              <img
-                src={c.image}
-                alt=""
-                aria-hidden="true"
-                className="aspect-[400/269] w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
-              />
-              <div className="flex flex-1 flex-col p-6">
-                <span className="font-display text-3xl font-extrabold text-falcon-gold/80">{c.n}</span>
-                <h3 className="mt-4 text-lg font-bold leading-tight">{c.title}</h3>
-                <p className="mt-2 text-sm italic text-muted-foreground">{c.tagline}</p>
-                <div className="mt-5 rounded-lg border border-dashed border-falcon-gold/50 bg-falcon-gold/5 p-3">
-                  <div className="text-[10px] font-bold uppercase tracking-wider text-falcon-gold">Final artifact</div>
-                  <div className="mt-1 text-sm font-semibold">{c.artifact}</div>
-                </div>
-              </div>
-            </a>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Row({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="flex items-start justify-between gap-4 border-b border-border/60 pb-2 last:border-0 last:pb-0">
-      <span className="text-muted-foreground">{label}</span>
-      <span className="text-right font-semibold">{value}</span>
-    </div>
-  );
-}
-
-function Results() {
-  return (
-    <section id="results" className="section-pad">
-      <div className="container-x">
-        <div className="mx-auto max-w-3xl text-center">
-          <span className="eyebrow">What you will build</span>
-          <h2 className="mt-4 text-3xl font-extrabold sm:text-4xl">
-            A portfolio of <span className="text-falcon-green">working business artifacts</span>.
-          </h2>
-        </div>
-
-        <div className="mt-14 grid gap-6 lg:grid-cols-2">
-          <div className="rounded-2xl border border-border bg-white p-6 shadow-[var(--shadow-card)]">
-            <div className="text-xs font-bold uppercase tracking-wider text-falcon-gold">Artifact · 01</div>
-            <h3 className="mt-1 text-xl font-bold">AI Use-Case Readiness Brief</h3>
-            <div className="mt-4 space-y-3 rounded-xl bg-falcon-sand p-4 text-sm">
-              <Row label="Workflow" value="Vendor contract review" />
-              <Row label="Data sensitivity" value="Confidential — legal" />
-              <Row label="Model category" value="Hosted API · enterprise tier" />
-              <Row label="Human review" value="Required before sign-off" />
-              <Row label="Next steps" value="Pilot with 10 contracts · 4 weeks" />
-            </div>
-          </div>
-
-          <div className="rounded-2xl border border-border bg-white p-6 shadow-[var(--shadow-card)]">
-            <div className="text-xs font-bold uppercase tracking-wider text-falcon-gold">Artifact · 02</div>
-            <h3 className="mt-1 text-xl font-bold">AI Tool Testing Portfolio</h3>
-            <div className="mt-4 overflow-hidden rounded-xl border border-border text-sm">
-              <div className="grid grid-cols-3 bg-falcon-sand p-3 font-semibold">
-                <div>Criterion</div>
-                <div>ChatGPT</div>
-                <div>Claude</div>
-              </div>
-              {[
-                ["Clause extraction", "Good", "Excellent"],
-                ["Tone control", "Excellent", "Good"],
-                ["Long contracts", "Limited", "Strong"],
-                ["Risk flagging", "Good", "Excellent"],
-              ].map((r) => (
-                <div key={r[0]} className="grid grid-cols-3 border-t border-border p-3">
-                  <div className="text-muted-foreground">{r[0]}</div>
-                  <div>{r[1]}</div>
-                  <div className="font-semibold text-falcon-green">{r[2]}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="rounded-2xl border border-border bg-white p-6 shadow-[var(--shadow-card)]">
-            <div className="text-xs font-bold uppercase tracking-wider text-falcon-gold">Artifact · 03</div>
-            <h3 className="mt-1 text-xl font-bold">Agentic Workflow Blueprint</h3>
-            <div className="mt-6 flex items-center justify-between gap-2 text-xs font-semibold">
-              {["User", "Agent", "Approval", "Action"].map((s, i) => (
-                <div key={s} className="flex flex-1 items-center">
-                  <div
-                    className={`flex-1 rounded-lg border p-3 text-center ${
-                      i === 2
-                        ? "border-falcon-gold bg-falcon-gold/10 text-falcon-ink"
-                        : "border-border bg-falcon-sand"
-                    }`}
-                  >
-                    {s}
-                  </div>
-                  {i < 3 && <span className="px-1 text-muted-foreground">→</span>}
-                </div>
-              ))}
-            </div>
-            <p className="mt-4 text-sm text-muted-foreground">
-              Every agent runs through approval gates and risk controls before any external action.
-            </p>
-          </div>
-
-          <div className="rounded-2xl border border-border bg-white p-6 shadow-[var(--shadow-card)]">
-            <div className="text-xs font-bold uppercase tracking-wider text-falcon-gold">Artifact · 04</div>
-            <h3 className="mt-1 text-xl font-bold">Business AI Implementation Roadmap</h3>
-            <div className="mt-6 space-y-3">
-              {[
-                { phase: "Phase 1 · Discovery", w: "20%", color: "var(--falcon-green)" },
-                { phase: "Phase 2 · Pilots", w: "45%", color: "var(--falcon-gold)" },
-                { phase: "Phase 3 · Governance", w: "70%", color: "var(--falcon-ink)" },
-                { phase: "Phase 4 · Scale", w: "95%", color: "var(--falcon-red)" },
-              ].map((p) => (
-                <div key={p.phase}>
-                  <div className="flex justify-between text-xs font-semibold">
-                    <span>{p.phase}</span>
-                    <span className="text-muted-foreground">{p.w}</span>
-                  </div>
-                  <div className="mt-1 h-2 rounded-full bg-muted">
-                    <div className="h-full rounded-full" style={{ width: p.w, backgroundColor: p.color }} />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <p className="mx-auto mt-10 text-center italic text-muted-foreground">
-          These are not homework. You finish the program with working documents you can apply immediately.
-        </p>
-      </div>
-    </section>
-  );
-}
-
-function Audience() {
-  const personas = [
-    {
-      icon: "👑",
-      title: "Business owners & founders",
-      description: "Make smarter decisions and unlock new growth with AI.",
-    },
-    {
-      icon: "🧭",
-      title: "Managers & team leads",
-      description: "Empower your team and improve productivity with AI tools.",
-    },
-    {
-      icon: "📊",
-      title: "Consultants & analysts",
-      description: "Deliver deeper insights and automate complex analysis.",
-    },
-    {
-      icon: "📣",
-      title: "Marketing & sales professionals",
-      description: "Create better content, generate leads, and close more deals.",
-    },
-    {
-      icon: "⚙️",
-      title: "Operations & project managers",
-      description: "Streamline workflows and manage projects more efficiently.",
-    },
-    {
-      icon: "🤝",
-      title: "HR & people ops",
-      description: "Enhance recruitment, engagement, and people development.",
-    },
-  ];
-
-  return (
-    <section className="section-pad bg-falcon-sand">
-      <div className="container-x">
-        <div className="mx-auto max-w-3xl text-center">
-          <span className="eyebrow">Who it is for</span>
-          <h2 className="mt-4 text-3xl font-extrabold sm:text-4xl">
-            Built for ambitious professionals who want to{" "}
-            <span className="text-falcon-green">level up</span> or start a new venture.
-          </h2>
-        </div>
-
-        <div className="relative mx-auto mt-12 max-w-6xl">
-          <div className="aspect-[700/261] overflow-hidden rounded-3xl border border-border/50 shadow-[var(--shadow-card)]">
-            <img
-              src={audienceSectionImage}
-              alt="Professionals collaborating on AI strategy in a modern office"
-              className="size-full object-cover object-top"
-            />
-          </div>
-
-          <div className="relative z-10 -mt-8 px-1 sm:-mt-10 md:-mt-12 lg:px-2">
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-              {personas.map((p) => (
-                <div
-                  key={p.title}
-                  className="flex items-start gap-3 rounded-2xl border border-border bg-white p-4 text-left shadow-[var(--shadow-card)] transition-all hover:-translate-y-0.5 hover:border-falcon-green/30"
-                >
-                  <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-falcon-green/10 text-2xl">
-                    {p.icon}
-                  </div>
-                  <div className="min-w-0">
-                    <h3 className="text-sm font-bold leading-snug">{p.title}</h3>
-                    <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">{p.description}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <p className="mt-10 text-center text-muted-foreground">
-          You do not need to be technical. You do need to make better decisions about AI.
-        </p>
-      </div>
-    </section>
-  );
-}
-
-function Outcomes() {
-  const items = [
-    "Explain AI systems in plain business language",
-    "Compare LLMs, RAG, agents, APIs, self-hosted options",
-    "Match AI tools to business workflows",
-    "Write prompts that produce useful outputs",
-    "Evaluate AI outputs for accuracy, bias and privacy risks",
-    "Build prompt libraries and review habits",
-    "Design AI-assisted workflows with human-in-the-loop",
-    "Prepare AI pilots with success criteria and governance",
-  ];
-  return (
-    <section className="section-pad">
-      <div className="container-x">
-        <div className="mx-auto max-w-3xl text-center">
-          <span className="eyebrow">Capabilities you gain</span>
-          <h2 className="mt-4 text-3xl font-extrabold sm:text-4xl">
-            What learners will be able to do
-          </h2>
-        </div>
-        <ul className="mx-auto mt-10 grid max-w-4xl gap-x-10 gap-y-4 md:grid-cols-2">
-          {items.map((i) => (
-            <li key={i} className="flex items-start gap-3">
-              <CheckDot />
-              <span className="text-foreground">{i}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </section>
-  );
-}
-
-function Field({ label, placeholder }: { label: string; placeholder: string }) {
-  return (
-    <label className="block">
-      <span className="text-xs font-semibold text-muted-foreground">{label}</span>
-      <div className="mt-1 rounded-lg border border-border bg-falcon-sand px-3 py-2.5 text-sm text-muted-foreground">
-        {placeholder}
-      </div>
-    </label>
-  );
-}
-
-function Course1Deep() {
-  return (
-    <section id="enroll" className="section-pad bg-falcon-ink text-white">
-      <div className="container-x grid items-center gap-12 lg:grid-cols-2">
-        <div>
-          <span className="eyebrow" style={{ background: "rgba(199,161,90,0.18)", color: "var(--falcon-gold)" }}>
-            Course 01 · Entry point
-          </span>
-          <h2 className="mt-4 text-3xl font-extrabold sm:text-4xl">
-            Start with AI Fundamentals — leave with a{" "}
-            <span className="text-falcon-gold">ready-to-use decision framework</span>.
-          </h2>
-          <p className="mt-5 text-white/75">
-            Covered topics include tokens, context windows, embeddings, hosted vs self-hosted models, prompting,
-            verification and privacy — explained for decision-makers.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <a href={learnWorldsAiFundamentalsUrl} className="btn-accent">Enroll in Course 1</a>
-            <a href={learnWorldsCoursesUrl} className="btn-gold" style={{ color: "white", borderColor: "var(--falcon-gold)" }}>
-              See full program
-            </a>
-          </div>
-          <p className="mt-4 text-sm text-white/60">
-            Access to materials for 6 months.
-          </p>
-        </div>
-
-        <div className="rounded-2xl border border-white/10 bg-white p-6 text-foreground shadow-2xl">
-          <div className="flex items-center justify-between">
-            <div className="text-xs font-bold uppercase tracking-wider text-falcon-gold">
-              AI Use-Case Readiness Brief
-            </div>
-            <div className="text-xs text-muted-foreground">Preview</div>
-          </div>
-          <div className="mt-4 space-y-4 text-sm">
-            <Field label="Workflow" placeholder="e.g. Inbound lead qualification" />
-            <Field label="Data sensitivity" placeholder="Public · Internal · Confidential" />
-            <Field label="Model category" placeholder="Hosted · API · Self-hosted" />
-            <Field label="Human verification needed" placeholder="When and by whom" />
-            <Field label="Expected benefit" placeholder="Time saved · quality gained" />
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function UaeFlagStrip({ className = "" }: { className?: string }) {
-  return (
-    <div className={`flex h-3 w-10 overflow-hidden rounded-sm border border-border/60 ${className}`} aria-hidden="true">
-      <span className="flex-1 bg-[#00843D]" />
-      <span className="flex-1 bg-white" />
-      <span className="flex-1 bg-[#1F2937]" />
-      <span className="w-1 bg-[#C8102E]" />
-    </div>
-  );
-}
-
-function ShieldBadge() {
-  return (
-    <svg viewBox="0 0 48 48" className="h-12 w-12" aria-hidden="true">
-      <path
-        d="M24 4 8 10v12c0 10.5 6.8 18.2 16 22 9.2-3.8 16-11.5 16-22V10L24 4Z"
-        fill="color-mix(in oklab, var(--falcon-green) 12%, white)"
-        stroke="var(--falcon-green)"
-        strokeWidth="1.5"
-      />
-      <path
-        d="M17 24.5 21.5 29 31 19.5"
-        fill="none"
-        stroke="var(--falcon-green)"
-        strokeWidth="2.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function Certification() {
-  const credentials = [
-    {
-      label: "Educational licence",
-      value: "No. 52001001",
-      detail: "Issued for regulated training & professional education",
-      accent: "var(--falcon-gold)",
-    },
-    {
-      label: "Registered entity",
-      value: "Falcon Expert Institute FZ-LLC",
-      detail: "Ras Al Khaimah Economic Zone (RAKEZ)",
-      accent: "var(--falcon-green)",
-    }
-  ];
-
-  return (
-    <section id="certification" className="section-pad relative overflow-hidden bg-white">
-      <div
-        className="pointer-events-none absolute inset-0 -z-10"
-        style={{
-          background:
-            "radial-gradient(50% 60% at 100% 0%, rgba(0,132,61,0.08), transparent 65%), radial-gradient(45% 50% at 0% 100%, rgba(199,161,90,0.12), transparent 70%)",
-        }}
-      />
-      <div className="container-x">
-        <div className="grid items-center gap-12 lg:grid-cols-[1fr_1.05fr]">
-          <div>
-            <span className="eyebrow">
-              Licensed in the UAE
-            </span>
-            <h2 className="mt-4 text-3xl font-extrabold sm:text-4xl">
-              A <span className="text-falcon-green">certified expert institute</span> — we want to build trust with you.
-            </h2>
-            <p className="mt-5 max-w-xl text-muted-foreground">
-              Falcon Expert Institute FZ-LLC is a registered educational provider in the United Arab Emirates,
-              operating under Educational Licence No. 52001001 from Ras Al Khaimah Economic Zone (RAKEZ).
-            </p>
-            <ul className="mt-8 space-y-4">
-              {[
-                "Officially licensed for business and professional education",
-                "Structured programs with defined learning outcomes",
-                "Transparent legal entity — enrol with confidence",
-                "UAE standards of governance and accountability",
-              ].map((point) => (
-                <li key={point} className="flex items-start gap-3 text-sm sm:text-base">
-                  <CheckDot />
-                  <span>{point}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="relative">
-            <div className="absolute -inset-4 -z-10 rounded-[2rem] bg-gradient-to-br from-falcon-sand to-white" />
-            <div className="overflow-hidden rounded-2xl border border-falcon-gold/30 bg-white shadow-[var(--shadow-card)]">
-              <div className="relative bg-falcon-sand/30 px-6 py-8">
-                <img
-                  src={falconLogoFull}
-                  alt="Falcon Expert Institute"
-                  className="mx-auto w-full max-w-md object-contain"
-                />
-              </div>
-
-              <div className="grid gap-px bg-border sm:grid-cols-2">
-                {credentials.map((item) => (
-                  <div key={item.label} className="bg-white p-4">
-                    <div
-                      className="mb-2 h-1 w-8 rounded-full"
-                      style={{ backgroundColor: item.accent }}
-                    />
-                    <div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-                      {item.label}
-                    </div>
-                    <div className="mt-1 text-sm font-bold leading-snug">{item.value}</div>
-                    <div className="mt-1 text-xs text-muted-foreground">{item.detail}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Benefits() {
-  const groups = [
-    { title: "For individuals", icon: "🎯", points: ["Confidence with AI", "Better decisions", "Verification skills", "Career value"] },
-    { title: "For managers", icon: "🧩", points: ["Team adoption without chaos", "Clear tool evaluation", "Higher productivity"] },
-    { title: "For business owners", icon: "🏛️", points: ["Time & cost savings", "A real roadmap", "Staff readiness", "Safe adoption"] },
-  ];
-  return (
-    <section className="section-pad bg-falcon-sand">
-      <div className="container-x">
-        <div className="mx-auto max-w-3xl text-center">
-          <span className="eyebrow">Business benefits</span>
-          <h2 className="mt-4 text-3xl font-extrabold sm:text-4xl">Value at every level</h2>
-        </div>
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
-          {groups.map((g) => (
-            <div key={g.title} className="rounded-2xl border border-border bg-white p-7">
-              <div className="grid h-12 w-12 place-items-center rounded-xl bg-falcon-green/10 text-2xl">
-                {g.icon}
-              </div>
-              <h3 className="mt-5 text-lg font-bold">{g.title}</h3>
-              <ul className="mt-4 space-y-2">
-                {g.points.map((p) => (
-                  <li key={p} className="flex items-start gap-2 text-sm">
-                    <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-falcon-gold" />
-                    {p}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-const FAQS = [
-  { q: "Do I need technical experience?", a: "No. The program is built for business learners. You learn concepts only at the level needed to make decisions." },
-  { q: "Is this only about ChatGPT?", a: "No. We cover multimodal tools, RAG systems, APIs, open-source models, self-hosted AI, agents and automation." },
-  { q: "Is AI automation safe for confidential business data?", a: "Yes — the program teaches you to choose between hosted, API and on-premise options, and how to implement human review gates and data handling rules." },
-  { q: "Will I learn to build AI agents?", a: "Yes, but only after building the judgment to use them safely. Course 3 focuses on agentic workflows with controls." },
-  { q: "What do I leave with?", a: "Four practical artifacts: Readiness Brief, Tool Portfolio, Agentic Blueprint and Implementation Roadmap — plus the skills to keep using them." },
-];
-
-function FAQ() {
-  const [open, setOpen] = useState<number | null>(0);
-  return (
-    <section id="faq" className="section-pad">
-      <div className="container-x grid gap-12 lg:grid-cols-[0.9fr_1.1fr]">
-        <div>
-          <span className="eyebrow">FAQ</span>
-          <h2 className="mt-4 text-3xl font-extrabold sm:text-4xl">
-            Honest answers, before you enroll.
-          </h2>
-          <p className="mt-4 text-muted-foreground">
-            Still unsure? Reach out and we will help you choose the right entry course for your role.
-          </p>
-        </div>
-        <div className="divide-y divide-border rounded-2xl border border-border bg-white">
-          {FAQS.map((f, i) => {
-            const isOpen = open === i;
-            return (
-              <button
-                key={f.q}
-                onClick={() => setOpen(isOpen ? null : i)}
-                className="block w-full text-left"
-              >
-                <div className="flex items-center justify-between gap-4 px-6 py-5">
-                  <span className="font-semibold">{f.q}</span>
-                  <span
-                    className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-border transition-[transform,background-color,border-color,color] ${
-                      isOpen ? "rotate-45 border-falcon-green bg-falcon-green text-white" : ""
-                    }`}
-                  >
-                    <svg viewBox="0 0 12 12" className="h-3 w-3" aria-hidden="true">
-                      <path
-                        d="M6 1.5v9M1.5 6h9"
-                        stroke="currentColor"
-                        strokeWidth="1.75"
-                        strokeLinecap="round"
-                      />
-                    </svg>
-                  </span>
-                </div>
-                {isOpen && <div className="px-6 pb-5 text-muted-foreground">{f.a}</div>}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function FinalCTA() {
-  return (
-    <section className="section-pad bg-falcon-sand">
-      <div className="container-x">
-        <div className="relative overflow-hidden rounded-3xl border border-falcon-gold/30 bg-white p-10 text-center md:p-16">
-          <div
-            className="pointer-events-none absolute inset-0 -z-10 opacity-60"
-            style={{
-              background:
-                "radial-gradient(40% 60% at 90% 0%, rgba(199,161,90,0.18), transparent 70%), radial-gradient(40% 60% at 0% 100%, rgba(0,132,61,0.12), transparent 70%)",
-            }}
-          />
-          <h2 className="mx-auto max-w-3xl text-3xl font-extrabold leading-tight sm:text-4xl lg:text-5xl">
-            Stop chaotic experiments. <br className="hidden sm:block" />
-            Start <span className="text-falcon-green">systematic AI adoption</span>.
-          </h2>
-          <p className="mx-auto mt-5 max-w-2xl text-muted-foreground">
-            Join Falcon Innovation Academy and build your competitive advantage with AI.
-          </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <a href={learnWorldsAiFundamentalsUrl} className="btn-primary">Start with AI Fundamentals</a>
-            <a href={learnWorldsCoursesUrl} className="btn-gold">View all courses</a>
-          </div>
-          <p className="mt-6 text-sm text-muted-foreground">
-            Access to materials for 6 months. Based in UAE, serving the world.
-          </p>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Footer() {
-  const [legalModal, setLegalModal] = useState<"privacy" | "terms" | "refund" | null>(null);
-
-  return (
-    <footer className="border-t border-border bg-white">
+    <div className="min-h-screen bg-offwhite text-ink font-sora">
       <LegalModal
         type={legalModal}
         open={legalModal !== null}
@@ -1307,90 +283,555 @@ function Footer() {
           if (!open) setLegalModal(null);
         }}
       />
-      <div className="container-x grid gap-8 py-12 md:grid-cols-[1.4fr_1fr_1fr]">
-        <div>
-          <BrandLogo />
-          <div className="mt-3 max-w-sm space-y-1 text-sm text-muted-foreground">
-            <p>Falcon Innovation Academy is a trading brand operated by Falcon Expert Institute FZ-LLC.</p>
-            <p>VUNE3122, Compass building, AL Hulaila Industrial Zone-FZ, RAK, UAE.</p>
-            <p>Educational Licence No 52001001.</p>
+      {/* Navigation */}
+      <nav className="fixed top-0 w-full z-50 border-b border-black/5 bg-offwhite/80 backdrop-blur-md">
+        <div className="max-w-[1440px] mx-auto flex items-center justify-between px-8 py-5">
+          <div className="flex items-center space-x-12">
+            <a href="#" style={{ marginTop: "4px" }}>
+              <FalconLogo />
+            </a>
+            <div className="hidden md:flex space-x-8 text-[12px] font-semibold uppercase tracking-widest">
+              {navigationLinks.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className="hover:text-black/60 transition-colors"
+                >
+                  {link.label}
+                </a>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex items-center space-x-4">
+            <a
+              href="https://learn.falcon.academy/courses"
+              className="hidden md:inline-block px-5 py-2.5 bg-ink text-offwhite text-[11px] font-bold uppercase tracking-widest hover:bg-black/80 transition-colors"
+            >
+              Explore Courses
+            </a>
+            <Sheet>
+              <SheetTrigger asChild>
+                <button
+                  aria-label="Open menu"
+                  className="flex size-10 items-center justify-center rounded-sm bg-ink text-white transition-colors hover:bg-black/80 md:hidden"
+                >
+                  <span className="relative block w-5">
+                    <span className="mb-1 block h-0.5 bg-white" />
+                    <span className="mb-1 block h-0.5 bg-white" />
+                    <span className="block h-0.5 bg-white" />
+                  </span>
+                </button>
+              </SheetTrigger>
+              <SheetContent
+                side="right"
+                className="w-[88vw] max-w-sm border-l border-black/10 bg-offwhite px-6 py-16"
+              >
+                <SheetTitle className="text-left text-sm font-bold uppercase tracking-[0.28em] text-ink">
+                  Navigation
+                </SheetTitle>
+                <div className="mt-10 flex flex-col gap-5">
+                  {navigationLinks.map((link) => (
+                    <SheetClose key={link.href} asChild>
+                      <a
+                        href={link.href}
+                        className="text-lg font-semibold uppercase tracking-[0.16em] text-ink transition-colors hover:text-black/60"
+                      >
+                        {link.label}
+                      </a>
+                    </SheetClose>
+                  ))}
+                </div>
+                <SheetClose asChild>
+                  <a
+                    href="https://learn.falcon.academy/courses"
+                    className="mt-10 inline-flex w-full items-center justify-center bg-ink px-5 py-3 text-[11px] font-bold uppercase tracking-widest text-offwhite transition-colors hover:bg-black/80"
+                  >
+                    Explore Courses
+                  </a>
+                </SheetClose>
+              </SheetContent>
+            </Sheet>
           </div>
         </div>
-        <div>
-          <div className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Program</div>
-          <ul className="mt-3 space-y-2 text-sm">
-            <li><a href={learnWorldsCourseUrls.aiFundamentals} className="hover:text-falcon-green">AI Fundamentals</a></li>
-            <li><a href={learnWorldsCourseUrls.aiTools} className="hover:text-falcon-green">Tools & Cases</a></li>
-            <li><a href={learnWorldsCourseUrls.aiAgents} className="hover:text-falcon-green">Agents & Automation</a></li>
-            <li><a href={learnWorldsCourseUrls.aiStrategy} className="hover:text-falcon-green">Strategy & Roadmap</a></li>
-          </ul>
-        </div>
-        <div>
-          <div className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Company</div>
-          <ul className="mt-3 space-y-2 text-sm">
-            <li>
-              <button
-                type="button"
-                onClick={() => setLegalModal("privacy")}
-                className="hover:text-falcon-green"
-              >
-                Privacy Policy
-              </button>
-            </li>
-            <li>
-              <button
-                type="button"
-                onClick={() => setLegalModal("terms")}
-                className="hover:text-falcon-green"
-              >
-                Terms of Use
-              </button>
-            </li>
-            <li>
-              <button
-                type="button"
-                onClick={() => setLegalModal("refund")}
-                className="hover:text-falcon-green"
-              >
-                Refund & Cancellation Policy
-              </button>
-            </li>
-            <li>
-              <a href="mailto:info@falcon.academy" className="hover:text-falcon-green">
-                Contact
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div className="border-t border-border">
-        <div className="container-x flex flex-col items-start justify-between gap-3 py-5 text-xs text-muted-foreground sm:flex-row sm:items-center">
-          <div>© {new Date().getFullYear()} Falcon Expert Institute FZ-LLC. All rights reserved.</div>
-        </div>
-      </div>
-    </footer>
-  );
-}
+      </nav>
 
-function Landing() {
-  return (
-    <div className="bg-background text-foreground">
-      <Nav />
-      <main>
-        <Hero />
-        <ProblemSolution />
-        <Comparison />
-        <Program />
-        <Results />
-        <Audience />
-        <Outcomes />
-        <Course1Deep />
-        <Benefits />
-        <Certification />
-        <FAQ />
-        <FinalCTA />
-      </main>
-      <Footer />
+      {/* Hero */}
+      <header className="relative pt-32 pb-24 px-8 max-w-[1440px] mx-auto min-h-[92vh] flex flex-col justify-between overflow-hidden">
+        <div className="absolute top-20 right-0 w-1/2 h-full opacity-25 pointer-events-none bg-grid-lines" />
+        <div className="absolute -bottom-32 -left-32 w-[720px] h-[720px] bg-diagonal-line pointer-events-none" />
+
+        <div className="relative z-10 grid lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] gap-12 items-center animate-enter">
+          <div>
+            <div className="inline-flex items-center gap-2 mb-8 px-3 py-1.5 rounded-full border border-black/10 bg-white/60">
+              <span className="size-2 rounded-full bg-mint" />
+              <span className="text-[10px] font-bold uppercase tracking-[0.25em]">
+                UAE-based · Globally trusted
+              </span>
+            </div>
+
+            <h1 className="text-[clamp(2.75rem,6.6vw,6.75rem)] leading-[0.88] font-extrabold tracking-tighter uppercase text-balance">
+              Learn AI as a<br />
+              business{" "}
+              <span
+                aria-hidden
+                className="inline-flex h-[1em] overflow-hidden align-baseline translate-y-[0.08em]"
+              >
+                <span className="animate-word-cycle flex flex-col leading-none shrink-0">
+                  <span className="flex h-[1em] shrink-0 items-center text-transparent bg-clip-text bg-gradient-to-r from-ink via-black/40 to-ink">
+                    advantage
+                  </span>
+                  <span className="flex h-[1em] shrink-0 items-center text-transparent bg-clip-text bg-gradient-to-r from-ink via-black/40 to-ink">
+                    workflow
+                  </span>
+                  <span className="flex h-[1em] shrink-0 items-center text-transparent bg-clip-text bg-gradient-to-r from-ink via-black/40 to-ink">
+                    edge
+                  </span>
+                  <span className="flex h-[1em] shrink-0 items-center text-transparent bg-clip-text bg-gradient-to-r from-ink via-black/40 to-ink">
+                    moat
+                  </span>
+                  <span className="flex h-[1em] shrink-0 items-center text-transparent bg-clip-text bg-gradient-to-r from-ink via-black/40 to-ink">
+                    advantage
+                  </span>
+                </span>
+              </span>
+              <span className="sr-only">advantage, workflow, edge, moat</span>
+              <br />
+              not a{" "}
+              <span className="underline decoration-sky decoration-[10px] underline-offset-[10px]">
+                buzzword
+              </span>
+              .
+            </h1>
+
+            <div className="mt-10 flex flex-wrap gap-3">
+              {stats.map((s) => (
+                <div
+                  key={s.label}
+                  className="flex items-center space-x-2 bg-white px-4 py-2 border border-black/5 rounded-full"
+                >
+                  <div className={`size-2 rounded-full ${s.dot}`} />
+                  <span className="text-[11px] font-bold tracking-widest">{s.label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* 3D animated composition — right */}
+          <HeroCraft />
+        </div>
+
+        <div className="relative z-10 mt-[24px] grid md:grid-cols-[auto_1fr] gap-10 md:items-end">
+          <a
+            href="https://learn.falcon.academy/course/ai-fundamentals-for-business-decision-makers"
+            className="inline-block px-12 py-6 bg-mint text-ink font-extrabold text-sm uppercase tracking-[0.2em] hover:translate-x-2 transition-transform duration-300"
+          >
+            Start with AI Fundamentals →
+          </a>
+          <p className="max-w-[600px] text-sm font-medium leading-relaxed text-black/60">
+            A practical four-course program for business owners, managers, consultants and analysts
+            who want to understand AI, choose the right tools, build real workflows and safely adopt
+            AI agents.
+          </p>
+        </div>
+      </header>
+
+      {/* Program overview — dark break */}
+      <section
+        id="program"
+        ref={programRef}
+        data-in-view={programInView ? "true" : "false"}
+        className="w-full bg-ink py-32 px-8 overflow-hidden relative"
+      >
+        <div className="absolute inset-0 bg-diagonal-lines-dense opacity-60 pointer-events-none" />
+        <div className="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center relative">
+          <div className="reveal reveal-left">
+            <span className="text-sky text-xs font-extrabold uppercase tracking-[0.3em] block mb-6 italic">
+              // From chaos to capability
+            </span>
+            <h2 className="text-white text-5xl md:text-6xl font-extrabold leading-[0.95] tracking-tighter">
+              Shift from the chaotic use of AI tools to the deliberate construction of processes.
+            </h2>
+            <p className="text-white/55 mt-8 text-lg max-w-md leading-relaxed">
+              Falcon Innovation Academy is a practical AI for Business program. You leave with real
+              business artifacts, not just prompts.
+            </p>
+            <div className="mt-12 grid grid-cols-2 gap-8 border-t border-white/10 pt-8">
+              <div className="reveal" style={{ ["--reveal-delay" as string]: "120ms" }}>
+                <div className="text-sky text-3xl font-extrabold">4</div>
+                <div className="text-white/40 text-[10px] uppercase font-bold mt-1 tracking-widest">
+                  Sequential courses
+                </div>
+              </div>
+              <div className="reveal" style={{ ["--reveal-delay" as string]: "180ms" }}>
+                <div className="text-mint text-3xl font-extrabold">Real</div>
+                <div className="text-white/40 text-[10px] uppercase font-bold mt-1 tracking-widest">
+                  Business artifacts
+                </div>
+              </div>
+              <div className="reveal" style={{ ["--reveal-delay" as string]: "240ms" }}>
+                <div className="text-white text-3xl font-extrabold">Safe</div>
+                <div className="text-white/40 text-[10px] uppercase font-bold mt-1 tracking-widest">
+                  Agent adoption
+                </div>
+              </div>
+              <div className="reveal" style={{ ["--reveal-delay" as string]: "300ms" }}>
+                <div className="text-white text-3xl font-extrabold">UAE</div>
+                <div className="text-white/40 text-[10px] uppercase font-bold mt-1 tracking-widest">
+                  Based, globally trusted
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            className="relative reveal reveal-right"
+            style={{ ["--reveal-delay" as string]: "180ms" }}
+          >
+            <div className="w-full aspect-auto min-h-0 py-10 px-8 sm:py-12 sm:px-10 lg:aspect-square lg:p-10 bg-white/[0.03] outline-1 -outline-offset-1 outline-white/10 rounded-sm flex items-center relative overflow-hidden">
+              <div className="absolute inset-0 bg-grid-lines opacity-[0.06]" />
+              {/* Live workflow diagram */}
+              <div className="relative z-10 w-full space-y-6">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs sm:text-sm font-mono font-bold uppercase tracking-[0.24em] text-white/45">
+                    AI Workflow · Live
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <span className="size-2 rounded-full bg-mint animate-pulse" />
+                    <span className="text-xs sm:text-sm font-bold uppercase tracking-[0.22em] text-mint">
+                      Verified
+                    </span>
+                  </span>
+                </div>
+                <div className="text-white text-[clamp(1.9rem,3vw,2.6rem)] font-extrabold tracking-tight">
+                  Contract review
+                </div>
+                <div className="flex items-center gap-2 flex-wrap">
+                  {["Intake", "AI draft", "Verify", "Approve"].map((step, i) => (
+                    <span
+                      key={step}
+                      className={`px-3.5 py-2 rounded-sm text-xs sm:text-sm font-bold uppercase tracking-[0.14em] ${
+                        i < 3 ? "bg-mint text-ink" : "border border-white/20 text-white/60"
+                      }`}
+                    >
+                      {i < 3 ? "✓ " : ""}
+                      {step}
+                    </span>
+                  ))}
+                </div>
+                <div>
+                  <div className="flex justify-between text-xs sm:text-sm font-bold uppercase tracking-[0.18em] text-white/55 mb-2.5">
+                    <span>Verification confidence</span>
+                    <span>86%</span>
+                  </div>
+                  <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                    <div className="h-full w-[86%] bg-mint rounded-full" />
+                  </div>
+                </div>
+                <div className="grid grid-cols-3 gap-3 pt-2">
+                  {[
+                    { l: "Queued", v: "2", c: "text-white" },
+                    { l: "In progress", v: "1", c: "text-sky" },
+                    { l: "Done today", v: "14", c: "text-mint" },
+                  ].map((t) => (
+                    <div
+                      key={t.l}
+                      className="border border-white/10 rounded-sm px-3 py-4 sm:p-4 text-center"
+                    >
+                      <div className={`text-3xl sm:text-4xl font-extrabold leading-none ${t.c}`}>
+                        {t.v}
+                      </div>
+                      <div className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.18em] text-white/45 mt-2 leading-snug">
+                        {t.l}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div className="absolute -bottom-6 -right-6 bg-mint p-8 hidden md:block max-w-[240px]">
+              <div className="text-ink font-extrabold text-xl leading-none italic">
+                "AI you can actually ship."
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Courses ladder */}
+      <section
+        id="courses"
+        ref={coursesRef}
+        data-in-view={coursesInView ? "true" : "false"}
+        className="py-32 px-8 max-w-[1440px] mx-auto"
+      >
+        <div className="flex items-end justify-between mb-20 gap-8 flex-wrap">
+          <h2 className="reveal reveal-left text-[clamp(3rem,7vw,7rem)] font-extrabold tracking-tighter uppercase leading-[0.8]">
+            The <br />
+            Curriculum
+          </h2>
+          <div
+            className="reveal reveal-right max-w-sm"
+            style={{ ["--reveal-delay" as string]: "120ms" }}
+          >
+            <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-black/40 block mb-3">
+              Sequence · 01 → 04
+            </span>
+            <p className="text-sm text-black/60 leading-relaxed">
+              Four sequential courses. Take them in order. Stop when you have what you need — or go
+              all the way to a deployable plan.
+            </p>
+          </div>
+        </div>
+
+        <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-px bg-black/5 border border-black/5">
+          {courses.map((c, i) => (
+            <a
+              key={c.n}
+              href={c.href}
+              className="reveal reveal-scale bg-offwhite p-10 group cursor-pointer hover:bg-white transition-colors flex flex-col"
+              style={{ ["--reveal-delay" as string]: `${160 + i * 80}ms` }}
+            >
+              <div
+                className={`size-12 rounded-sm flex items-center justify-center mb-12 transition-colors ${c.tint}`}
+              >
+                <span className="text-ink font-extrabold">{c.n}</span>
+              </div>
+              <h3 className="text-2xl font-extrabold tracking-tight mb-4">{c.title}</h3>
+              <p className="text-sm text-black/60 mb-8 leading-relaxed flex-1">{c.body}</p>
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-black/40">
+                  {c.tag}
+                </span>
+                <span className="text-[10px] font-bold uppercase tracking-widest">→</span>
+              </div>
+              <div className="h-px w-0 group-hover:w-full bg-ink transition-all duration-500 mt-6" />
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <UniquenessSection />
+
+      {/* Certificate */}
+      <CertificateSection />
+
+      {/* FAQ */}
+      <section
+        id="faq"
+        ref={faqRef}
+        data-in-view={faqInView ? "true" : "false"}
+        className="bg-white border-y border-black/10 py-32 px-8"
+      >
+        <div className="max-w-[1440px] mx-auto grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)] gap-16">
+          <div className="reveal reveal-left">
+            <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-black/40 block mb-6 italic">
+              // Common questions
+            </span>
+            <h2 className="text-5xl md:text-6xl font-extrabold tracking-tighter uppercase leading-[0.9]">
+              Ask before <br />
+              you enrol.
+            </h2>
+            <p className="text-sm text-black/60 mt-8 max-w-sm leading-relaxed">
+              Still unsure? Reach out and we will help you choose the right entry course for your
+              role.
+            </p>
+            <a
+              href="mailto:info@falcon.academy"
+              className="inline-block mt-8 text-xs font-bold uppercase tracking-widest border-b-2 border-ink pb-1 hover:border-mint transition-colors"
+            >
+              info@falcon.academy
+            </a>
+          </div>
+
+          <div className="divide-y divide-black/10 border-y border-black/10">
+            {faqs.map((f, i) => (
+              <details
+                key={f.q}
+                className="reveal group py-6"
+                style={{ ["--reveal-delay" as string]: `${100 + i * 70}ms` }}
+                open={i === 0}
+              >
+                <summary className="flex items-center justify-between cursor-pointer list-none">
+                  <span className="text-xl font-extrabold tracking-tight pr-8">{f.q}</span>
+                  <span className="size-8 shrink-0 rounded-full border border-black/15 grid place-items-center text-lg group-open:bg-mint group-open:border-mint transition-colors">
+                    <span className="group-open:rotate-45 transition-transform">+</span>
+                  </span>
+                </summary>
+                <p className="mt-4 text-sm text-black/60 max-w-2xl leading-relaxed">{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Apply CTA */}
+      <section
+        id="apply"
+        ref={applyRef}
+        data-in-view={applyInView ? "true" : "false"}
+        className="py-32 px-8 max-w-[1440px] mx-auto"
+      >
+        <div className="border border-black/10 px-8 py-10 sm:p-12 md:p-20 bg-mint/30 relative overflow-hidden">
+          <div className="absolute -bottom-24 -right-24 w-[400px] h-[400px] bg-diagonal-line pointer-events-none opacity-70" />
+          <div className="relative grid md:grid-cols-[1fr_auto] gap-10 md:gap-12 items-center md:items-end">
+            <div className="reveal reveal-left text-center md:text-left">
+              <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-black/50 block mb-6">
+                Course 01 · Entry point
+              </span>
+              <h2 className="text-[clamp(2rem,4.6vw,4rem)] font-extrabold tracking-tighter uppercase leading-[0.92]">
+                Start with AI Fundamentals. <br />
+                Leave with a decision framework.
+              </h2>
+              <p className="text-sm text-black/70 mt-6 max-w-md leading-relaxed mx-auto md:mx-0">
+                Covered topics include tokens, context windows, embeddings, hosted vs self-hosted
+                models, prompting, verification and privacy — explained for decision-makers.
+              </p>
+            </div>
+            <div
+              className="reveal reveal-right flex flex-col gap-3 w-full md:w-auto"
+              style={{ ["--reveal-delay" as string]: "140ms" }}
+            >
+              <a
+                href="https://learn.falcon.academy/course/ai-fundamentals-for-business-decision-makers"
+                className="inline-block w-full md:w-auto px-10 sm:px-12 py-5 sm:py-6 bg-ink text-offwhite font-extrabold text-sm uppercase tracking-[0.2em] hover:translate-x-2 transition-transform duration-300 text-center"
+              >
+                Enroll in Course 1 →
+              </a>
+              <a
+                href="https://learn.falcon.academy/courses"
+                className="inline-block w-full md:w-auto px-10 sm:px-12 py-5 sm:py-6 bg-transparent border border-ink/20 text-ink font-extrabold text-sm uppercase tracking-[0.2em] hover:bg-white transition-colors text-center"
+              >
+                See full program
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="border-t border-black/10">
+        <div className="flex overflow-hidden py-6 bg-ink text-white">
+          <div className="flex shrink-0 items-center whitespace-nowrap uppercase text-[11px] font-bold tracking-[0.4em] opacity-80 animate-marquee">
+            {Array.from({ length: 2 })
+              .flatMap(() => [
+                "AI as a business advantage",
+                "*",
+                "Not a buzzword",
+                "*",
+                "UAE-based · globally trusted",
+                "*",
+                "Real business artifacts",
+                "*",
+                "Falcon Innovation Academy",
+                "*",
+              ])
+              .map((t, i) => (
+                <span key={i} className="px-8">
+                  {t}
+                </span>
+              ))}
+          </div>
+        </div>
+        <div className="max-w-[1440px] mx-auto px-8 py-20 grid grid-cols-1 md:grid-cols-4 gap-12">
+          <div className="col-span-2">
+            <FalconLogo className="h-[1.875rem]" />
+            <p className="mt-6 text-sm text-black/50 max-w-sm leading-relaxed font-semibold">
+              Falcon Innovation Academy is a trading brand operated by Falcon Expert Institute
+              FZ-LLC.
+            </p>
+            <p className="mt-3 text-sm text-black/50 max-w-sm leading-relaxed font-semibold">
+              VUNE3122, Compass building, AL Hulaila Industrial Zone-FZ, RAK, UAE.
+            </p>
+            <p className="mt-3 text-sm text-black/50 max-w-sm leading-relaxed font-semibold">
+              Educational Licence No 52001001.
+            </p>
+          </div>
+          <div>
+            <h4 className="text-[10px] font-extrabold tracking-widest uppercase mb-6">Program</h4>
+            <ul className="space-y-3 text-sm font-medium">
+              <li>
+                <a
+                  href="https://learn.falcon.academy/course/ai-fundamentals-for-business-decision-makers"
+                  className="hover:text-black/60 transition-colors"
+                >
+                  AI Fundamentals
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://learn.falcon.academy/course/ai-tools-practical-cases"
+                  className="hover:text-black/60 transition-colors"
+                >
+                  Tools & Cases
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://learn.falcon.academy/course/ai-agents-automation-design-a-safe-humansupervised-pilot"
+                  className="hover:text-black/60 transition-colors"
+                >
+                  Agents & Automation
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://learn.falcon.academy/course/ai-strategy-governance-implementation"
+                  className="hover:text-black/60 transition-colors"
+                >
+                  Strategy & Roadmap
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="text-[10px] font-extrabold tracking-widest uppercase mb-6">Company</h4>
+            <ul className="space-y-3 text-sm font-medium">
+              <li>
+                <button
+                  type="button"
+                  onClick={() => setLegalModal("privacy")}
+                  className="text-left bg-transparent border-0 p-0 font-inherit text-inherit cursor-pointer hover:text-black/60 transition-colors"
+                >
+                  Privacy Policy
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => setLegalModal("terms")}
+                  className="text-left bg-transparent border-0 p-0 font-inherit text-inherit cursor-pointer hover:text-black/60 transition-colors"
+                >
+                  Terms of Use
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => setLegalModal("refund")}
+                  className="text-left bg-transparent border-0 p-0 font-inherit text-inherit cursor-pointer hover:text-black/60 transition-colors"
+                >
+                  Refund &<br className="md:hidden" /> Cancellation Policy
+                </button>
+              </li>
+              <li>
+                <a
+                  href="mailto:info@falcon.academy"
+                  className="hover:text-black/60 transition-colors"
+                >
+                  Contact
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div className="max-w-[1440px] mx-auto px-8 py-6 border-t border-black/10 flex flex-col md:flex-row justify-between items-center gap-4">
+          <span className="text-[10px] font-bold tracking-widest uppercase text-black/40">
+            © 2026 Falcon Expert Institute FZ-LLC. All rights reserved.
+          </span>
+          <div className="flex gap-6 text-[10px] font-bold tracking-widest uppercase text-black/40" />
+        </div>
+      </footer>
     </div>
   );
 }

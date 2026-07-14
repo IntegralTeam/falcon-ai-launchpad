@@ -1,0 +1,27 @@
+- name: Generate env file from Infisical
+  shell: |
+    TOKEN=$(infisical login \
+      --method=universal-auth \
+      --client-id={{ infisical_client_id }} \
+      --client-secret={{ infisical_client_secret }} \
+      --plain \
+      --domain={{ infisical_domain }})
+
+    infisical export \
+      --projectId={{ infisical_project_id }} \
+      --env={{ CI_COMMIT_REF_NAME }} \
+      --format=dotenv \
+      --token=$TOKEN \
+      --domain={{ infisical_domain }} \
+      > /opt/{{ CI_PROJECT_NAME }}/.env
+
+- name: Down old compose
+  shell:
+    cmd: "docker compose down" 
+    chdir: "/opt/{{ CI_PROJECT_NAME }}"
+  ignore_errors: true
+
+- name: Up new compose
+  shell:
+    cmd: "docker compose up -d" 
+    chdir: "/opt/{{ CI_PROJECT_NAME }}"

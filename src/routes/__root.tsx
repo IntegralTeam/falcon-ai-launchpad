@@ -24,7 +24,7 @@ function NotFoundComponent() {
         <div className="mt-6">
           <Link
             to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            className="inline-flex items-center justify-center bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
             Go home
           </Link>
@@ -56,13 +56,13 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
               router.invalidate();
               reset();
             }}
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            className="inline-flex items-center justify-center bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
             Try again
           </button>
           <a
             href="/"
-            className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
+            className="inline-flex items-center justify-center border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
           >
             Go home
           </a>
@@ -72,31 +72,40 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   );
 }
 
-const assetUrl = (path: string) => `${import.meta.env.BASE_URL}${path.replace(/^\//, "")}`;
-
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Falcon Innovation Academy — AI for Business Courses" },
-      { name: "description", content: "Practical AI for Business program for owners, managers and consultants. From fundamentals to agents and implementation. UAE-based, serving the world." },
-      { property: "og:title", content: "Falcon Innovation Academy — AI for Business Courses" },
-      { property: "og:description", content: "Practical AI for Business program for owners, managers and consultants. From fundamentals to agents and implementation. UAE-based, serving the world." },
+      { title: "Falcon Innovation Academy — Learn AI as a Business Advantage" },
+      {
+        name: "description",
+        content:
+          "A practical four-course AI for Business program: fundamentals, tools, agents and implementation. Build real artifacts, not just prompts.",
+      },
+      { name: "author", content: "Falcon Innovation Academy" },
+      { property: "og:title", content: "Falcon Innovation Academy — AI for Business" },
+      {
+        property: "og:description",
+        content:
+          "Master AI tools and decision-making to make your business competitive and future-proof.",
+      },
       { property: "og:type", content: "website" },
-      { property: "og:image", content: assetUrl("og-image.jpeg") },
-      { property: "og:image:alt", content: "Falcon Innovation Academy — Knowledge. Intelligence. Impact." },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:image", content: assetUrl("og-image.jpeg") },
+      { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: "Falcon Innovation Academy — AI for Business" },
+      {
+        name: "twitter:description",
+        content:
+          "Master AI tools and decision-making to make your business competitive and future-proof.",
+      },
+      { property: "og:image", content: "https://falcon.academy/og-image.jpeg" },
+      { name: "twitter:image", content: "https://falcon.academy/og-image.jpeg" },
     ],
     links: [
-      { rel: "icon", href: assetUrl("favicon.ico"), sizes: "any" },
-      { rel: "icon", type: "image/png", sizes: "32x32", href: assetUrl("favicon-32x32.png") },
-      { rel: "apple-touch-icon", sizes: "180x180", href: assetUrl("apple-touch-icon.png") },
-      { rel: "stylesheet", href: appCss },
-      { rel: "preconnect", href: "https://fonts.googleapis.com" },
-      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" },
+      {
+        rel: "stylesheet",
+        href: appCss,
+      },
     ],
   }),
   shellComponent: RootShell,
