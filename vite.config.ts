@@ -8,6 +8,9 @@ import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 // GitHub Pages project sites are served from /{repo}/ — set BASE_PATH in CI (e.g. /falcon-ai-launchpad/).
 const basePath = process.env.BASE_PATH ?? "/";
+// Nitro outputs to `.output/`, but TanStack Start prerender expects `dist/server/server.js`.
+// Disable nitro for static GH Pages builds so prerender can run the classic dist output.
+const isGitHubPagesBuild = process.env.GITHUB_PAGES === "true";
 
 export default defineConfig({
   vite: {
@@ -25,10 +28,6 @@ export default defineConfig({
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this
     server: { entry: "server" },
-    // Nitro preset: node-server для Docker, cloudflare-module для Cloudflare Workers
-    nitro: {
-      preset: process.env.NITRO_PRESET ?? "cloudflare-module",
-    },
     // Static HTML for GitHub Pages and other static hosts
     prerender: {
       enabled: process.env.DISABLE_PRERENDER !== "true",
@@ -36,4 +35,11 @@ export default defineConfig({
       crawlLinks: false,
     },
   },
+  // Top-level nitro option (not tanstackStart.nitro) — see @lovable.dev/vite-tanstack-config.
+  nitro: isGitHubPagesBuild
+    ? false
+    : {
+        // node-server for Docker, cloudflare-module for Cloudflare Workers
+        preset: process.env.NITRO_PRESET ?? "cloudflare-module",
+      },
 });
