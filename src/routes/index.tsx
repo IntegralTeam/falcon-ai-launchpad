@@ -113,7 +113,7 @@ function Home() {
       {/* Institution strip + sticky header */}
       <div className="institution-bar" id="top">
         <div className="page-shell institution-bar-inner">
-          <p>UAE-based · Globally trusted</p>
+          <p>UAE-based · AI Education</p>
           <div>
             <span>4 Sequential Courses</span>
             <span>Real Business Artifacts</span>
@@ -196,7 +196,7 @@ function Home() {
         <div className="hero-copy">
           <div className="hero-copy-inner">
             <p className="eyebrow">
-              <span>UAE-based</span> · Globally trusted
+              <span>UAE-based</span> · AI Education
             </p>
             <h1 id="hero-title">
               Learn AI as a<br />
@@ -278,7 +278,7 @@ function Home() {
               </div>
               <div>
                 <strong>UAE</strong>
-                <span>Based, globally trusted</span>
+                <span>Based AI Education</span>
               </div>
             </div>
             <a className="light-link" href="#courses">
