@@ -18,10 +18,9 @@ export function CertificateSection() {
           <p className="section-kicker">Proof of completion</p>
           <h2 id="certificate-title">Documents after training</h2>
           <p>
-            After completing each course, you receive an official Certificate of Completion
-            confirming the skills acquired — verifiable online with a unique certificate ID.
+            After successfully completing a course, learners receive a Certificate of Completion
+            issued by Falcon Expert Institute FZ-LLC.
           </p>
-          <p>Licensed by Falcon Expert Institute FZ-LLC · No. 52001001</p>
           <a
             href="#certificate-sample"
             className="button button-outline"
