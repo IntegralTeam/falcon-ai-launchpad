@@ -76,7 +76,7 @@ const faqs = [
   },
   {
     q: "Is this only about ChatGPT?",
-    a: "No. We cover multimodal tools, RAG systems, APIs, open-source models, self-hosted AI, agents and automation.",
+    a: "No. The programme covers a range of practical AI tools and business applications, not only one platform.",
   },
   {
     q: "Is AI automation safe for confidential business data?",
