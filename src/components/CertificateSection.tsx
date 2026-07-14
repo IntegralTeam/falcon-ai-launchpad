@@ -1,7 +1,8 @@
-import certificateImg from "@/assets/certificate.jpg";
+import logoSvg from "@/assets/logo.svg";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useRepeatInView } from "@/hooks/use-repeat-in-view";
 
-/** Certificate showcase — text panel left, sample certificate preview right */
+/** Certificate showcase — text panel left, stylized certificate preview right */
 export function CertificateSection() {
   const [sectionRef, sectionInView] = useRepeatInView<HTMLElement>();
 
@@ -24,24 +25,13 @@ export function CertificateSection() {
               Documents after training
             </h2>
             <p className="mt-6 text-white/55 text-base md:text-lg leading-relaxed max-w-lg">
-              After completing each course, you receive an official Certificate of Completion
-              confirming the skills acquired — verifiable online with a unique certificate ID.
+              After successfully completing a course, learners receive a Certificate of Completion
+              issued by Falcon Expert Institute FZ-LLC.
             </p>
-            <p className="mt-6 text-white/55 text-base md:text-lg leading-relaxed max-w-lg">
-              Licensed by Falcon Expert Institute FZ-LLC · No. 52001001
-            </p>
-            <a
-              href={certificateImg}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-8 inline-flex items-center justify-center border border-white/30 px-10 py-4 text-[11px] font-bold uppercase tracking-[0.2em] text-white transition-colors hover:bg-white/10"
-            >
-              View sample certificate
-            </a>
           </div>
         </div>
 
-        {/* Right — certificate preview with mint glow */}
+        {/* Right — stylized certificate preview with mint glow */}
         <div
           className="reveal reveal-right relative flex items-stretch justify-center"
           style={{ ["--reveal-delay" as string]: "140ms" }}
@@ -53,26 +43,44 @@ export function CertificateSection() {
           {/* Certificate frame — full column width */}
           <div className="relative w-full flex items-center">
             <div
-              className="relative w-full rounded-sm overflow-hidden border border-black/10 bg-white shadow-[0_32px_100px_-16px_rgba(10,10,10,0.4)]"
+              className="relative w-full aspect-[4/3] rounded-sm overflow-hidden border border-black/10 bg-white shadow-[0_32px_100px_-16px_rgba(10,10,10,0.4)] flex flex-col items-start justify-start gap-5 px-10 py-10"
               style={{ transform: "rotate(-1.5deg)" }}
             >
               <img
-                src={certificateImg}
-                alt="Falcon Innovation Academy Certificate of Completion — Course 01 AI Fundamentals for Business Decision-Makers"
-                className="w-full h-auto block"
-                loading="lazy"
+                src={logoSvg}
+                alt="Falcon Academy"
+                className="w-[min(50%,15.4rem)] h-auto shrink-0"
               />
-            </div>
+              <h3 className="text-left text-[clamp(1.35rem,3.2vw,2.5rem)] font-extrabold uppercase tracking-[0.04em] leading-[1.05] text-ink shrink-0">
+                Certificate of Completion
+              </h3>
 
-            {/* Verified badge */}
-            <div
-              className="reveal reveal-scale absolute -bottom-4 -left-2 md:-left-6 flex items-center gap-2 bg-ink text-white px-4 py-2 rounded-sm shadow-lg"
-              style={{ ["--reveal-delay" as string]: "360ms" }}
-            >
-              <span className="size-1.5 rounded-full bg-mint animate-pulse" />
-              <span className="text-[10px] font-bold uppercase tracking-[0.2em]">
-                Verifiable online
-              </span>
+              {/* Skeleton fields — certificate layout without placeholder copy */}
+              <div className="flex flex-col flex-1 w-full gap-5 min-h-0">
+                <div className="flex flex-col gap-2">
+                  <Skeleton className="h-2 w-14 rounded-full bg-black/[0.07]" />
+                  <Skeleton className="h-3.5 w-[58%] rounded-full bg-black/10" />
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <Skeleton className="h-2 w-20 rounded-full bg-black/[0.07]" />
+                  <Skeleton className="h-3 w-[72%] rounded-full bg-black/10" />
+                  <Skeleton className="h-3 w-[48%] rounded-full bg-black/[0.08]" />
+                </div>
+
+                <div className="flex-1 min-h-2" />
+
+                <div className="flex justify-between items-end gap-8 w-full">
+                  <div className="flex flex-col gap-2">
+                    <Skeleton className="h-2 w-16 rounded-full bg-black/[0.07]" />
+                    <Skeleton className="h-2.5 w-24 rounded-full bg-black/10" />
+                  </div>
+                  <div className="flex flex-col gap-2 items-end flex-1 max-w-[9rem]">
+                    <Skeleton className="h-px w-full rounded-full bg-black/15" />
+                    <Skeleton className="h-2 w-20 rounded-full bg-black/[0.07]" />
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
