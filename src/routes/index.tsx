@@ -366,7 +366,7 @@ function Home() {
             <div className="inline-flex items-center gap-2 mb-8 px-3 py-1.5 rounded-full border border-black/10 bg-white/60">
               <span className="size-2 rounded-full bg-mint" />
               <span className="text-[10px] font-bold uppercase tracking-[0.25em]">
-                UAE-based · Globally trusted
+                UAE-based · AI Education
               </span>
             </div>
 
@@ -478,7 +478,7 @@ function Home() {
               <div className="reveal" style={{ ["--reveal-delay" as string]: "300ms" }}>
                 <div className="text-white text-3xl font-extrabold">UAE</div>
                 <div className="text-white/40 text-[10px] uppercase font-bold mt-1 tracking-widest">
-                  Based, globally trusted
+                  Based AI Education
                 </div>
               </div>
             </div>
@@ -719,7 +719,7 @@ function Home() {
                 "*",
                 "Not a buzzword",
                 "*",
-                "UAE-based · globally trusted",
+                "UAE-based · AI Education",
                 "*",
                 "Real business artifacts",
                 "*",
@@ -737,7 +737,7 @@ function Home() {
           <div className="col-span-2">
             <FalconLogo className="h-[1.875rem]" />
             <p className="mt-6 text-sm text-black/50 max-w-sm leading-relaxed font-semibold">
-              Falcon Innovation Academy is a trading brand operated by Falcon Expert Institute
+              Falcon Innovation Academy is a brand operated by Falcon Expert Institute
               FZ-LLC.
             </p>
             <p className="mt-3 text-sm text-black/50 max-w-sm leading-relaxed font-semibold">
