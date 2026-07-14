@@ -421,7 +421,7 @@ function Home() {
           <HeroCraft />
         </div>
 
-        <div className="relative z-10 mt-[24px] grid md:grid-cols-[auto_1fr] gap-10 md:items-end">
+        <div className="relative z-10 mt-[24px] grid md:grid-cols-[auto_1fr] gap-x-10 gap-y-4 md:items-end">
           <a
             href="https://learn.falcon.academy/course/ai-fundamentals-for-business-decision-makers"
             className="inline-block px-12 py-6 bg-mint text-ink font-extrabold text-sm uppercase tracking-[0.2em] hover:translate-x-2 transition-transform duration-300"
@@ -432,6 +432,10 @@ function Home() {
             A practical four-course program for business owners, managers, consultants and analysts
             who want to understand AI, choose the right tools, build real workflows and safely adopt
             AI agents.
+          </p>
+          <p className="md:col-start-2 max-w-[600px] text-[11px] font-medium leading-relaxed text-black/65">
+            Falcon Innovation Academy is operated by Falcon Expert Institute FZ-LLC, a UAE-licensed
+            E-Training Institute. RAKEZ Educational Licence No. 52001001.
           </p>
         </div>
       </header>
