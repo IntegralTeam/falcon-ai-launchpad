@@ -1,0 +1,48 @@
+<!-- Editorial certificate sample for landing (matches redesigned PDF templates) -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 842 595" role="img" aria-label="Sample Falcon Certificate of Completion">
+  <rect width="842" height="595" fill="#faf8f4"/>
+  <rect x="0" y="0" width="8" height="286" fill="#147a43"/>
+  <rect x="0" y="286" width="8" height="60" fill="#ffffff"/>
+  <rect x="0" y="346" width="8" height="249" fill="#c62832"/>
+
+  <!-- Corner brackets -->
+  <path d="M28 28h22M28 28v22M814 28h-22M814 28v22M28 567h22M28 567v-22M814 567h-22M814 567v-22" fill="none" stroke="#d8d4cc" stroke-width="1"/>
+
+  <!-- Soft arcs -->
+  <circle cx="880" cy="330" r="180" fill="none" stroke="#102a43" stroke-opacity="0.06" stroke-width="1.2"/>
+  <circle cx="880" cy="330" r="228" fill="none" stroke="#102a43" stroke-opacity="0.06" stroke-width="1.2"/>
+  <circle cx="880" cy="330" r="276" fill="none" stroke="#102a43" stroke-opacity="0.06" stroke-width="1.2"/>
+
+  <image href="/images/falcon-logo-horizontal.png" x="56" y="36" width="250" height="70" preserveAspectRatio="xMinYMid meet"/>
+
+  <text x="56" y="160" font-family="Georgia, 'Times New Roman', serif" font-size="28" font-weight="700" fill="#102a43">CERTIFICATE OF COMPLETION</text>
+  <rect x="56" y="172" width="32" height="3" fill="#c62832"/>
+  <rect x="88" y="172" width="58" height="3" fill="#147a43"/>
+
+  <text x="56" y="220" font-family="Helvetica, Arial, sans-serif" font-size="9" font-weight="700" letter-spacing="0.12em" fill="#5f666b">THIS CERTIFIES THAT</text>
+  <text x="56" y="270" font-family="Georgia, 'Times New Roman', serif" font-size="28" font-weight="700" fill="#102a43">Michael Anderson</text>
+  <line x1="56" y1="290" x2="616" y2="290" stroke="#d8d4cc" stroke-width="0.8"/>
+
+  <text x="56" y="320" font-family="Helvetica, Arial, sans-serif" font-size="9" font-weight="700" letter-spacing="0.12em" fill="#5f666b">HAS SUCCESSFULLY COMPLETED</text>
+  <text x="56" y="350" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#17242e">Course 01 - AI Fundamentals for Business Decision-Makers</text>
+  <line x1="56" y1="368" x2="616" y2="368" stroke="#d8d4cc" stroke-width="0.8"/>
+
+  <text x="56" y="410" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#17242e">24 Jun 2026</text>
+  <text x="56" y="428" font-family="Helvetica, Arial, sans-serif" font-size="8" font-weight="700" letter-spacing="0.14em" fill="#5f666b">DATE</text>
+  <rect x="98" y="420" width="5" height="5" fill="#147a43"/>
+
+  <line x1="56" y1="455" x2="786" y2="455" stroke="#d8d4cc" stroke-width="0.8"/>
+
+  <rect x="56" y="475" width="18" height="18" fill="none" stroke="#102a43" stroke-width="1"/>
+  <text x="59" y="488" font-family="Helvetica, Arial, sans-serif" font-size="7" font-weight="700" fill="#102a43">ID</text>
+  <text x="84" y="486" font-family="Helvetica, Arial, sans-serif" font-size="9" fill="#17242e">6a3b72afaa472b73470994cf</text>
+  <text x="84" y="502" font-family="Helvetica, Arial, sans-serif" font-size="7" font-weight="700" letter-spacing="0.12em" fill="#5f666b">CERTIFICATE ID</text>
+
+  <rect x="360" y="475" width="18" height="18" fill="none" stroke="#102a43" stroke-width="1"/>
+  <text x="362" y="488" font-family="Helvetica, Arial, sans-serif" font-size="6" font-weight="700" fill="#102a43">URL</text>
+  <text x="388" y="486" font-family="Helvetica, Arial, sans-serif" font-size="9" fill="#17242e">https://mycourse.app/UFzyCK5C7eHw8fqAV</text>
+  <text x="388" y="502" font-family="Helvetica, Arial, sans-serif" font-size="7" font-weight="700" letter-spacing="0.12em" fill="#5f666b">VERIFICATION LINK</text>
+
+  <text x="56" y="545" font-family="Helvetica, Arial, sans-serif" font-size="8" fill="#5f666b">Falcon Innovation Academy FZ-LLC  |  License No: 52001001</text>
+  <text x="622" y="545" font-family="Georgia, 'Times New Roman', serif" font-size="8" fill="#102a43">Knowledge. Intelligence. Impact.</text>
+</svg>

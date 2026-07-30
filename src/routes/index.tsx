@@ -5,7 +5,6 @@ import { UniquenessSection } from "@/components/UniquenessSection";
 import { LegalModal, type LegalModalType } from "@/components/LegalModal";
 import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useRepeatInView } from "@/hooks/use-repeat-in-view";
-import logoSvg from "@/assets/logo.svg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -28,16 +27,9 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-const stats = [
-  { dot: "bg-mint", label: "4 SEQUENTIAL COURSES" },
-  { dot: "bg-sky", label: "REAL BUSINESS ARTIFACTS" },
-  { dot: "bg-amber-400", label: "NO CODING REQUIRED" },
-];
-
 const courses = [
   {
     n: "01",
-    tint: "bg-sky/25 group-hover:bg-sky/50",
     title: "AI Fundamentals for Business Decision-Makers",
     body: "Understand AI before you choose tools. Learn the mechanics, limits, privacy basics and decision-making models that matter for business use.",
     tag: "READINESS BRIEF",
@@ -45,7 +37,6 @@ const courses = [
   },
   {
     n: "02",
-    tint: "bg-mint/40 group-hover:bg-mint/70",
     title: "AI Tools & Practical Cases",
     body: "Move from generic prompting to evaluated tools. Compare vendors, use multimodal workflows, and build a practical tool portfolio for real tasks.",
     tag: "TOOL PORTFOLIO",
@@ -53,7 +44,6 @@ const courses = [
   },
   {
     n: "03",
-    tint: "bg-amber-200/60 group-hover:bg-amber-300/80",
     title: "AI Agents & Automation",
     body: "Design AI workflows that do more than answer questions. Build agentic processes with controls, supervision and safe handoffs.",
     tag: "AGENTIC BLUEPRINT",
@@ -61,7 +51,6 @@ const courses = [
   },
   {
     n: "04",
-    tint: "bg-ink/10 group-hover:bg-ink/20",
     title: "AI Strategy, Implementation & Operating Model",
     body: "Turn experiments into a governed operating model. Define rollout phases, ownership, policies and an implementation roadmap.",
     tag: "ROADMAP",
@@ -91,174 +80,17 @@ const faqs = [
     a: "Four practical artifacts: Readiness Brief, Tool Portfolio, Agentic Blueprint and Implementation Roadmap — plus the skills to keep using them.",
   },
 ];
-function HeroCraft() {
-  return (
-    <div className="relative hidden lg:block">
-      {/* Halo blur */}
-      <div className="absolute inset-8 rounded-full bg-mint/40 blur-3xl opacity-70 pointer-events-none" />
-      <div className="absolute -top-6 -right-8 size-24 rounded-full bg-sky/50 blur-2xl pointer-events-none" />
 
-      {/* 3D rotating isometric wireframe */}
-      <div className="relative perspective-scene aspect-square w-full max-w-[520px] mx-auto">
-        {/* Ambient thin ring */}
-        <svg
-          viewBox="0 0 400 400"
-          className="absolute inset-0 w-full h-full text-ink/70 animate-float"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1"
-        >
-          <circle cx="200" cy="200" r="180" className="opacity-20" />
-          <circle cx="200" cy="200" r="150" className="opacity-15" strokeDasharray="2 4" />
-          <circle cx="200" cy="200" r="120" className="opacity-10" />
-          {/* Corner ticks */}
-          {[0, 90, 180, 270].map((r) => (
-            <g key={r} transform={`rotate(${r} 200 200)`}>
-              <line x1="200" y1="12" x2="200" y2="26" strokeWidth="1.5" />
-            </g>
-          ))}
-        </svg>
+const navigationLinks = [
+  { href: "#program", label: "Solution" },
+  { href: "#courses", label: "Courses" },
+  { href: "#corporate", label: "Corporate" },
+  { href: "#certificate", label: "Certificate" },
+  { href: "#faq", label: "FAQ" },
+];
 
-        {/* Rotating cube stack */}
-        <div className="absolute inset-0 grid place-items-center">
-          <div className="relative animate-spin-y" style={{ width: 260, height: 260 }}>
-            {/* Cube 1 - large */}
-            <div
-              className="absolute left-1/2 top-1/2"
-              style={{
-                width: 200,
-                height: 200,
-                transformStyle: "preserve-3d",
-                transform: "translate3d(-50%, -50%, 0)",
-              }}
-            >
-              <div className="face-3d" style={{ transform: "translateZ(100px)" }} />
-              <div className="face-3d" style={{ transform: "rotateY(180deg) translateZ(100px)" }} />
-              <div className="face-3d" style={{ transform: "rotateY(90deg) translateZ(100px)" }} />
-              <div className="face-3d" style={{ transform: "rotateY(-90deg) translateZ(100px)" }} />
-              <div
-                className="face-3d"
-                style={{
-                  transform: "rotateX(90deg) translateZ(100px)",
-                  background:
-                    "linear-gradient(135deg, rgba(181,234,215,0.35), rgba(160,196,255,0.15))",
-                }}
-              />
-              <div className="face-3d" style={{ transform: "rotateX(-90deg) translateZ(100px)" }} />
-            </div>
-
-            {/* Cube 2 — offset small */}
-            <div
-              className="absolute"
-              style={{
-                width: 90,
-                height: 90,
-                left: "78%",
-                top: "18%",
-                transformStyle: "preserve-3d",
-                transform: "translate3d(-50%, -50%, 120px)",
-              }}
-            >
-              <div
-                className="face-3d"
-                style={{
-                  transform: "translateZ(45px)",
-                  background: "rgba(10,10,10,0.9)",
-                  borderColor: "rgba(10,10,10,1)",
-                }}
-              />
-              <div className="face-3d" style={{ transform: "rotateY(180deg) translateZ(45px)" }} />
-              <div className="face-3d" style={{ transform: "rotateY(90deg) translateZ(45px)" }} />
-              <div className="face-3d" style={{ transform: "rotateY(-90deg) translateZ(45px)" }} />
-              <div className="face-3d" style={{ transform: "rotateX(90deg) translateZ(45px)" }} />
-              <div className="face-3d" style={{ transform: "rotateX(-90deg) translateZ(45px)" }} />
-            </div>
-
-            {/* Cube 3 — bottom-left accent */}
-            <div
-              className="absolute"
-              style={{
-                width: 56,
-                height: 56,
-                left: "12%",
-                top: "82%",
-                transformStyle: "preserve-3d",
-                transform: "translate3d(-50%, -50%, -80px)",
-              }}
-            >
-              <div
-                className="face-3d"
-                style={{
-                  transform: "translateZ(28px)",
-                  background: "var(--mint)",
-                  borderColor: "rgba(10,10,10,0.85)",
-                }}
-              />
-              <div className="face-3d" style={{ transform: "rotateY(180deg) translateZ(28px)" }} />
-              <div className="face-3d" style={{ transform: "rotateY(90deg) translateZ(28px)" }} />
-              <div className="face-3d" style={{ transform: "rotateY(-90deg) translateZ(28px)" }} />
-              <div className="face-3d" style={{ transform: "rotateX(90deg) translateZ(28px)" }} />
-              <div className="face-3d" style={{ transform: "rotateX(-90deg) translateZ(28px)" }} />
-            </div>
-          </div>
-        </div>
-
-        {/* Overlay SVG connectors + labels */}
-        <svg
-          viewBox="0 0 400 400"
-          className="absolute inset-0 w-full h-full pointer-events-none"
-          fill="none"
-        >
-          <g stroke="#0a0a0a" strokeWidth="1">
-            <path
-              d="M 60 340 L 140 260"
-              className="animate-draw"
-              style={{ ["--dash" as string]: "160" }}
-            />
-            <path
-              d="M 340 90 L 270 150"
-              className="animate-dash"
-              style={{ animationDelay: "0.4s" }}
-            />
-          </g>
-          <g
-            fontFamily="ui-monospace, Menlo, monospace"
-            fontSize="9"
-            fontWeight="700"
-            fill="#0a0a0a"
-          >
-            <text x="18" y="352" letterSpacing="2">
-              INPUT · 01
-            </text>
-            <text x="278" y="82" letterSpacing="2">
-              AGENT · 02
-            </text>
-            <text x="300" y="360" letterSpacing="2" fill="#0a0a0a" opacity="0.5">
-              OUTPUT · 03
-            </text>
-          </g>
-          {/* Corner brackets */}
-          <g stroke="#0a0a0a" strokeWidth="1.5" opacity="0.6">
-            <path d="M 8 8 L 8 28 M 8 8 L 28 8" />
-            <path d="M 392 8 L 392 28 M 392 8 L 372 8" />
-            <path d="M 8 392 L 8 372 M 8 392 L 28 392" />
-            <path d="M 392 392 L 392 372 M 392 392 L 372 392" />
-          </g>
-        </svg>
-      </div>
-    </div>
-  );
-}
-
-/** Brand mark: FALCON.ACADEMY wordmark */
-function FalconLogo({ className = "h-[30px]" }: { className?: string }) {
-  return (
-    <img
-      src={logoSvg}
-      alt="Falcon Academy"
-      className={`w-auto ${className}`}
-    />
-  );
+function Arrow() {
+  return <span aria-hidden="true">↗</span>;
 }
 
 function Home() {
@@ -266,16 +98,10 @@ function Home() {
   const [programRef, programInView] = useRepeatInView<HTMLElement>();
   const [coursesRef, coursesInView] = useRepeatInView<HTMLElement>();
   const [faqRef, faqInView] = useRepeatInView<HTMLElement>();
-  const [applyRef, applyInView] = useRepeatInView<HTMLElement>();
-  const navigationLinks = [
-    { href: "#program", label: "Solution" },
-    { href: "#courses", label: "Courses" },
-    { href: "#certificate", label: "Certificate" },
-    { href: "#faq", label: "FAQ" },
-  ];
+  const [ctaRef, ctaInView] = useRepeatInView<HTMLElement>();
 
   return (
-    <div className="min-h-screen bg-offwhite text-ink font-sora">
+    <div className="min-h-screen bg-warm-white text-ink">
       <LegalModal
         type={legalModal}
         open={legalModal !== null}
@@ -283,341 +109,297 @@ function Home() {
           if (!open) setLegalModal(null);
         }}
       />
-      {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 border-b border-black/5 bg-offwhite/80 backdrop-blur-md">
-        <div className="max-w-[1440px] mx-auto flex items-center justify-between px-8 py-5">
-          <div className="flex items-center space-x-12">
-            <a href="#" style={{ marginTop: "4px" }}>
-              <FalconLogo />
-            </a>
-            <div className="hidden md:flex space-x-8 text-[12px] font-semibold uppercase tracking-widest">
+
+      {/* Institution strip + sticky header */}
+      <div className="institution-bar" id="top">
+        <div className="page-shell institution-bar-inner">
+          <p>UAE-based · Globally trusted</p>
+          <div>
+            <span>4 Sequential Courses</span>
+            <span>Real Business Artifacts</span>
+            <span>No Coding Required</span>
+          </div>
+        </div>
+      </div>
+
+      <header className="site-header">
+        <div className="page-shell header-main">
+          <a className="logo-link" href="#top" aria-label="Falcon Innovation Academy home">
+            <img
+              className="full-logo"
+              src="/images/falcon-logo-horizontal.png"
+              alt="Falcon Expert Institute — Knowledge. Intelligence. Impact."
+            />
+          </a>
+
+          <div className="desktop-navigation">
+            <nav className="main-nav" aria-label="Primary navigation">
               {navigationLinks.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  className="hover:text-black/60 transition-colors"
-                >
+                <a key={link.href} href={link.href}>
                   {link.label}
                 </a>
               ))}
-            </div>
-          </div>
-
-          <div className="flex items-center space-x-4">
-            <a
-              href="https://learn.falcon.academy/courses"
-              className="hidden md:inline-block px-5 py-2.5 bg-ink text-offwhite text-[11px] font-bold uppercase tracking-widest hover:bg-black/80 transition-colors"
-            >
-              Explore Courses
+            </nav>
+            <a className="header-cta" href="https://learn.falcon.academy/courses">
+              Explore Courses <Arrow />
             </a>
-            <Sheet>
-              <SheetTrigger asChild>
-                <button
-                  aria-label="Open menu"
-                  className="flex size-10 items-center justify-center rounded-sm bg-ink text-white transition-colors hover:bg-black/80 md:hidden"
-                >
-                  <span className="relative block w-5">
-                    <span className="mb-1 block h-0.5 bg-white" />
-                    <span className="mb-1 block h-0.5 bg-white" />
-                    <span className="block h-0.5 bg-white" />
-                  </span>
-                </button>
-              </SheetTrigger>
-              <SheetContent
-                side="right"
-                className="w-[88vw] max-w-sm border-l border-black/10 bg-offwhite px-6 py-16"
-              >
-                <SheetTitle className="text-left text-sm font-bold uppercase tracking-[0.28em] text-ink">
-                  Navigation
-                </SheetTitle>
-                <div className="mt-10 flex flex-col gap-5">
-                  {navigationLinks.map((link) => (
-                    <SheetClose key={link.href} asChild>
-                      <a
-                        href={link.href}
-                        className="text-lg font-semibold uppercase tracking-[0.16em] text-ink transition-colors hover:text-black/60"
-                      >
-                        {link.label}
-                      </a>
-                    </SheetClose>
-                  ))}
-                </div>
-                <SheetClose asChild>
-                  <a
-                    href="https://learn.falcon.academy/courses"
-                    className="mt-10 inline-flex w-full items-center justify-center bg-ink px-5 py-3 text-[11px] font-bold uppercase tracking-widest text-offwhite transition-colors hover:bg-black/80"
+
+            <div className="mobile-nav-trigger">
+              <Sheet>
+                <SheetTrigger asChild>
+                  <button
+                    aria-label="Open menu"
+                    className="flex items-center gap-3 text-[10px] font-bold uppercase tracking-[0.12em] text-navy"
                   >
-                    Explore Courses
-                  </a>
-                </SheetClose>
-              </SheetContent>
-            </Sheet>
-          </div>
-        </div>
-      </nav>
-
-      {/* Hero */}
-      <header className="relative pt-32 pb-24 px-8 max-w-[1440px] mx-auto min-h-[92vh] flex flex-col justify-between overflow-hidden">
-        <div className="absolute top-20 right-0 w-1/2 h-full opacity-25 pointer-events-none bg-grid-lines" />
-        <div className="absolute -bottom-32 -left-32 w-[720px] h-[720px] bg-diagonal-line pointer-events-none" />
-
-        <div className="relative z-10 grid lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] gap-12 items-center animate-enter">
-          <div>
-            <div className="inline-flex items-center gap-2 mb-8 px-3 py-1.5 rounded-full border border-black/10 bg-white/60">
-              <span className="size-2 rounded-full bg-mint" />
-              <span className="text-[10px] font-bold uppercase tracking-[0.25em]">
-                UAE-based · Globally trusted
-              </span>
-            </div>
-
-            <h1 className="text-[clamp(2.75rem,6.6vw,6.75rem)] leading-[0.88] font-extrabold tracking-tighter uppercase text-balance">
-              Learn AI as a<br />
-              business{" "}
-              <span
-                aria-hidden
-                className="inline-flex h-[1em] overflow-hidden align-baseline translate-y-[0.08em]"
-              >
-                <span className="animate-word-cycle flex flex-col leading-none shrink-0">
-                  <span className="flex h-[1em] shrink-0 items-center text-transparent bg-clip-text bg-gradient-to-r from-ink via-black/40 to-ink">
-                    advantage
-                  </span>
-                  <span className="flex h-[1em] shrink-0 items-center text-transparent bg-clip-text bg-gradient-to-r from-ink via-black/40 to-ink">
-                    workflow
-                  </span>
-                  <span className="flex h-[1em] shrink-0 items-center text-transparent bg-clip-text bg-gradient-to-r from-ink via-black/40 to-ink">
-                    edge
-                  </span>
-                  <span className="flex h-[1em] shrink-0 items-center text-transparent bg-clip-text bg-gradient-to-r from-ink via-black/40 to-ink">
-                    moat
-                  </span>
-                  <span className="flex h-[1em] shrink-0 items-center text-transparent bg-clip-text bg-gradient-to-r from-ink via-black/40 to-ink">
-                    advantage
-                  </span>
-                </span>
-              </span>
-              <span className="sr-only">advantage, workflow, edge, moat</span>
-              <br />
-              not a{" "}
-              <span className="underline decoration-sky decoration-[10px] underline-offset-[10px]">
-                buzzword
-              </span>
-              .
-            </h1>
-
-            <div className="mt-10 flex flex-wrap gap-3">
-              {stats.map((s) => (
-                <div
-                  key={s.label}
-                  className="flex items-center space-x-2 bg-white px-4 py-2 border border-black/5 rounded-full"
+                    <span>Menu</span>
+                    <span className="text-xl font-normal" aria-hidden>
+                      ☰
+                    </span>
+                  </button>
+                </SheetTrigger>
+                <SheetContent
+                  side="right"
+                  className="w-[88vw] max-w-sm border-l border-line bg-warm-white px-6 py-16"
                 >
-                  <div className={`size-2 rounded-full ${s.dot}`} />
-                  <span className="text-[11px] font-bold tracking-widest">{s.label}</span>
-                </div>
-              ))}
+                  <SheetTitle className="text-left text-sm font-bold uppercase tracking-[0.28em] text-navy">
+                    Navigation
+                  </SheetTitle>
+                  <div className="mt-10 flex flex-col gap-5">
+                    {navigationLinks.map((link) => (
+                      <SheetClose key={link.href} asChild>
+                        <a
+                          href={link.href}
+                          className="text-lg font-semibold tracking-tight text-navy transition-colors hover:text-green"
+                        >
+                          {link.label}
+                        </a>
+                      </SheetClose>
+                    ))}
+                  </div>
+                  <SheetClose asChild>
+                    <a
+                      href="https://learn.falcon.academy/courses"
+                      className="button button-navy mt-10 w-full justify-center"
+                    >
+                      Explore Courses <Arrow />
+                    </a>
+                  </SheetClose>
+                </SheetContent>
+              </Sheet>
             </div>
           </div>
-
-          {/* 3D animated composition — right */}
-          <HeroCraft />
-        </div>
-
-        <div className="relative z-10 mt-[24px] grid md:grid-cols-[auto_1fr] gap-x-10 gap-y-4 md:items-end">
-          <a
-            href="https://learn.falcon.academy/course/ai-fundamentals-for-business-decision-makers"
-            className="inline-block px-12 py-6 bg-mint text-ink font-extrabold text-sm uppercase tracking-[0.2em] hover:translate-x-2 transition-transform duration-300"
-          >
-            Start with AI Fundamentals →
-          </a>
-          <p className="max-w-[600px] text-sm font-medium leading-relaxed text-black/60">
-            A practical four-course program for business owners, managers, consultants and analysts
-            who want to understand AI, choose the right tools, build real workflows and safely adopt
-            AI agents.
-          </p>
-          <p className="md:col-start-2 max-w-[600px] text-[11px] font-medium leading-relaxed text-black/65">
-            Falcon Innovation Academy is operated by Falcon Expert Institute FZ-LLC, a UAE-licensed
-            E-Training Institute. RAKEZ Educational Licence No. 52001001.
-          </p>
         </div>
       </header>
 
-      {/* Program overview — dark break */}
+      {/* Split photo hero — Academy pitch, FEI atmosphere */}
+      <section className="hero" aria-labelledby="hero-title">
+        <div className="hero-copy">
+          <div className="hero-copy-inner">
+            <p className="eyebrow">
+              <span>UAE-based</span> · Globally trusted
+            </p>
+            <h1 id="hero-title">
+              Learn AI as a<br />
+              business <em>advantage</em>
+              <br />
+              not a buzzword.
+            </h1>
+            <p className="hero-lead">
+              A practical four-course program for business owners, managers, consultants and
+              analysts who want to understand AI, choose the right tools, build real workflows and
+              safely adopt AI agents.
+            </p>
+            <div className="hero-actions">
+              <a
+                className="button button-navy"
+                href="https://learn.falcon.academy/course/ai-fundamentals-for-business-decision-makers"
+              >
+                Start with AI Fundamentals <Arrow />
+              </a>
+              <a className="text-link" href="#courses">
+                See full program <span>→</span>
+              </a>
+            </div>
+            <div className="hero-note">
+              <span className="uae-rule" aria-hidden="true">
+                <i></i>
+                <b></b>
+              </span>
+              <p>
+                Falcon Innovation Academy is operated by Falcon Expert Institute FZ-LLC, a
+                UAE-licensed E-Training Institute. RAKEZ Educational Licence No. 52001001.
+              </p>
+            </div>
+          </div>
+        </div>
+        <figure className="hero-image">
+          <img src="/images/hero-uae.jpg" alt="UAE skyline viewed across the waterfront" />
+          <figcaption>
+            <span>United Arab Emirates</span>
+            <span>UAE&nbsp;&nbsp;·&nbsp;&nbsp;GCC</span>
+          </figcaption>
+        </figure>
+      </section>
+
+      {/* Program mission + image collage */}
       <section
         id="program"
         ref={programRef}
         data-in-view={programInView ? "true" : "false"}
-        className="w-full bg-ink py-32 px-8 overflow-hidden relative"
+        className="mission-section"
+        aria-labelledby="program-title"
       >
-        <div className="absolute inset-0 bg-diagonal-lines-dense opacity-60 pointer-events-none" />
-        <div className="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center relative">
-          <div className="reveal reveal-left">
-            <span className="text-sky text-xs font-extrabold uppercase tracking-[0.3em] block mb-6 italic">
-              // From chaos to capability
-            </span>
-            <h2 className="text-white text-5xl md:text-6xl font-extrabold leading-[0.95] tracking-tighter">
+        <div className="page-shell mission-grid">
+          <div className="mission-copy reveal reveal-left">
+            <p className="section-kicker light-kicker">From chaos to capability</p>
+            <h2 id="program-title">
               Shift from the chaotic use of AI tools to the deliberate construction of processes.
             </h2>
-            <p className="text-white/55 mt-8 text-lg max-w-md leading-relaxed">
+            <span className="accent-rule" aria-hidden="true">
+              <i></i>
+              <b></b>
+            </span>
+            <p className="mission-lead">
               Falcon Innovation Academy is a practical AI for Business program. You leave with real
               business artifacts, not just prompts.
             </p>
-            <div className="mt-12 grid grid-cols-2 gap-8 border-t border-white/10 pt-8">
-              <div className="reveal" style={{ ["--reveal-delay" as string]: "120ms" }}>
-                <div className="text-sky text-3xl font-extrabold">4</div>
-                <div className="text-white/40 text-[10px] uppercase font-bold mt-1 tracking-widest">
-                  Sequential courses
-                </div>
+            <div className="mission-stats" aria-label="Program highlights">
+              <div>
+                <strong>4</strong>
+                <span>Sequential courses</span>
               </div>
-              <div className="reveal" style={{ ["--reveal-delay" as string]: "180ms" }}>
-                <div className="text-mint text-3xl font-extrabold">Real</div>
-                <div className="text-white/40 text-[10px] uppercase font-bold mt-1 tracking-widest">
-                  Business artifacts
-                </div>
+              <div>
+                <strong>Real</strong>
+                <span>Business artifacts</span>
               </div>
-              <div className="reveal" style={{ ["--reveal-delay" as string]: "240ms" }}>
-                <div className="text-white text-3xl font-extrabold">Safe</div>
-                <div className="text-white/40 text-[10px] uppercase font-bold mt-1 tracking-widest">
-                  Agent adoption
-                </div>
+              <div>
+                <strong>Safe</strong>
+                <span>Agent adoption</span>
               </div>
-              <div className="reveal" style={{ ["--reveal-delay" as string]: "300ms" }}>
-                <div className="text-white text-3xl font-extrabold">UAE</div>
-                <div className="text-white/40 text-[10px] uppercase font-bold mt-1 tracking-widest">
-                  Based, globally trusted
-                </div>
+              <div>
+                <strong>UAE</strong>
+                <span>Based, globally trusted</span>
               </div>
             </div>
+            <a className="light-link" href="#courses">
+              See full program <Arrow />
+            </a>
           </div>
-
-          <div
-            className="relative reveal reveal-right"
-            style={{ ["--reveal-delay" as string]: "180ms" }}
-          >
-            <div className="w-full aspect-auto min-h-0 py-10 px-8 sm:py-12 sm:px-10 lg:aspect-square lg:p-10 bg-white/[0.03] outline-1 -outline-offset-1 outline-white/10 rounded-sm flex items-center relative overflow-hidden">
-              <div className="absolute inset-0 bg-grid-lines opacity-[0.06]" />
-              {/* Live workflow diagram */}
-              <div className="relative z-10 w-full space-y-6">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs sm:text-sm font-mono font-bold uppercase tracking-[0.24em] text-white/45">
-                    AI Workflow · Live
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <span className="size-2 rounded-full bg-mint animate-pulse" />
-                    <span className="text-xs sm:text-sm font-bold uppercase tracking-[0.22em] text-mint">
-                      Verified
-                    </span>
-                  </span>
-                </div>
-                <div className="text-white text-[clamp(1.9rem,3vw,2.6rem)] font-extrabold tracking-tight">
-                  Contract review
-                </div>
-                <div className="flex items-center gap-2 flex-wrap">
-                  {["Intake", "AI draft", "Verify", "Approve"].map((step, i) => (
-                    <span
-                      key={step}
-                      className={`px-3.5 py-2 rounded-sm text-xs sm:text-sm font-bold uppercase tracking-[0.14em] ${
-                        i < 3 ? "bg-mint text-ink" : "border border-white/20 text-white/60"
-                      }`}
-                    >
-                      {i < 3 ? "✓ " : ""}
-                      {step}
-                    </span>
-                  ))}
-                </div>
-                <div>
-                  <div className="flex justify-between text-xs sm:text-sm font-bold uppercase tracking-[0.18em] text-white/55 mb-2.5">
-                    <span>Verification confidence</span>
-                    <span>86%</span>
-                  </div>
-                  <div className="h-2 bg-white/10 rounded-full overflow-hidden">
-                    <div className="h-full w-[86%] bg-mint rounded-full" />
-                  </div>
-                </div>
-                <div className="grid grid-cols-3 gap-3 pt-2">
-                  {[
-                    { l: "Queued", v: "2", c: "text-white" },
-                    { l: "In progress", v: "1", c: "text-sky" },
-                    { l: "Done today", v: "14", c: "text-mint" },
-                  ].map((t) => (
-                    <div
-                      key={t.l}
-                      className="border border-white/10 rounded-sm px-3 py-4 sm:p-4 text-center"
-                    >
-                      <div className={`text-3xl sm:text-4xl font-extrabold leading-none ${t.c}`}>
-                        {t.v}
-                      </div>
-                      <div className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.18em] text-white/45 mt-2 leading-snug">
-                        {t.l}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-            <div className="absolute -bottom-6 -right-6 bg-mint p-8 hidden md:block max-w-[240px]">
-              <div className="text-ink font-extrabold text-xl leading-none italic">
-                "AI you can actually ship."
-              </div>
-            </div>
+          <div className="mission-collage reveal reveal-right" aria-label="Falcon learning community">
+            <figure className="mission-main-image">
+              <img src="/images/mission.jpg" alt="Multicultural professional team collaborating" />
+              <figcaption>International expertise. Regional ambition.</figcaption>
+            </figure>
+            <figure className="mission-small-image">
+              <img src="/images/uae-home.jpg" alt="UAE city skyline" />
+              <figcaption>01 / The UAE</figcaption>
+            </figure>
+            <figure className="mission-small-image second">
+              <img src="/images/practical.jpg" alt="Professional classroom" />
+              <figcaption>02 / Applied learning</figcaption>
+            </figure>
           </div>
         </div>
       </section>
 
-      {/* Courses ladder */}
+      {/* Curriculum — numbered course grid */}
       <section
         id="courses"
         ref={coursesRef}
         data-in-view={coursesInView ? "true" : "false"}
-        className="py-32 px-8 max-w-[1440px] mx-auto"
+        className="courses-section"
+        aria-labelledby="courses-title"
       >
-        <div className="flex items-end justify-between mb-20 gap-8 flex-wrap">
-          <h2 className="reveal reveal-left text-[clamp(3rem,7vw,7rem)] font-extrabold tracking-tighter uppercase leading-[0.8]">
-            The <br />
-            Curriculum
-          </h2>
-          <div
-            className="reveal reveal-right max-w-sm"
-            style={{ ["--reveal-delay" as string]: "120ms" }}
-          >
-            <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-black/40 block mb-3">
-              Sequence · 01 → 04
-            </span>
-            <p className="text-sm text-black/60 leading-relaxed">
-              Four sequential courses. Take them in order. Stop when you have what you need — or go
-              all the way to a deployable plan.
-            </p>
-          </div>
-        </div>
-
-        <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-px bg-black/5 border border-black/5">
-          {courses.map((c, i) => (
-            <a
-              key={c.n}
-              href={c.href}
-              className="reveal reveal-scale bg-offwhite p-10 group cursor-pointer hover:bg-white transition-colors flex flex-col"
-              style={{ ["--reveal-delay" as string]: `${160 + i * 80}ms` }}
+        <div className="page-shell">
+          <div className="courses-heading">
+            <div className="reveal reveal-left">
+              <p className="section-kicker">Sequence · 01 → 04</p>
+              <h2 id="courses-title">
+                The
+                <br />
+                Curriculum
+              </h2>
+            </div>
+            <div
+              className="courses-intro reveal reveal-right"
+              style={{ ["--reveal-delay" as string]: "120ms" }}
             >
-              <div
-                className={`size-12 rounded-sm flex items-center justify-center mb-12 transition-colors ${c.tint}`}
+              <p className="lead-serif">
+                Four sequential courses. Take them in order. Stop when you have what you need — or
+                go all the way to a deployable plan.
+              </p>
+            </div>
+          </div>
+
+          <div className="course-list">
+            {courses.map((course, i) => (
+              <a
+                className="course-item reveal"
+                href={course.href}
+                key={course.n}
+                style={{ ["--reveal-delay" as string]: `${100 + i * 70}ms` }}
               >
-                <span className="text-ink font-extrabold">{c.n}</span>
-              </div>
-              <h3 className="text-2xl font-extrabold tracking-tight mb-4">{c.title}</h3>
-              <p className="text-sm text-black/60 mb-8 leading-relaxed flex-1">{c.body}</p>
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-black/40">
-                  {c.tag}
+                <span className="course-number">{course.n}</span>
+                <div>
+                  <h3>{course.title}</h3>
+                  <p>{course.body}</p>
+                  <span className="course-tag">{course.tag}</span>
+                </div>
+                <span className="course-arrow" aria-hidden="true">
+                  ↗
                 </span>
-                <span className="text-[10px] font-bold uppercase tracking-widest">→</span>
-              </div>
-              <div className="h-px w-0 group-hover:w-full bg-ink transition-all duration-500 mt-6" />
-            </a>
-          ))}
+              </a>
+            ))}
+          </div>
         </div>
       </section>
 
       <UniquenessSection />
 
-      {/* Certificate */}
+      {/* Corporate learning — from Expert Institute pattern */}
+      <section
+        id="corporate"
+        className="corporate-section"
+        aria-labelledby="corporate-title"
+      >
+        <div className="corporate-photo">
+          <img
+            src="/images/corporate-uae.png"
+            alt="UAE professionals participating in a corporate learning workshop"
+            loading="lazy"
+          />
+          <div className="corporate-photo-label">
+            <span>Tailored programmes</span>
+            <b>Team · Leadership · Enterprise</b>
+          </div>
+        </div>
+        <div className="corporate-copy">
+          <div className="corporate-copy-inner">
+            <p className="section-kicker">For organisations</p>
+            <h2 id="corporate-title">
+              Corporate Learning
+              <br />
+              & Certification
+            </h2>
+            <p className="lead-serif">
+              Falcon works with companies, government entities and professional teams to design
+              tailored learning programmes aligned with their strategic priorities.
+            </p>
+            <p>
+              Corporate programmes can combine self-paced learning, instructor-led sessions,
+              practical workshops, assessments and company-specific case studies.
+            </p>
+            <p>
+              Training can be delivered for individual teams, leadership groups or
+              organisation-wide capability development.
+            </p>
+            <a className="button button-outline" href="mailto:info@falcon.academy">
+              Discuss Corporate Training <Arrow />
+            </a>
+          </div>
+        </div>
+      </section>
+
       <CertificateSection />
 
       {/* FAQ */}
@@ -625,88 +407,70 @@ function Home() {
         id="faq"
         ref={faqRef}
         data-in-view={faqInView ? "true" : "false"}
-        className="bg-white border-y border-black/10 py-32 px-8"
+        className="faq-section"
+        aria-labelledby="faq-title"
       >
-        <div className="max-w-[1440px] mx-auto grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)] gap-16">
+        <div className="page-shell faq-grid">
           <div className="reveal reveal-left">
-            <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-black/40 block mb-6 italic">
-              // Common questions
-            </span>
-            <h2 className="text-5xl md:text-6xl font-extrabold tracking-tighter uppercase leading-[0.9]">
-              Ask before <br />
-              you enrol.
-            </h2>
-            <p className="text-sm text-black/60 mt-8 max-w-sm leading-relaxed">
+            <p className="section-kicker">Common questions</p>
+            <h2 id="faq-title">Ask before you enrol.</h2>
+            <p>
               Still unsure? Reach out and we will help you choose the right entry course for your
               role.
             </p>
-            <a
-              href="mailto:info@falcon.academy"
-              className="inline-block mt-8 text-xs font-bold uppercase tracking-widest border-b-2 border-ink pb-1 hover:border-mint transition-colors"
-            >
+            <a className="text-link" href="mailto:info@falcon.academy" style={{ marginTop: 28 }}>
               info@falcon.academy
             </a>
           </div>
 
-          <div className="divide-y divide-black/10 border-y border-black/10">
+          <div className="faq-list reveal reveal-right">
             {faqs.map((f, i) => (
-              <details
-                key={f.q}
-                className="reveal group py-6"
-                style={{ ["--reveal-delay" as string]: `${100 + i * 70}ms` }}
-                open={i === 0}
-              >
-                <summary className="flex items-center justify-between cursor-pointer list-none">
-                  <span className="text-xl font-extrabold tracking-tight pr-8">{f.q}</span>
-                  <span className="size-8 shrink-0 rounded-full border border-black/15 grid place-items-center text-lg group-open:bg-mint group-open:border-mint transition-colors">
-                    <span className="group-open:rotate-45 transition-transform">+</span>
-                  </span>
+              <details key={f.q} className="faq-item" open={i === 0}>
+                <summary>
+                  {f.q}
+                  <b aria-hidden="true">+</b>
                 </summary>
-                <p className="mt-4 text-sm text-black/60 max-w-2xl leading-relaxed">{f.a}</p>
+                <p>{f.a}</p>
               </details>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Apply CTA */}
+      {/* Final CTA */}
       <section
         id="apply"
-        ref={applyRef}
-        data-in-view={applyInView ? "true" : "false"}
-        className="py-32 px-8 max-w-[1440px] mx-auto"
+        ref={ctaRef}
+        data-in-view={ctaInView ? "true" : "false"}
+        className="final-cta"
+        aria-labelledby="cta-title"
       >
-        <div className="border border-black/10 px-8 py-10 sm:p-12 md:p-20 bg-mint/30 relative overflow-hidden">
-          <div className="absolute -bottom-24 -right-24 w-[400px] h-[400px] bg-diagonal-line pointer-events-none opacity-70" />
-          <div className="relative grid md:grid-cols-[1fr_auto] gap-10 md:gap-12 items-center md:items-end">
-            <div className="reveal reveal-left text-center md:text-left">
-              <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-black/50 block mb-6">
-                Course 01 · Entry point
-              </span>
-              <h2 className="text-[clamp(2rem,4.6vw,4rem)] font-extrabold tracking-tighter uppercase leading-[0.92]">
-                Start with AI Fundamentals. <br />
-                Leave with a decision framework.
-              </h2>
-              <p className="text-sm text-black/70 mt-6 max-w-md leading-relaxed mx-auto md:mx-0">
-                Covered topics include tokens, context windows, embeddings, hosted vs self-hosted
-                models, prompting, verification and privacy — explained for decision-makers.
-              </p>
-            </div>
-            <div
-              className="reveal reveal-right flex flex-col gap-3 w-full md:w-auto"
-              style={{ ["--reveal-delay" as string]: "140ms" }}
-            >
+        <div className="page-shell final-cta-grid">
+          <div className="reveal reveal-left">
+            <p className="section-kicker light-kicker">Course 01 · Entry point</p>
+            <h2 id="cta-title">
+              Start with AI Fundamentals.
+              <br />
+              Leave with a decision framework.
+            </h2>
+          </div>
+          <div
+            className="final-cta-copy reveal reveal-right"
+            style={{ ["--reveal-delay" as string]: "120ms" }}
+          >
+            <p>
+              Covered topics include tokens, context windows, embeddings, hosted vs self-hosted
+              models, prompting, verification and privacy — explained for decision-makers.
+            </p>
+            <div className="final-actions">
               <a
+                className="button button-white"
                 href="https://learn.falcon.academy/course/ai-fundamentals-for-business-decision-makers"
-                className="inline-block w-full md:w-auto px-10 sm:px-12 py-5 sm:py-6 bg-ink text-offwhite font-extrabold text-sm uppercase tracking-[0.2em] hover:translate-x-2 transition-transform duration-300 text-center"
               >
-                Enroll in Course 1 →
+                Enroll in Course 1 <Arrow />
               </a>
-              <a
-                href="https://learn.falcon.academy/courses"
-                className="inline-block w-full md:w-auto px-10 sm:px-12 py-5 sm:py-6 bg-transparent border border-ink/20 text-ink font-extrabold text-sm uppercase tracking-[0.2em] hover:bg-white transition-colors text-center"
-              >
-                See full program
+              <a className="button button-ghost" href="https://learn.falcon.academy/courses">
+                See full program <Arrow />
               </a>
             </div>
           </div>
@@ -714,126 +478,50 @@ function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-black/10">
-        <div className="flex overflow-hidden py-6 bg-ink text-white">
-          <div className="flex shrink-0 items-center whitespace-nowrap uppercase text-[11px] font-bold tracking-[0.4em] opacity-80 animate-marquee">
-            {Array.from({ length: 2 })
-              .flatMap(() => [
-                "AI as a business advantage",
-                "*",
-                "Not a buzzword",
-                "*",
-                "UAE-based · globally trusted",
-                "*",
-                "Real business artifacts",
-                "*",
-                "Falcon Innovation Academy",
-                "*",
-              ])
-              .map((t, i) => (
-                <span key={i} className="px-8">
-                  {t}
-                </span>
-              ))}
+      <footer className="site-footer">
+        <div className="page-shell footer-top">
+          <div className="footer-brand">
+            <a href="#top" aria-label="Falcon Innovation Academy home">
+              <img
+                className="footer-mark"
+                src="/images/falcon-mark-footer.png"
+                alt="Falcon Expert Institute"
+              />
+            </a>
+            <p>Falcon Innovation Academy is a brand operated by Falcon Expert Institute FZ-LLC.</p>
+            <p>VUNE3122, Compass building, AL Hulaila Industrial Zone-FZ, RAK, UAE.</p>
+            <p>Educational Licence No 52001001.</p>
+          </div>
+          <div className="footer-column">
+            <h3>Program</h3>
+            <a href="https://learn.falcon.academy/course/ai-fundamentals-for-business-decision-makers">
+              AI Fundamentals
+            </a>
+            <a href="https://learn.falcon.academy/course/ai-tools-practical-cases">Tools & Cases</a>
+            <a href="https://learn.falcon.academy/course/ai-agents-automation-design-a-safe-humansupervised-pilot">
+              Agents & Automation
+            </a>
+            <a href="https://learn.falcon.academy/course/ai-strategy-governance-implementation">
+              Strategy & Roadmap
+            </a>
+            <a href="#corporate">Corporate Training</a>
+          </div>
+          <div className="footer-column">
+            <h3>Company</h3>
+            <button type="button" onClick={() => setLegalModal("privacy")}>
+              Privacy Policy
+            </button>
+            <button type="button" onClick={() => setLegalModal("terms")}>
+              Terms of Use
+            </button>
+            <button type="button" onClick={() => setLegalModal("refund")}>
+              Refund & Cancellation Policy
+            </button>
+            <a href="mailto:info@falcon.academy">Contact</a>
           </div>
         </div>
-        <div className="max-w-[1440px] mx-auto px-8 py-20 grid grid-cols-1 md:grid-cols-4 gap-12">
-          <div className="col-span-2">
-            <FalconLogo className="h-[1.875rem]" />
-            <p className="mt-6 text-sm text-black/50 max-w-sm leading-relaxed font-semibold">
-              Falcon Innovation Academy is a trading brand operated by Falcon Expert Institute
-              FZ-LLC.
-            </p>
-            <p className="mt-3 text-sm text-black/50 max-w-sm leading-relaxed font-semibold">
-              VUNE3122, Compass building, AL Hulaila Industrial Zone-FZ, RAK, UAE.
-            </p>
-            <p className="mt-3 text-sm text-black/50 max-w-sm leading-relaxed font-semibold">
-              Educational Licence No 52001001.
-            </p>
-          </div>
-          <div>
-            <h4 className="text-[10px] font-extrabold tracking-widest uppercase mb-6">Program</h4>
-            <ul className="space-y-3 text-sm font-medium">
-              <li>
-                <a
-                  href="https://learn.falcon.academy/course/ai-fundamentals-for-business-decision-makers"
-                  className="hover:text-black/60 transition-colors"
-                >
-                  AI Fundamentals
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://learn.falcon.academy/course/ai-tools-practical-cases"
-                  className="hover:text-black/60 transition-colors"
-                >
-                  Tools & Cases
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://learn.falcon.academy/course/ai-agents-automation-design-a-safe-humansupervised-pilot"
-                  className="hover:text-black/60 transition-colors"
-                >
-                  Agents & Automation
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://learn.falcon.academy/course/ai-strategy-governance-implementation"
-                  className="hover:text-black/60 transition-colors"
-                >
-                  Strategy & Roadmap
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="text-[10px] font-extrabold tracking-widest uppercase mb-6">Company</h4>
-            <ul className="space-y-3 text-sm font-medium">
-              <li>
-                <button
-                  type="button"
-                  onClick={() => setLegalModal("privacy")}
-                  className="text-left bg-transparent border-0 p-0 font-inherit text-inherit cursor-pointer hover:text-black/60 transition-colors"
-                >
-                  Privacy Policy
-                </button>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  onClick={() => setLegalModal("terms")}
-                  className="text-left bg-transparent border-0 p-0 font-inherit text-inherit cursor-pointer hover:text-black/60 transition-colors"
-                >
-                  Terms of Use
-                </button>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  onClick={() => setLegalModal("refund")}
-                  className="text-left bg-transparent border-0 p-0 font-inherit text-inherit cursor-pointer hover:text-black/60 transition-colors"
-                >
-                  Refund &<br className="md:hidden" /> Cancellation Policy
-                </button>
-              </li>
-              <li>
-                <a
-                  href="mailto:info@falcon.academy"
-                  className="hover:text-black/60 transition-colors"
-                >
-                  Contact
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div className="max-w-[1440px] mx-auto px-8 py-6 border-t border-black/10 flex flex-col md:flex-row justify-between items-center gap-4">
-          <span className="text-[10px] font-bold tracking-widest uppercase text-black/40">
-            © 2026 Falcon Expert Institute FZ-LLC. All rights reserved.
-          </span>
-          <div className="flex gap-6 text-[10px] font-bold tracking-widest uppercase text-black/40" />
+        <div className="page-shell footer-bottom">
+          <p>© 2026 Falcon Expert Institute FZ-LLC. All rights reserved.</p>
         </div>
       </footer>
     </div>

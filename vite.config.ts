@@ -13,7 +13,8 @@ export default defineConfig({
   vite: {
     base: basePath,
     server: {
-      allowedHosts: ['falcon.sfxdx.com'],
+      // `.trycloudflare.com` = любой quick-tunnel subdomain
+      allowedHosts: ["falcon.sfxdx.com", ".trycloudflare.com"],
     },
     preview: {
       host: '0.0.0.0',
