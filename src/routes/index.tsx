@@ -483,9 +483,9 @@ function Home() {
           <div className="footer-brand">
             <a href="#top" aria-label="Falcon Innovation Academy home">
               <img
-                className="footer-mark"
-                src="/images/falcon-mark-footer.png"
-                alt="Falcon Expert Institute"
+                className="footer-logo"
+                src="/images/falcon-logo-horizontal-light.png"
+                alt="Falcon Expert Institute — Knowledge. Intelligence. Impact."
               />
             </a>
             <p>Falcon Innovation Academy is a brand operated by Falcon Expert Institute FZ-LLC.</p>

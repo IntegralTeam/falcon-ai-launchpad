@@ -1,7 +1,7 @@
 import { useRepeatInView } from "@/hooks/use-repeat-in-view";
 import { CertificateCard } from "@/components/CertificateCard";
 
-/** Certificate showcase — copy left, HTML certificate card right (not an image) */
+/** Certificate showcase — copy left, sample certificate image right */
 export function CertificateSection() {
   const [sectionRef, sectionInView] = useRepeatInView<HTMLElement>();
 
