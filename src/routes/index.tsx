@@ -140,7 +140,7 @@ function Home() {
                 </a>
               ))}
             </nav>
-            <a className="header-cta" href="/">
+            <a className="header-cta" href="https://learn.falcon.academy">
               Explore Courses <Arrow />
             </a>
 
@@ -178,7 +178,7 @@ function Home() {
                   </div>
                   <SheetClose asChild>
                     <a
-                      href="/"
+                      href="https://learn.falcon.academy"
                       className="button button-navy mt-10 w-full justify-center"
                     >
                       Explore Courses <Arrow />
