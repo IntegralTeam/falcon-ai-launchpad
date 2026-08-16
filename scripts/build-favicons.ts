@@ -1,6 +1,10 @@
 /**
- * Build favicons from the falcon-head silhouette master.
+ * Build favicons from the bordered falcon-head PNG master.
  * Usage: bun scripts/build-favicons.ts
+ *
+ * ADR: the master is already a 512² transparent PNG with a white outline,
+ * so we resize in-place (no knockout / trim / re-pad). Apple touch icons
+ * still get a cream fill because iOS ignores alpha.
  */
 import sharp from "sharp";
 import pngToIco from "png-to-ico";
@@ -9,63 +13,51 @@ import path from "node:path";
 
 const ROOT = path.resolve(import.meta.dir, "..");
 const PUBLIC = path.join(ROOT, "public");
-const SRC_JPG = path.join(PUBLIC, "images/falcon-head-master.jpg");
-const SRC_PNG = path.join(PUBLIC, "images/falcon-mark-master.png");
+const SRC = path.join(PUBLIC, "favicon-new-border-transparent.png");
 
-async function loadMark(): Promise<Buffer> {
-  const src = fs.existsSync(SRC_JPG) ? SRC_JPG : SRC_PNG;
-  const { data, info } = await sharp(src).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
-
-  // Knock out near-black backdrop; keep navy silhouette
-  for (let i = 0; i < data.length; i += 4) {
-    const max = Math.max(data[i]!, data[i + 1]!, data[i + 2]!);
-    if (max < 28) data[i + 3] = 0;
-  }
-
-  return sharp(data, { raw: { width: info.width, height: info.height, channels: 4 } })
-    .trim({ threshold: 5 })
-    .png()
-    .toBuffer();
-}
-
-async function squarePad(
-  mark: Buffer,
-  size: number,
-  outPath: string,
-  opts?: { bg?: { r: number; g: number; b: number; alpha: number }; padRatio?: number },
-) {
-  const padRatio = opts?.padRatio ?? 0.1;
-  const pad = Math.round(size * padRatio);
-  const inner = Math.max(1, size - pad * 2);
-  const resized = await sharp(mark)
-    .resize(inner, inner, { fit: "contain", background: { r: 0, g: 0, b: 0, alpha: 0 } })
-    .png()
-    .toBuffer();
-
-  await sharp({
-    create: {
-      width: size,
-      height: size,
-      channels: 4,
-      background: opts?.bg ?? { r: 0, g: 0, b: 0, alpha: 0 },
-    },
-  })
-    .composite([{ input: resized, gravity: "centre" }])
+async function resizePng(src: Buffer, size: number, outPath: string) {
+  await sharp(src)
+    .resize(size, size, {
+      fit: "contain",
+      background: { r: 0, g: 0, b: 0, alpha: 0 },
+    })
     .png()
     .toFile(outPath);
 }
 
 async function main() {
-  const mark = await loadMark();
-  fs.writeFileSync(path.join(PUBLIC, "images/falcon-mark.png"), mark);
+  if (!fs.existsSync(SRC)) {
+    throw new Error(`Missing favicon master: ${SRC}`);
+  }
 
-  await squarePad(mark, 512, path.join(PUBLIC, "favicon.png"), { padRatio: 0.1 });
-  await squarePad(mark, 32, path.join(PUBLIC, "favicon-32x32.png"), { padRatio: 0.08 });
-  await squarePad(mark, 16, path.join(PUBLIC, "favicon-16x16.png"), { padRatio: 0.06 });
-  await squarePad(mark, 180, path.join(PUBLIC, "apple-touch-icon.png"), {
-    padRatio: 0.14,
-    bg: { r: 250, g: 248, b: 244, alpha: 1 },
-  });
+  const mark = await sharp(SRC).ensureAlpha().png().toBuffer();
+
+  fs.writeFileSync(path.join(PUBLIC, "images/falcon-mark.png"), mark);
+  fs.writeFileSync(path.join(PUBLIC, "favicon.png"), mark);
+
+  await resizePng(mark, 32, path.join(PUBLIC, "favicon-32x32.png"));
+  await resizePng(mark, 16, path.join(PUBLIC, "favicon-16x16.png"));
+
+  // iOS home-screen icon: composite onto cream so the mark stays opaque
+  const appleSize = 180;
+  const appleMark = await sharp(mark)
+    .resize(appleSize, appleSize, {
+      fit: "contain",
+      background: { r: 0, g: 0, b: 0, alpha: 0 },
+    })
+    .png()
+    .toBuffer();
+  await sharp({
+    create: {
+      width: appleSize,
+      height: appleSize,
+      channels: 4,
+      background: { r: 250, g: 248, b: 244, alpha: 1 },
+    },
+  })
+    .composite([{ input: appleMark, gravity: "centre" }])
+    .png()
+    .toFile(path.join(PUBLIC, "apple-touch-icon.png"));
 
   fs.writeFileSync(
     path.join(PUBLIC, "favicon.ico"),
@@ -75,9 +67,12 @@ async function main() {
     ]),
   );
 
-  // SVG embeds cleaned mark for pixel-perfect silhouette
+  // SVG wraps a 128px PNG so browsers that prefer SVG still get the silhouette
   const mark128 = await sharp(mark)
-    .resize(128, 128, { fit: "contain", background: { r: 0, g: 0, b: 0, alpha: 0 } })
+    .resize(128, 128, {
+      fit: "contain",
+      background: { r: 0, g: 0, b: 0, alpha: 0 },
+    })
     .png()
     .toBuffer();
   const svg = `<?xml version="1.0" encoding="UTF-8"?>
@@ -87,7 +82,7 @@ async function main() {
   fs.writeFileSync(path.join(PUBLIC, "favicon.svg"), svg);
   fs.writeFileSync(path.join(PUBLIC, "images/falcon-mark.svg"), svg);
 
-  console.log("Favicons rebuilt from falcon head.");
+  console.log("Favicons rebuilt from bordered falcon mark.");
 }
 
 main().catch((e) => {
