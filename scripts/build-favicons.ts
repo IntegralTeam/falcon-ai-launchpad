@@ -1,10 +1,11 @@
 /**
- * Build favicons from the bordered falcon-head PNG master.
+ * Build favicons from the cream rounded-square falcon PNG master.
  * Usage: bun scripts/build-favicons.ts
  *
- * ADR: the master is already a 512² transparent PNG with a white outline,
- * so we resize in-place (no knockout / trim / re-pad). Apple touch icons
- * still get a cream fill because iOS ignores alpha.
+ * ADR: the export is a 1254² opaque PNG (cream squircle + navy mark on
+ * flattened black). Knock out near-black so tab chrome gets transparent
+ * corners; don't trim — padding inside the squircle is intentional.
+ * Apple touch icons get a cream fill because iOS ignores alpha.
  */
 import sharp from "sharp";
 import pngToIco from "png-to-ico";
@@ -13,7 +14,24 @@ import path from "node:path";
 
 const ROOT = path.resolve(import.meta.dir, "..");
 const PUBLIC = path.join(ROOT, "public");
-const SRC = path.join(PUBLIC, "favicon-new-border-transparent.png");
+const SRC = path.join(PUBLIC, "new-favicon.png");
+const CREAM = { r: 245, g: 241, b: 235, alpha: 1 };
+
+async function loadMark(): Promise<Buffer> {
+  const { data, info } = await sharp(SRC).ensureAlpha().raw().toBuffer({
+    resolveWithObject: true,
+  });
+
+  // Knock out flattened black corners; navy fill maxes around 93 so <40 is safe
+  for (let i = 0; i < data.length; i += 4) {
+    const max = Math.max(data[i]!, data[i + 1]!, data[i + 2]!);
+    if (max < 40) data[i + 3] = 0;
+  }
+
+  return sharp(data, { raw: { width: info.width, height: info.height, channels: 4 } })
+    .png()
+    .toBuffer();
+}
 
 async function resizePng(src: Buffer, size: number, outPath: string) {
   await sharp(src)
@@ -30,11 +48,10 @@ async function main() {
     throw new Error(`Missing favicon master: ${SRC}`);
   }
 
-  const mark = await sharp(SRC).ensureAlpha().png().toBuffer();
+  const mark = await loadMark();
 
-  fs.writeFileSync(path.join(PUBLIC, "images/falcon-mark.png"), mark);
-  fs.writeFileSync(path.join(PUBLIC, "favicon.png"), mark);
-
+  await resizePng(mark, 512, path.join(PUBLIC, "favicon.png"));
+  await resizePng(mark, 512, path.join(PUBLIC, "images/falcon-mark.png"));
   await resizePng(mark, 32, path.join(PUBLIC, "favicon-32x32.png"));
   await resizePng(mark, 16, path.join(PUBLIC, "favicon-16x16.png"));
 
@@ -52,7 +69,7 @@ async function main() {
       width: appleSize,
       height: appleSize,
       channels: 4,
-      background: { r: 250, g: 248, b: 244, alpha: 1 },
+      background: CREAM,
     },
   })
     .composite([{ input: appleMark, gravity: "centre" }])
@@ -82,7 +99,7 @@ async function main() {
   fs.writeFileSync(path.join(PUBLIC, "favicon.svg"), svg);
   fs.writeFileSync(path.join(PUBLIC, "images/falcon-mark.svg"), svg);
 
-  console.log("Favicons rebuilt from bordered falcon mark.");
+  console.log("Favicons rebuilt from cream squircle falcon mark.");
 }
 
 main().catch((e) => {
