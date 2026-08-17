@@ -355,7 +355,8 @@ function Home() {
       </section>
 
       <UniquenessSection />
-
+      <CertificateSection />
+      
       {/* Corporate learning — from Expert Institute pattern */}
       <section
         id="corporate"
@@ -399,8 +400,6 @@ function Home() {
           </div>
         </div>
       </section>
-
-      <CertificateSection />
 
       {/* FAQ */}
       <section
